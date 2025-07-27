@@ -75,6 +75,8 @@ private:
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged FINAL)
 };
 
+//////////////////////////////////////////////////////////////////////
+
 class Applicant : public QObject {
     
     Q_OBJECT

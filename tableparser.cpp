@@ -279,7 +279,7 @@ QString TableParser::extractType(const QString& str) {
         return "Бюджет";
     }
     if(str.contains("Отдельная квота")){
-        return "Отдельная квот";
+        return "Отдельная квота";
     }
     if(str.contains("Особое право")){
         return "Особое право";
