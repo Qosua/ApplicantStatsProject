@@ -31,6 +31,10 @@ private:
     
     bool setColumnsNames();
     void printStatsToConsole();
+    QString extractCode(const QString& str);
+    QString extractName(const QString& str);
+    QString extractStudyForm(const QString& str);
+    QString extractType(const QString& str);
     
     QMap<QString, int> m_columnsNames;
     QString m_tablePath;

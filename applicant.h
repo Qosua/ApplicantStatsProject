@@ -35,25 +35,44 @@ public:
     int priorityNumber() const;
     void setPriorityNumber(int newPriorityNumber);
     
-    QString priorityName() const;
-    void setPriorityName(const QString &newPriorityName);
+    QString code() const;
+    void setCode(const QString &newCode);
+    
+    QString name() const;
+    void setName(const QString &newName);
+    
+    QString studyForm() const;
+    void setStudyForm(const QString &newStudyForm);
+    
+    QString type() const;
+    void setType(const QString &newType);
     
 signals:
     void egeScoreChanged();
     void egeAdditionalScoreChanged();
     void priorityNumberChanged();
     void priorityNameChanged();
+    void codeChanged();
+    void nameChanged();
+    void studyFormChanged();
+    void typeChanged();
     
 private:
     int m_egeScore;
     int m_egeAdditionalScore;
     int m_priorityNumber;
-    QString m_priorityName;
+    QString m_code;
+    QString m_name;
+    QString m_studyForm; //Personal, Personal-NotPersonal,...
+    QString m_type; //Budget, NonBudget,...
     
     Q_PROPERTY(int egeScore READ egeScore WRITE setEgeScore NOTIFY egeScoreChanged FINAL)
     Q_PROPERTY(int egeAdditionalScore READ egeAdditionalScore WRITE setEgeAdditionalScore NOTIFY egeAdditionalScoreChanged FINAL)
     Q_PROPERTY(int priorityNumber READ priorityNumber WRITE setPriorityNumber NOTIFY priorityNumberChanged FINAL)
-    Q_PROPERTY(QString priorityName READ priorityName WRITE setPriorityName NOTIFY priorityNameChanged FINAL)
+    Q_PROPERTY(QString code READ code WRITE setCode NOTIFY codeChanged FINAL)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged FINAL)
+    Q_PROPERTY(QString studyForm READ studyForm WRITE setStudyForm NOTIFY studyFormChanged FINAL)
+    Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged FINAL)
 };
 
 class Applicant : public QObject {

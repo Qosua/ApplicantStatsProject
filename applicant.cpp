@@ -54,31 +54,31 @@ void Applicant::deletePriority(PrioritiesFlags flag) {
     switch(flag){
         case PrioritiesFlags::Budget: {
             for(const auto& elem : m_priorities)
-                if(elem.priorityName().contains("Бюджет"))
+                if(elem.type().contains("Бюджет"))
                     m_priorities.removeOne(elem);
         }break;
             
         case PrioritiesFlags::NonBudget: {
             for(const auto& elem : m_priorities)
-                if(elem.priorityName().contains("Внебюджет"))
+                if(elem.type().contains("Внебюджет"))
                     m_priorities.removeOne(elem);
         }break;
             
         case PrioritiesFlags::SpecialRight: {
             for(const auto& elem : m_priorities)
-                if(elem.priorityName().contains("Особое право"))
+                if(elem.type().contains("Особое право"))
                     m_priorities.removeOne(elem);
         }break;
             
         case PrioritiesFlags::Kvot: {
             for(const auto& elem : m_priorities)
-                if(elem.priorityName().contains("Отдельная квота"))
+                if(elem.type().contains("Отдельная квота"))
                     m_priorities.removeOne(elem);
         }break;
             
         case PrioritiesFlags::CompanySponsor: {
             for(const auto& elem : m_priorities)
-                if(elem.priorityName().contains("Целевое"))
+                if(elem.type().contains("Целевое"))
                     m_priorities.removeOne(elem);
         }break;
     }
@@ -114,15 +114,56 @@ void PriorityInfo::setPriorityNumber(int newPriorityNumber) {
     emit priorityNumberChanged();
 }
 
-QString PriorityInfo::priorityName() const {
-    return m_priorityName;
+QString PriorityInfo::code() const
+{
+    return m_code;
 }
 
-void PriorityInfo::setPriorityName(const QString &newPriorityName) {
-    if (m_priorityName == newPriorityName)
+void PriorityInfo::setCode(const QString &newCode)
+{
+    if (m_code == newCode)
         return;
-    m_priorityName = newPriorityName;
-    emit priorityNameChanged();
+    m_code = newCode;
+    emit codeChanged();
+}
+
+QString PriorityInfo::name() const
+{
+    return m_name;
+}
+
+void PriorityInfo::setName(const QString &newName)
+{
+    if (m_name == newName)
+        return;
+    m_name = newName;
+    emit nameChanged();
+}
+
+QString PriorityInfo::studyForm() const
+{
+    return m_studyForm;
+}
+
+void PriorityInfo::setStudyForm(const QString &newStudyForm)
+{
+    if (m_studyForm == newStudyForm)
+        return;
+    m_studyForm = newStudyForm;
+    emit studyFormChanged();
+}
+
+QString PriorityInfo::type() const
+{
+    return m_type;
+}
+
+void PriorityInfo::setType(const QString &newType)
+{
+    if (m_type == newType)
+        return;
+    m_type = newType;
+    emit typeChanged();
 }
 
 PriorityInfo::PriorityInfo() {
@@ -137,14 +178,20 @@ void PriorityInfo::operator=(const PriorityInfo &copy) {
     m_egeScore = copy.m_egeScore;
     m_egeAdditionalScore = copy.m_egeAdditionalScore;
     m_priorityNumber = copy.m_priorityNumber;
-    m_priorityName = copy.m_priorityName;
+    m_code = copy.m_code;
+    m_name = copy.m_name;
+    m_studyForm = copy.m_studyForm;
+    m_type = copy.m_type;
 }
 
 bool PriorityInfo::operator==(const PriorityInfo &copy) const {
     return ((m_egeScore == copy.m_egeScore) and
             (m_egeAdditionalScore == copy.m_egeAdditionalScore) and
             (m_priorityNumber == copy.m_priorityNumber) and
-            (m_priorityName == copy.m_priorityName));
+            (m_code == copy.m_code) and
+            (m_name == copy.m_name) and
+            (m_studyForm == copy.m_studyForm) and
+            (m_type == copy.m_type));
 }
 
 int PriorityInfo::egeScore() const {

@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
                        "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
     parser.parseTable();
     
-    QList<Applicant> list1 = parser.getApplicants(ApplicantsFilterFlags::AdmissionsTrue);
+    QList<Applicant> list1 = parser.getApplicants(ApplicantsFilterFlags::All);
     qDebug() << list1.size();
 
     return app.exec();

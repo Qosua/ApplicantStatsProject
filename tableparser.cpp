@@ -61,8 +61,15 @@ void TableParser::parseTable() {
         PriorityInfo info;
         info.setEgeScore(m_doc->read(i, m_columnsNames["Сумма баллов"]).toInt());
         info.setEgeAdditionalScore(m_doc->read(i, m_columnsNames["Сумма баллов за инд.дост.(конкурсные)"]).toInt());
-        info.setPriorityName(m_doc->read(i, m_columnsNames["Конкурсная группа"]).toString());
         info.setPriorityNumber(m_doc->read(i, m_columnsNames["Приоритет"]).toInt());
+        
+        QString priorityFullName = m_doc->read(i, m_columnsNames["Конкурсная группа"]).toString();
+        
+        info.setCode(extractCode(priorityFullName));
+        info.setName(extractName(priorityFullName));
+        info.setStudyForm(extractStudyForm(priorityFullName));
+        info.setType(extractType(priorityFullName));
+        
         tempHash[applicantId].addPriority(info);
     }
     
@@ -139,7 +146,7 @@ void TableParser::printStatsToConsole() {
     int counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.priorityName().contains("Внебюджет")) {
+            if(priority.type().contains("Внебюджет")) {
                 counter += 1;
                 break;
             }
@@ -149,7 +156,7 @@ void TableParser::printStatsToConsole() {
     counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.priorityName().contains(", Бюджет")) {
+            if(priority.type().contains(", Бюджет")) {
                 counter += 1;
                 break;
             }
@@ -159,7 +166,7 @@ void TableParser::printStatsToConsole() {
     counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.priorityName().contains("Целевое")) {
+            if(priority.type().contains("Целевое")) {
                 counter += 1;
                 break;
             }
@@ -169,7 +176,7 @@ void TableParser::printStatsToConsole() {
     counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.priorityName().contains("Отдельная квота")) {
+            if(priority.type().contains("Отдельная квота")) {
                 counter += 1;
                 break;
             }
@@ -179,7 +186,7 @@ void TableParser::printStatsToConsole() {
     counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.priorityName().contains("Особое право")) {
+            if(priority.type().contains("Особое право")) {
                 counter += 1;
                 break;
             }
@@ -190,7 +197,7 @@ void TableParser::printStatsToConsole() {
     counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.priorityName().contains("Внебюджет")) {
+            if(priority.type().contains("Внебюджет")) {
                 counter += 1;
             }
     qDebug() << "количество внебюджетных заявлений -" << counter;
@@ -199,7 +206,7 @@ void TableParser::printStatsToConsole() {
     counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.priorityName().contains(", Бюджет")) {
+            if(priority.type().contains(", Бюджет")) {
                 counter += 1;
             }
     qDebug() << "количество бюджетных заявлений -" << counter;
@@ -208,7 +215,7 @@ void TableParser::printStatsToConsole() {
     counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.priorityName().contains("Целевое")) {
+            if(priority.type().contains("Целевое")) {
                 counter += 1;
             }
     qDebug() << "количество целевых заявлений -" << counter;
@@ -217,7 +224,7 @@ void TableParser::printStatsToConsole() {
     counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.priorityName().contains("Отдельная квота")) {
+            if(priority.type().contains("Отдельная квота")) {
                 counter += 1;
             }
     qDebug() << "количество квотных заявлений -" << counter;
@@ -226,13 +233,64 @@ void TableParser::printStatsToConsole() {
     counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.priorityName().contains("Особое право")) {
+            if(priority.type().contains("Особое право")) {
                 counter += 1;
             }
     qDebug() << "количество заявлений с особым правом -" << counter;
     qDebug() << ">>=====================================================================<<";
     
     
+}
+
+QString TableParser::extractCode(const QString& str) {
+    return str.mid(0,8);
+}
+
+QString TableParser::extractName(const QString& str) {
+    
+    QString ans;
+    
+    for(int i = 9; (str.mid(i+2,4) != "Заоч" and str.mid(i+2,4) != "Очно" and str.mid(i+2,4) != "Очна");++i) {
+        
+        ans += str[i];
+        
+    }
+    
+    return ans;
+    
+}
+
+QString TableParser::extractStudyForm(const QString& str) {
+    
+    if(str.contains("Очное") or str.contains("Очная")){
+        return "Очное";
+    }
+    if(str.contains("Заочная") or str.contains("Заочное")){
+        return "Заочная";
+    }
+    if(str.contains("Очно-Заочная") or str.contains("Очно-Заочное")){
+        return "Очно-Заочная";
+    }
+    return "ОШИБКА ФОРМЫ ОБУЧЕНИЯ";
+}
+
+QString TableParser::extractType(const QString& str) {
+    if(str.contains("Бюджет")){
+        return "Бюджет";
+    }
+    if(str.contains("Отдельная квота")){
+        return "Отдельная квот";
+    }
+    if(str.contains("Особое право")){
+        return "Особое право";
+    }
+    if(str.contains("Внебюджет")){
+        return "Внебюджет";
+    }
+    if(str.contains("Целевое")){
+        return "Целевое";
+    }
+    return "ОШИБКА ТИПА";
 }
 
 
