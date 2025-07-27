@@ -156,7 +156,7 @@ void TableParser::printStatsToConsole() {
     counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains(", Бюджет")) {
+            if(priority.type().contains("Бюджет")) {
                 counter += 1;
                 break;
             }
@@ -206,7 +206,7 @@ void TableParser::printStatsToConsole() {
     counter = 0;
     for(const auto& elem : *m_applicants)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains(", Бюджет")) {
+            if(priority.type().contains("Бюджет")) {
                 counter += 1;
             }
     qDebug() << "количество бюджетных заявлений -" << counter;

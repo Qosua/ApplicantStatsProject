@@ -3,7 +3,6 @@
 #include <QString>
 #include <QDebug>
 
-#include "xlsx.h"
 #include "tableparser.h"
 
 int main(int argc, char *argv[])
