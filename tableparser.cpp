@@ -20,9 +20,21 @@ TableParser::TableParser(const QString& tablePath, const QString& columnsNamesFi
 TableParser::~TableParser() {
     delete m_doc;
     m_doc = nullptr;
+    
+    delete m_applicants;
+    m_applicants = nullptr;
 }
 
 void TableParser::parseTable() {
+    
+    if(m_doc) {
+        delete m_doc;
+        m_doc = nullptr;
+    }
+    if(m_applicants) {
+        delete m_applicants;
+        m_applicants = nullptr;
+    }
     
     m_doc = new QXlsx::Document(m_tablePath);
     m_applicants = new QList<Applicant>;
@@ -63,39 +75,31 @@ void TableParser::parseTable() {
     
 }
 
-QList<Applicant>* TableParser::getApplicants(ApplicantsFilter stats) {
+QList<Applicant> TableParser::getApplicants(ApplicantsFilterFlags flag) {
     
-    switch(stats){
-        case ApplicantsFilter::All: {
-            return m_applicants;
-        }break;
-            
-        case ApplicantsFilter::AdmissionsTrue: {
-            
-            QList<Applicant>* newList = new QList<Applicant>;
-            
-            for(const auto& elem : *m_applicants) {
-                if(elem.admissionFlag())
-                    newList->append(elem);
-            }
-            
-            return newList;
-        }break;
-            
-        case ApplicantsFilter::AdmissionsFalse: {
-            
-            QList<Applicant>* newList = new QList<Applicant>;
-            
-            for(const auto& elem : *m_applicants) {
-                if(!elem.admissionFlag())
-                    newList->append(elem);
-            }
-            
-            return newList;
-        }break;
+    QList<Applicant> newList;
+    
+    if(flag == ApplicantsFilterFlags::All) {
+        newList = *m_applicants;
+        return newList;
     }
-        
-    return new QList<Applicant>;
+    if(flag == ApplicantsFilterFlags::AdmissionsTrue) {
+        for(const auto& elem : *m_applicants) {
+            if(elem.admissionFlag())
+                newList.append(elem);
+        }
+        return newList;
+    }
+    if(flag == ApplicantsFilterFlags::AdmissionsFalse) {
+        for(const auto& elem : *m_applicants) {
+            if(!elem.admissionFlag())
+                newList.append(elem);
+        }
+        return newList;
+    }
+    
+    return QList<Applicant>();
+    
 }
 
 bool TableParser::setColumnsNames() {

@@ -11,15 +11,10 @@
 #include "xlsx.h"
 #include "applicant.h"
 
-enum ApplicantsFilter {
-    All,
-    AdmissionsTrue,
-    AdmissionsFalse,
-    NoNonBudget,
-    NoBudget,
-    NoSpecialRight,
-    NoKvot,
-    NoCompanySponsor,
+enum ApplicantsFilterFlags {
+    All              = 1 << 0,
+    AdmissionsTrue   = 1 << 1,
+    AdmissionsFalse  = 1 << 2,
 };
 
 class TableParser {
@@ -30,7 +25,7 @@ public:
     ~TableParser();
     
     void parseTable();
-    QList<Applicant>* getApplicants(ApplicantsFilter stats = ApplicantsFilter::All);
+    QList<Applicant> getApplicants(ApplicantsFilterFlags flag);
     
 private:
     
@@ -46,9 +41,3 @@ private:
 };
 
 #endif // TABLEPARSER_H
-
-// ///////////////////TEMP/////////////////
-// QString str = m_doc->read(i, m_columnsNames["Конкурсная группа"]).toString();
-// if(str.contains("Внебюджет"))
-//     continue;
-// ///////////////////TEMP/////////////////

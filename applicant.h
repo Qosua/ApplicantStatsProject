@@ -4,6 +4,15 @@
 #include <QObject>
 #include <QString>
 #include <QList>
+#include <algorithm>
+
+enum PrioritiesFlags {
+    NonBudget      = 1 << 3,
+    Budget         = 1 << 4,
+    SpecialRight   = 1 << 5,
+    Kvot           = 1 << 6,
+    CompanySponsor = 1 << 7,
+};
 
 class PriorityInfo : public QObject {
     
@@ -14,6 +23,8 @@ public:
     PriorityInfo();
     PriorityInfo(const PriorityInfo& copy);
     void operator=(const PriorityInfo& copy);
+    
+    bool operator==(const PriorityInfo& copy) const;
     
     int egeScore() const;
     void setEgeScore(int newEgeScore);
@@ -52,8 +63,8 @@ class Applicant : public QObject {
 public:
     
     Applicant();
-    void operator=(const Applicant& copy);
     Applicant(const Applicant& copy);
+    void operator=(const Applicant& copy);
     
     int id() const;
     void setId(int newId);
@@ -64,6 +75,7 @@ public:
     QList<PriorityInfo> priorities() const;
     void setPriorities(const QList<PriorityInfo> &newPriorities);
     void addPriority(const PriorityInfo& info);
+    void deletePriority(PrioritiesFlags flag);
     
 signals:
     void idChanged();
