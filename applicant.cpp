@@ -84,10 +84,52 @@ void Applicant::deletePriority(PrioritiesFlags flag) {
     }
 }
 
+QString Applicant::phoneNumber() const
+{
+    return m_phoneNumber;
+}
+
+void Applicant::setPhoneNumber(const QString &newPhoneNumber)
+{
+    if (m_phoneNumber == newPhoneNumber)
+        return;
+    m_phoneNumber = newPhoneNumber;
+    emit phoneNumberChanged();
+}
+
+QString Applicant::email() const
+{
+    return m_email;
+}
+
+void Applicant::setEmail(const QString &newEmail)
+{
+    if (m_email == newEmail)
+        return;
+    m_email = newEmail;
+    emit emailChanged();
+}
+
+QString Applicant::FIO() const
+{
+    return m_FIO;
+}
+
+void Applicant::setFIO(const QString &newFIO)
+{
+    if (m_FIO == newFIO)
+        return;
+    m_FIO = newFIO;
+    emit FIOChanged();
+}
+
 void Applicant::operator=(const Applicant &copy) {
     m_id = copy.m_id;
     m_admissionFlag = copy.m_admissionFlag;
-    m_priorities = copy.m_priorities; 
+    m_priorities = copy.m_priorities;
+    m_FIO = copy.m_FIO;
+    m_email = copy.m_email;
+    m_phoneNumber = copy.m_phoneNumber;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -166,6 +208,23 @@ void PriorityInfo::setType(const QString &newType)
     emit typeChanged();
 }
 
+QList<int> PriorityInfo::subjectScores() const {
+    return m_subjectScores;
+}
+
+void PriorityInfo::setSubjectScores(const QList<int> &newSubjectScores) {
+    if (m_subjectScores == newSubjectScores)
+        return;
+    m_subjectScores = newSubjectScores;
+    emit subjectScoresChanged();
+}
+
+void PriorityInfo::addSubject(int score) {
+    m_subjectScores.append(score);
+    if(m_subjectScores.size() > 3)
+        qDebug() << "ПРЕДУПРЕЖДЕНИЕ КОЛИЧЕСТВО ПРЕДМЕТОВ БОЛЬШЕ 3";
+}
+
 PriorityInfo::PriorityInfo() {
     
 }
@@ -182,6 +241,7 @@ void PriorityInfo::operator=(const PriorityInfo &copy) {
     m_name = copy.m_name;
     m_studyForm = copy.m_studyForm;
     m_type = copy.m_type;
+    m_subjectScores = copy.m_subjectScores;
 }
 
 bool PriorityInfo::operator==(const PriorityInfo &copy) const {

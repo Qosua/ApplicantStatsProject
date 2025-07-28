@@ -51,26 +51,37 @@ void TableParser::parseTable() {
         
         //Adding new applicant if not exits
         if(!tempHash.contains(applicantId)) {
+
             Applicant applicant;
+
             applicant.setId(applicantId);
             applicant.setAdmissionFlag((m_doc->read(i, m_columnsNames["Согласие на зачисление"]).toString() == "Да" ? true : false));
-            
+            applicant.setFIO(m_doc->read(i, m_columnsNames["ФИО"]).toString());
+            applicant.setEmail(m_doc->read(i, m_columnsNames["E-mail"]).toString());
+            applicant.setPhoneNumber(m_doc->read(i, m_columnsNames["Телефон"]).toString());
+
             tempHash[applicantId] = applicant;
         }
 
         PriorityInfo info;
+        QString priorityFullName = m_doc->read(i, m_columnsNames["Конкурсная группа"]).toString();
+
         info.setEgeScore(m_doc->read(i, m_columnsNames["Сумма баллов"]).toInt());
         info.setEgeAdditionalScore(m_doc->read(i, m_columnsNames["Сумма баллов за инд.дост.(конкурсные)"]).toInt());
         info.setPriorityNumber(m_doc->read(i, m_columnsNames["Приоритет"]).toInt());
-        
-        QString priorityFullName = m_doc->read(i, m_columnsNames["Конкурсная группа"]).toString();
-        
+        info.addSubject(m_doc->read(i, m_columnsNames["Предмет1"]).toInt());
+        info.addSubject(m_doc->read(i, m_columnsNames["Предмет2"]).toInt());
+        info.addSubject(m_doc->read(i, m_columnsNames["Предмет3"]).toInt());
         info.setCode(extractCode(priorityFullName));
         info.setName(extractName(priorityFullName));
         info.setStudyForm(extractStudyForm(priorityFullName));
         info.setType(extractType(priorityFullName));
         
         tempHash[applicantId].addPriority(info);
+
+        int a = 0;
+        qDebug() << a;
+
     }
     
     *m_applicants = tempHash.values();

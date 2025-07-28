@@ -4,6 +4,7 @@
 #include <QDebug>
 
 #include "tableparser.h"
+#include "facultypool.h"
 
 int main(int argc, char *argv[])
 {
@@ -33,6 +34,16 @@ int main(int argc, char *argv[])
     
     QList<Applicant> list1 = parser.getApplicants(ApplicantsFilterFlags::All);
     qDebug() << list1.size();
+
+    for(auto& elem : list1)
+        elem.deletePriority(PrioritiesFlags::NonBudget);
+
+
+
+
+
+
+
 
     return app.exec();
 }
