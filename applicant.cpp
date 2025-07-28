@@ -41,10 +41,28 @@ void Applicant::setPriorities(const QList<PriorityInfo> &newPriorities) {
 }
 
 void Applicant::addPriority(const PriorityInfo &info) {
+    
     m_priorities.append(info);
+    
     std::sort(m_priorities.begin(), m_priorities.end(),
         [](const PriorityInfo &info1, const PriorityInfo &info2){
-            return info1.priorityNumber() < info2.priorityNumber();
+        
+        if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
+            info2.type() != "Бюджет" and info2.type() != "Внебюджет")
+            return !(true);
+        else
+            if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
+                (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
+                return (info1.priorityNumber() < info2.priorityNumber());
+            else
+                if((info1.type() != "Бюджет" and info1.type() != "Внебюджет") and
+                    (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
+                    return !(false);
+                else
+                    return (info1.priorityNumber() < info2.priorityNumber());
+        
+        qDebug() << "ERROR IN COMPARATOR -"  << __FILE__  << ":" << __LINE__;
+        return false;
     });
     
 }
@@ -53,33 +71,43 @@ void Applicant::deletePriority(PrioritiesFlags flag) {
     
     switch(flag){
         case PrioritiesFlags::Budget: {
-            for(const auto& elem : m_priorities)
-                if(elem.type().contains("Бюджет"))
-                    m_priorities.removeOne(elem);
+            for(int i = 0; i < m_priorities.size(); ++i)
+                if(m_priorities[i].type() == "Бюджет") {
+                    m_priorities.removeOne(m_priorities[i]);
+                    --i;
+                }
         }break;
             
         case PrioritiesFlags::NonBudget: {
-            for(const auto& elem : m_priorities)
-                if(elem.type().contains("Внебюджет"))
-                    m_priorities.removeOne(elem);
+            for(int i = 0; i < m_priorities.size(); ++i)
+                if(m_priorities[i].type() == "Внебюджет") {
+                    m_priorities.removeOne(m_priorities[i]);
+                    --i;
+                }
         }break;
             
         case PrioritiesFlags::SpecialRight: {
-            for(const auto& elem : m_priorities)
-                if(elem.type().contains("Особое право"))
-                    m_priorities.removeOne(elem);
+            for(int i = 0; i < m_priorities.size(); ++i)
+                if(m_priorities[i].type() == "Особое право") {
+                    m_priorities.removeOne(m_priorities[i]);
+                    --i;
+                }
         }break;
             
         case PrioritiesFlags::Kvot: {
-            for(const auto& elem : m_priorities)
-                if(elem.type().contains("Отдельная квота"))
-                    m_priorities.removeOne(elem);
+            for(int i = 0; i < m_priorities.size(); ++i)
+                if(m_priorities[i].type() == "Отдельная квота") {
+                    m_priorities.removeOne(m_priorities[i]);
+                    --i;
+                }
         }break;
             
         case PrioritiesFlags::CompanySponsor: {
-            for(const auto& elem : m_priorities)
-                if(elem.type().contains("Целевое"))
-                    m_priorities.removeOne(elem);
+            for(int i = 0; i < m_priorities.size(); ++i)
+                if(m_priorities[i].type() == "Целевое") {
+                    m_priorities.removeOne(m_priorities[i]);
+                    --i;
+                }
         }break;
     }
 }
@@ -130,6 +158,20 @@ void Applicant::operator=(const Applicant &copy) {
     m_FIO = copy.m_FIO;
     m_email = copy.m_email;
     m_phoneNumber = copy.m_phoneNumber;
+}
+
+bool Applicant::operator==(const Applicant &copy) const {
+    
+    if((m_id == copy.m_id) and
+        (m_admissionFlag == copy.m_admissionFlag) and
+        (m_priorities == copy.m_priorities) and
+        (m_FIO == copy.m_FIO) and
+        (m_email == copy.m_email) and
+        (m_phoneNumber == copy.m_phoneNumber))
+        return true;
+    else
+        return false;
+    
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -222,7 +264,7 @@ void PriorityInfo::setSubjectScores(const QList<int> &newSubjectScores) {
 void PriorityInfo::addSubject(int score) {
     m_subjectScores.append(score);
     if(m_subjectScores.size() > 3)
-        qDebug() << "ПРЕДУПРЕЖДЕНИЕ КОЛИЧЕСТВО ПРЕДМЕТОВ БОЛЬШЕ 3";
+        qDebug() << "WARNING SUBJECTS COUNT MOEW THAN 3" << __FILE__ << ":" << __LINE__;
 }
 
 PriorityInfo::PriorityInfo() {
@@ -251,7 +293,62 @@ bool PriorityInfo::operator==(const PriorityInfo &copy) const {
             (m_code == copy.m_code) and
             (m_name == copy.m_name) and
             (m_studyForm == copy.m_studyForm) and
-            (m_type == copy.m_type));
+            (m_type == copy.m_type) and
+            (m_subjectScores == copy.m_subjectScores));
+}
+
+bool PriorityInfo::operator!=(const PriorityInfo &copy) const {
+    return !(*this == copy);
+}
+
+bool PriorityInfo::operator <(const PriorityInfo &copy) const {
+    
+    if(m_egeScore < copy.m_egeScore) return true;
+    else
+        if(m_egeScore == copy.m_egeScore) {
+        
+            if(m_egeAdditionalScore < copy.m_egeAdditionalScore) return true;
+            else
+                if(m_egeAdditionalScore == copy.m_egeAdditionalScore) {
+                
+                    if(m_subjectScores[0] < copy.m_subjectScores[0]) return true;
+                    else
+                        if(m_subjectScores[0] == copy.m_subjectScores[0]) {
+                        
+                            if(m_subjectScores[1] < copy.m_subjectScores[1]) return true;
+                            else
+                                if(m_subjectScores[1] == copy.m_subjectScores[1]) {
+                                
+                                    if(m_subjectScores[2] < copy.m_subjectScores[2]) return true;
+                                    else
+                                        if(m_subjectScores[2] == copy.m_subjectScores[2]) {
+                                        
+                                            qDebug() << "Why???" << __FILE__ << ":" << __LINE__;
+                                            return true;
+                                            
+                                        }
+                                        else return false;
+                                }
+                                else return false;
+                        }
+                        else return false;
+                }
+                else return false;
+        }
+        else return false;
+    
+}
+
+bool PriorityInfo::operator >(const PriorityInfo &copy) const {
+    return (!(*this < copy) and (*this != copy));
+}
+
+bool PriorityInfo::operator<=(const PriorityInfo &copy) const {
+    return !(*this > copy);
+}
+
+bool PriorityInfo::operator>=(const PriorityInfo &copy) const {
+    return !(*this < copy);
 }
 
 int PriorityInfo::egeScore() const {

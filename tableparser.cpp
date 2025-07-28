@@ -3,12 +3,12 @@
 TableParser::TableParser(const QString& tablePath, const QString& columnsNamesFilePath) {
     
     if(!QFile::exists(tablePath)) {
-        qDebug() << "Не удалось найти файл таблицы" << tablePath;
+        qDebug() << "CAN NOT FIND TABLE FILE" << tablePath << __FILE__ << ":" << __LINE__;
         return;
     }
     
     if(!QFile::exists(columnsNamesFilePath)) {
-        qDebug() << "Не удалось найти файл имён столбцов" << columnsNamesFilePath;
+        qDebug() << "CAN NOT FIND COLUMNS NAMES FILE" << columnsNamesFilePath << __FILE__ << ":" << __LINE__;
         return;
     }
     
@@ -78,9 +78,6 @@ void TableParser::parseTable() {
         info.setType(extractType(priorityFullName));
         
         tempHash[applicantId].addPriority(info);
-
-        int a = 0;
-        qDebug() << a;
 
     }
     
@@ -161,7 +158,7 @@ void TableParser::printStatsToConsole() {
                 counter += 1;
                 break;
             }
-    qDebug() << "количество абитуриентов с хотя бы одним внебюджетным заявлением -" << counter;
+    qDebug() << "applicants count with at least one nonbudget priority -" << counter;
     
     
     counter = 0;
@@ -171,7 +168,7 @@ void TableParser::printStatsToConsole() {
                 counter += 1;
                 break;
             }
-    qDebug() << "количество абитуриентов с хотя бы одним бюджетным заявлением -" << counter;
+    qDebug() << "applicants count with at least one budget priority -" << counter;
     
     
     counter = 0;
@@ -181,7 +178,7 @@ void TableParser::printStatsToConsole() {
                 counter += 1;
                 break;
             }
-    qDebug() << "количество абитуриентов с хотя бы одним целевым заявлением -" << counter;
+    qDebug() << "applicants count with at least one goal priority -" << counter;
     
     
     counter = 0;
@@ -191,7 +188,7 @@ void TableParser::printStatsToConsole() {
                 counter += 1;
                 break;
             }
-    qDebug() << "количество абитуриентов с хотя бы одним квотным заявлением -" << counter;
+    qDebug() << "applicants count with at least one kvot priority -" << counter;
     
     
     counter = 0;
@@ -201,7 +198,7 @@ void TableParser::printStatsToConsole() {
                 counter += 1;
                 break;
             }
-    qDebug() << "количество абитуриентов с хотя бы одним особым правом -" << counter;
+    qDebug() << "applicants count with at least one special right -" << counter;
     qDebug() << ">-----------------------------------------------------------------------<";
     
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -211,7 +208,7 @@ void TableParser::printStatsToConsole() {
             if(priority.type().contains("Внебюджет")) {
                 counter += 1;
             }
-    qDebug() << "количество внебюджетных заявлений -" << counter;
+    qDebug() << "nonbudget priority count -" << counter;
     
     
     counter = 0;
@@ -220,7 +217,7 @@ void TableParser::printStatsToConsole() {
             if(priority.type().contains("Бюджет")) {
                 counter += 1;
             }
-    qDebug() << "количество бюджетных заявлений -" << counter;
+    qDebug() << "bidget priority count -" << counter;
     
     
     counter = 0;
@@ -229,7 +226,7 @@ void TableParser::printStatsToConsole() {
             if(priority.type().contains("Целевое")) {
                 counter += 1;
             }
-    qDebug() << "количество целевых заявлений -" << counter;
+    qDebug() << "goal priority count -" << counter;
     
     
     counter = 0;
@@ -238,7 +235,7 @@ void TableParser::printStatsToConsole() {
             if(priority.type().contains("Отдельная квота")) {
                 counter += 1;
             }
-    qDebug() << "количество квотных заявлений -" << counter;
+    qDebug() << "kvot priority count -" << counter;
     
     
     counter = 0;
@@ -247,7 +244,7 @@ void TableParser::printStatsToConsole() {
             if(priority.type().contains("Особое право")) {
                 counter += 1;
             }
-    qDebug() << "количество заявлений с особым правом -" << counter;
+    qDebug() << "special right priority count -" << counter;
     qDebug() << ">>=====================================================================<<";
     
     
@@ -279,8 +276,8 @@ QString TableParser::extractStudyForm(const QString& str) {
     if(str.contains("Заочная") or str.contains("Заочное")){
         return "Заочная";
     }
-    if(str.contains("Очно-Заочная") or str.contains("Очно-Заочное")){
-        return "Очно-Заочная";
+    if(str.contains("Очно-заочная") or str.contains("Очно-заочное")){
+        return "Очно-заочная";
     }
     return "ОШИБКА ФОРМЫ ОБУЧЕНИЯ";
 }

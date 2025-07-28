@@ -3,7 +3,7 @@ QT += quick core
 SOURCES += \
         applicant.cpp \
         facultycell.cpp \
-        facultypool.cpp \
+        magichat.cpp \
         main.cpp \
         tableparser.cpp
 
@@ -28,7 +28,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     applicant.h \
     facultycell.h \
-    facultypool.h \
+    magichat.h \
     tableparser.h \
     xlsx.h
 

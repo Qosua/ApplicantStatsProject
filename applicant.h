@@ -25,6 +25,11 @@ public:
     void operator=(const PriorityInfo& copy);
     
     bool operator==(const PriorityInfo& copy) const;
+    bool operator!=(const PriorityInfo& copy) const;
+    bool operator <(const PriorityInfo& copy) const;
+    bool operator >(const PriorityInfo& copy) const;
+    bool operator<=(const PriorityInfo& copy) const;
+    bool operator>=(const PriorityInfo& copy) const;
     
     int egeScore() const;
     void setEgeScore(int newEgeScore);
@@ -93,6 +98,8 @@ public:
     Applicant();
     Applicant(const Applicant& copy);
     void operator=(const Applicant& copy);
+    
+    bool operator==(const Applicant& copy) const;
     
     int id() const;
     void setId(int newId);

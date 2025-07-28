@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <algorithm>
+#include <QPair>
+#include <QDebug>
 #include "applicant.h"
 
 class FacultyCell : public QObject {
@@ -27,9 +29,13 @@ public:
     QString type() const;
     void setType(const QString &newType);
 
-    QList<Applicant> pool() const;
-    void setPool(const QList<Applicant> &newPool);
-    void addToPool(const Applicant& applicant);
+    QList<QPair<PriorityInfo, Applicant>> pool() const;
+    void setPool(const QList<QPair<PriorityInfo, Applicant>> &newPool);
+    void addToPool(const PriorityInfo& priority, const Applicant& applicant);
+    
+    bool isAbleToAdd(PriorityInfo priority);
+    
+    Applicant* getUnsuitableApplicant();
 
 signals:
     void nameChanged();
@@ -46,7 +52,7 @@ private:
     QString m_code;
     QString m_studyForm; //Personal, Personal-NotPersonal,...
     QString m_type; //Budget, CompanySponsor,...
-    QList<Applicant> m_pool;
+    QList<QPair<PriorityInfo, Applicant>> m_pool;
 
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged FINAL)
@@ -54,7 +60,7 @@ private:
     Q_PROPERTY(QString code READ code WRITE setCode NOTIFY codeChanged FINAL)
     Q_PROPERTY(QString studyForm READ studyForm WRITE setStudyForm NOTIFY studyFormChanged FINAL)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged FINAL)
-    Q_PROPERTY(QList<Applicant> pool READ pool WRITE setPool NOTIFY poolChanged FINAL)
+    Q_PROPERTY(QList<QPair<PriorityInfo, Applicant> > pool READ pool WRITE setPool NOTIFY poolChanged FINAL)
 };
 
 #endif // FACULTYCELL_H
