@@ -38,7 +38,7 @@ public:
     
     bool isAbleToAdd(PriorityInfo priority);
     
-    Applicant* getUnsuitableApplicant();
+    QPair<PriorityInfo, Applicant*> getUnsuitableApplicant();
 
 signals:
     void nameChanged();
@@ -49,14 +49,12 @@ signals:
     void poolChanged();
 
 private:
-
     int m_capacity;
     QString m_name;
     QString m_code;
     QString m_studyForm; //Personal, Personal-NotPersonal,...
     QString m_type; //Budget, CompanySponsor,...
     QList<QPair<PriorityInfo, Applicant>> m_pool;
-
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged FINAL)
     Q_PROPERTY(int capacity READ capacity WRITE setCapacity NOTIFY capacityChanged FINAL)

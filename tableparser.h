@@ -30,7 +30,7 @@ public:
 private:
     
     bool setColumnsNames();
-    void printStatsToConsole();
+    void printStatsToConsole() const;
     QString extractCode(const QString& str);
     QString extractName(const QString& str);
     QString extractStudyForm(const QString& str);

@@ -18,6 +18,10 @@ public:
     QList<Applicant> applicantsList() const;
     void setApplicantsList(const QList<Applicant> &newApplicantsList);
     void printFaculties();
+    
+    void startPriorityRoundSimulation();
+    void startGeneralRoundSimulation();
+    void rebalanceBudgetaryPlaces();
 
 signals:
     void applicantsListChanged();

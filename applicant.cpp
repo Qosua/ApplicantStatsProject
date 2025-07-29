@@ -31,7 +31,7 @@ void Applicant::setAdmissionFlag(bool newAdmissionFlag) {
     emit admissionFlagChanged();
 }
 
-QList<PriorityInfo> Applicant::priorities() const {
+QList<PriorityInfo>& Applicant::priorities() {
     return m_priorities;
 }
 
@@ -47,28 +47,45 @@ void Applicant::addPriority(const PriorityInfo &info) {
     std::sort(m_priorities.begin(), m_priorities.end(),
         [](const PriorityInfo &info1, const PriorityInfo &info2) {
 
-        if(info1.type() == "Целевое" and info2.type() != "Целевое")
-            return !(false);
+        // if(info1.type() == "Целевое" and info2.type() != "Целевое")
+        //     return !(false);
+        // else
+        //     if(info1.type() == "Целевое" and info2.type() == "Целевое")
+        //         return (info1.priorityNumber() < info2.priorityNumber());
+        //     else
+        //         if(info1.type() != "Целевое" and info2.type() == "Целевое")
+        //             return !(true);
+        //         else
+        //             if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
+        //                 info2.type() != "Бюджет" and info2.type() != "Внебюджет")
+        //                 return !(true);
+        //             else
+        //                 if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
+        //                     (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
+        //                     return (info1.priorityNumber() < info2.priorityNumber());
+        //                 else
+        //                     if((info1.type() != "Бюджет" and info1.type() != "Внебюджет") and
+        //                         (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
+        //                         return !(false);
+        //                     else
+        //                         return (info1.priorityNumber() < info2.priorityNumber());
+        
+        // qDebug() << "ERROR IN COMPARATOR -"  << __FILE__  << ":" << __LINE__;
+        // return false;
+        
+        if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
+            info2.type() != "Бюджет" and info2.type() != "Внебюджет")
+            return !(true);
         else
-            if(info1.type() == "Целевое" and info2.type() == "Целевое")
+            if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
+                (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
                 return (info1.priorityNumber() < info2.priorityNumber());
             else
-                if(info1.type() != "Целевое" and info2.type() == "Целевое")
-                    return !(true);
+                if((info1.type() != "Бюджет" and info1.type() != "Внебюджет") and
+                    (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
+                    return !(false);
                 else
-                    if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
-                        info2.type() != "Бюджет" and info2.type() != "Внебюджет")
-                        return !(true);
-                    else
-                        if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
-                            (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
-                            return (info1.priorityNumber() < info2.priorityNumber());
-                        else
-                            if((info1.type() != "Бюджет" and info1.type() != "Внебюджет") and
-                                (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
-                                return !(false);
-                            else
-                                return (info1.priorityNumber() < info2.priorityNumber());
+                    return (info1.priorityNumber() < info2.priorityNumber());
         
         qDebug() << "ERROR IN COMPARATOR -"  << __FILE__  << ":" << __LINE__;
         return false;
@@ -276,6 +293,19 @@ void PriorityInfo::addSubject(int score) {
         qDebug() << "WARNING SUBJECTS COUNT MOEW THAN 3" << __FILE__ << ":" << __LINE__;
 }
 
+int PriorityInfo::id() const
+{
+    return m_id;
+}
+
+void PriorityInfo::setId(int newId)
+{
+    if (m_id == newId)
+        return;
+    m_id = newId;
+    emit idChanged();
+}
+
 PriorityInfo::PriorityInfo() {
     
 }
@@ -293,6 +323,7 @@ void PriorityInfo::operator=(const PriorityInfo &copy) {
     m_studyForm = copy.m_studyForm;
     m_type = copy.m_type;
     m_subjectScores = copy.m_subjectScores;
+    m_id = copy.m_id;
 }
 
 bool PriorityInfo::operator==(const PriorityInfo &copy) const {
@@ -303,7 +334,8 @@ bool PriorityInfo::operator==(const PriorityInfo &copy) const {
             (m_name == copy.m_name) and
             (m_studyForm == copy.m_studyForm) and
             (m_type == copy.m_type) and
-            (m_subjectScores == copy.m_subjectScores));
+            (m_subjectScores == copy.m_subjectScores) and
+            (m_id == copy.m_id));
 }
 
 bool PriorityInfo::operator!=(const PriorityInfo &copy) const {
@@ -332,8 +364,9 @@ bool PriorityInfo::operator <(const PriorityInfo &copy) const {
                                     else
                                         if(m_subjectScores[2] == copy.m_subjectScores[2]) {
                                         
-                                            qDebug() << "Why???" << __FILE__ << ":" << __LINE__;
-                                            return true;
+                                            *this;
+                                            //qDebug() << "Why???" << __FILE__ << ":" << __LINE__;
+                                            return m_id < copy.m_id;
                                             
                                         }
                                         else return false;

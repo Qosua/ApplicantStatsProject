@@ -117,10 +117,31 @@ MagicHat::MagicHat() {
         //PHIS
         QPair<QList<QString>, QList<int>>({
             {
+             "03.00.00",
+             "Физика и Радиофизика",
+             "Очное"},
+            {28, 4, 4, 0}
+        }),
+        QPair<QList<QString>, QList<int>>({
+            {
+             "03.03.02",
+             "Физика и компьютерные технологии",
+             "Очное"},
+            {0, 0, 0, 3}
+        }),
+        QPair<QList<QString>, QList<int>>({
+            {
+             "03.03.02",
+             "Технологии беспроводной связи",
+             "Очное"},
+            {0, 0, 0, 4}
+        }),
+        QPair<QList<QString>, QList<int>>({
+            {
              "11.00.00",
              "Электроника, радиотехника и системы связи",
              "Очное"},
-            {112, 12, 12, 0}
+            {75, 12, 12, 0}
         }),
         QPair<QList<QString>, QList<int>>({
             {
@@ -235,14 +256,14 @@ MagicHat::MagicHat() {
             {
              "38.03.02",
              "Управление проектами",
-             "Заочная"},
+             "Очное"},
             {7, 1, 1, 1}
         }),
         QPair<QList<QString>, QList<int>>({
             {
              "38.03.02",
              "Менеджмент в инновационном и социальном предпринимательстве",
-             "Заочная"},
+             "Очное"},
             {7, 1, 1, 0}
         }),
         QPair<QList<QString>, QList<int>>({
@@ -345,6 +366,181 @@ void MagicHat::printFaculties() {
 
     }
 
+}
+
+void MagicHat::startPriorityRoundSimulation() {
+    
+    QList<Applicant> priorityList;
+    
+    for(auto& elem : m_applicantsList){
+        
+        Applicant tempApplicant = elem;
+        tempApplicant.priorities().clear();
+        
+        for(const auto& elem1 : elem.priorities()){
+            
+            if(elem1.type() != "Бюджет"){
+                
+                tempApplicant.addPriority(elem1);
+            }
+            
+            
+        }
+        
+        priorityList.append(tempApplicant);
+        
+    }
+    
+    for(int i = -1; priorityList.size() > 0;) {
+        
+        if(priorityList.size() == 0)
+            break;
+        
+        i = (i + 1) % priorityList.size();
+        
+        Applicant* applicant = &priorityList[i];
+        PriorityInfo tempPriority;
+        
+        if(applicant->priorities().size() > 0)
+            tempPriority = applicant->priorities().first();
+        else {
+            priorityList.removeOne(*applicant);
+            continue;
+        }
+        
+        qDebug() << priorityList.size();
+        
+        bool deletePriority = true;
+        for(int j = 0; j < m_faculties.size(); ++j){
+            
+            FacultyCell* facultyCell = &m_faculties[j];
+            
+            if(facultyCell->isAbleToAdd(tempPriority)){
+                
+                deletePriority = false;
+                
+                applicant->priorities().removeFirst();
+                facultyCell->addToPool(tempPriority, *applicant);
+                priorityList.removeOne(*applicant);
+                
+                QPair<PriorityInfo, Applicant*> unsuitable = facultyCell->getUnsuitableApplicant();
+                
+                if(unsuitable.second != nullptr){
+                    
+                    unsuitable.second->addPriority(unsuitable.first);
+                    priorityList.append(*unsuitable.second);
+                    
+                    delete unsuitable.second;
+                    unsuitable.second = nullptr;
+                    
+                }
+            }
+        }
+        
+        if(deletePriority){
+            
+            applicant->priorities().removeFirst();
+            int a = 0;
+            a += 1;
+            
+        }
+        
+    }
+    
+    qDebug() << "Priority simulation completed";
+    
+}
+
+void MagicHat::startGeneralRoundSimulation() {
+    
+    QList<Applicant> generalList;
+    
+    for(auto& elem : m_applicantsList){
+        
+        Applicant tempApplicant = elem;
+        tempApplicant.priorities().clear();
+        
+        for(const auto& elem1 : elem.priorities()){
+            
+            if(elem1.type() == "Бюджет"){
+                
+                tempApplicant.addPriority(elem1);
+            }
+            
+            
+        }
+        
+        generalList.append(tempApplicant);
+        
+    }
+    
+    for(int i = -1; generalList.size() > 0;) {
+        
+        if(generalList.size() == 0)
+            break;
+        
+        i = (i + 1) % generalList.size();
+        
+        Applicant* applicant = &generalList[i];
+        PriorityInfo tempPriority;
+        
+        if(applicant->priorities().size() > 0)
+            tempPriority = applicant->priorities().first();
+        else {
+            generalList.removeOne(*applicant);
+            continue;
+        }
+        
+        qDebug() << generalList.size();
+        
+        bool deletePriority = true;
+        for(int j = 0; j < m_faculties.size(); ++j){
+            
+            FacultyCell* facultyCell = &m_faculties[j];
+            
+            if(facultyCell->isAbleToAdd(tempPriority)){
+                
+                deletePriority = false;
+                
+                applicant->priorities().removeFirst();
+                facultyCell->addToPool(tempPriority, *applicant);
+                generalList.removeOne(*applicant);
+                
+                QPair<PriorityInfo, Applicant*> unsuitable = facultyCell->getUnsuitableApplicant();
+                
+                if(unsuitable.second != nullptr){
+                    
+                    unsuitable.second->addPriority(unsuitable.first);
+                    generalList.append(*unsuitable.second);
+                    
+                    delete unsuitable.second;
+                    unsuitable.second = nullptr;
+                    
+                }
+            }
+        }
+        
+        if(deletePriority){
+            
+            applicant->priorities().removeFirst();
+            int a = 0;
+            a += 1;
+            
+        }
+        
+    }
+    
+    qDebug() << "General simulation completed";
+    
+    
+}
+
+void MagicHat::rebalanceBudgetaryPlaces() {
+    
+    
+    
+    
+    
 }
 
 

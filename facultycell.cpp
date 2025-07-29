@@ -86,9 +86,10 @@ void FacultyCell::setPool(const QList<QPair<PriorityInfo, Applicant>> &newPool) 
 void FacultyCell::addToPool(const PriorityInfo &priority, const Applicant &applicant) {
     
     m_pool.append({priority, applicant});
+    
     std::sort(m_pool.begin(), m_pool.end(), [](const QPair<PriorityInfo, Applicant>& priority1, const QPair<PriorityInfo, Applicant>& priority2){
         
-        return priority1.first >= priority2.first;
+        return (priority1.first <= priority2.first);
         
     });
     
@@ -96,31 +97,43 @@ void FacultyCell::addToPool(const PriorityInfo &priority, const Applicant &appli
 
 bool FacultyCell::isAbleToAdd(PriorityInfo priority) {
     
+    if(m_capacity <= 0)
+        return false;
+    
     if(m_name != priority.name() or
         m_code != priority.code() or
         m_studyForm != priority.studyForm() or
-        m_type != priority.type())
-        qDebug() << "PRIORITY IN WRONG GROUP" << __FILE__ << ":" << __LINE__;
+        m_type != priority.type()) {
+        //qDebug() << "PRIORITY IN WRONG GROUP" << __FILE__ << ":" << __LINE__;
+        return false;
+    }
     
-    if((m_pool.first().first) < priority and m_pool.size() == m_capacity)
+    if(m_pool.size() == 0)
+        return true;
+    
+    // if(m_pool.first().first == priority)
+    //     return false;
+    
+    if(m_pool.size() >= m_capacity and m_pool.first().first > priority)
         return false;
     else
         return true;
     
 }
 
-Applicant *FacultyCell::getUnsuitableApplicant() {
+QPair<PriorityInfo, Applicant*> FacultyCell::getUnsuitableApplicant() {
     
     if(m_pool.size() > m_capacity){
         
         Applicant* applicant = new Applicant;
         *applicant = m_pool.first().second;
+        PriorityInfo temp =  m_pool.first().first;
         m_pool.removeFirst();
-        return applicant;
+        return {temp, applicant};
         
     }
     
-    return nullptr;
+    return {PriorityInfo(), nullptr};
 }
 
 

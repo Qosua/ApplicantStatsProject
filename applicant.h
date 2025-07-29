@@ -55,7 +55,10 @@ public:
     QList<int> subjectScores() const;
     void setSubjectScores(const QList<int> &newSubjectScores);
     void addSubject(int score);
-
+    
+    int id() const;
+    void setId(int newId);
+    
 signals:
     void egeScoreChanged();
     void egeAdditionalScoreChanged();
@@ -66,8 +69,11 @@ signals:
     void studyFormChanged();
     void typeChanged();
     void subjectScoresChanged();
-
+    
+    void idChanged();
+    
 private:
+    int m_id;
     int m_egeScore;
     int m_egeAdditionalScore;
     int m_priorityNumber;
@@ -85,6 +91,7 @@ private:
     Q_PROPERTY(QString studyForm READ studyForm WRITE setStudyForm NOTIFY studyFormChanged FINAL)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged FINAL)
     Q_PROPERTY(QList<int> subjectScores READ subjectScores WRITE setSubjectScores NOTIFY subjectScoresChanged FINAL)
+    Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged FINAL)
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -107,7 +114,7 @@ public:
     bool admissionFlag() const;
     void setAdmissionFlag(bool newAdmissionFlag);
     
-    QList<PriorityInfo> priorities() const;
+    QList<PriorityInfo>& priorities();
     void setPriorities(const QList<PriorityInfo> &newPriorities);
     void addPriority(const PriorityInfo& info);
     void deletePriority(PrioritiesFlags flag);
