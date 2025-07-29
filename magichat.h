@@ -2,8 +2,11 @@
 #define MAGICHAT_H
 
 #include <QObject>
+#include <QMap>
+#include <QList>
 
 #include "applicant.h"
+#include "facultycell.h"
 
 class MagicHat : public QObject {
 
@@ -12,17 +15,18 @@ class MagicHat : public QObject {
 public:
     MagicHat();
     
-    QList<Applicant> getApplicantsList() const;
+    QList<Applicant> applicantsList() const;
     void setApplicantsList(const QList<Applicant> &newApplicantsList);
-    
+    void printFaculties();
+
 signals:
     void applicantsListChanged();
-    
+
 private:
-    
-    QList<Applicant> applicantsList;
-    
-    Q_PROPERTY(QList<Applicant> applicantsList READ getApplicantsList WRITE setApplicantsList NOTIFY applicantsListChanged FINAL)
+    QList<Applicant> m_applicantsList;
+    QList<FacultyCell> m_faculties;
+
+    Q_PROPERTY(QList<Applicant> applicantsList READ applicantsList WRITE setApplicantsList NOTIFY applicantsListChanged FINAL)
 };
 
 #endif // MAGICHAT_H

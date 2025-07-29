@@ -45,21 +45,30 @@ void Applicant::addPriority(const PriorityInfo &info) {
     m_priorities.append(info);
     
     std::sort(m_priorities.begin(), m_priorities.end(),
-        [](const PriorityInfo &info1, const PriorityInfo &info2){
-        
-        if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
-            info2.type() != "Бюджет" and info2.type() != "Внебюджет")
-            return !(true);
+        [](const PriorityInfo &info1, const PriorityInfo &info2) {
+
+        if(info1.type() == "Целевое" and info2.type() != "Целевое")
+            return !(false);
         else
-            if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
-                (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
+            if(info1.type() == "Целевое" and info2.type() == "Целевое")
                 return (info1.priorityNumber() < info2.priorityNumber());
             else
-                if((info1.type() != "Бюджет" and info1.type() != "Внебюджет") and
-                    (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
-                    return !(false);
+                if(info1.type() != "Целевое" and info2.type() == "Целевое")
+                    return !(true);
                 else
-                    return (info1.priorityNumber() < info2.priorityNumber());
+                    if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
+                        info2.type() != "Бюджет" and info2.type() != "Внебюджет")
+                        return !(true);
+                    else
+                        if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
+                            (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
+                            return (info1.priorityNumber() < info2.priorityNumber());
+                        else
+                            if((info1.type() != "Бюджет" and info1.type() != "Внебюджет") and
+                                (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
+                                return !(false);
+                            else
+                                return (info1.priorityNumber() < info2.priorityNumber());
         
         qDebug() << "ERROR IN COMPARATOR -"  << __FILE__  << ":" << __LINE__;
         return false;

@@ -33,8 +33,20 @@ int main(int argc, char *argv[])
     QList<Applicant> list1 = parser.getApplicants(ApplicantsFilterFlags::All);
     qDebug() << list1.size();
 
-    for(auto& elem : list1)
-        elem.deletePriority(PrioritiesFlags::NonBudget);
+    /*
+    for(int i = 0; i < list1.size(); ++i) {
+        list1[i].deletePriority(PrioritiesFlags::NonBudget);
+        if(list1[i].FIO().contains("Парамонова")) {
+
+            for(int j = 0; j < list1[i].priorities().size(); ++j){
+
+                qDebug() << list1[i].priorities()[j].type() << list1[i].priorities()[j].priorityNumber();
+
+            }
+
+        }
+    }
+    */
     
     /*
     for(auto& elem : list1) {
@@ -82,7 +94,9 @@ int main(int argc, char *argv[])
     */
     
     
-    
+    MagicHat magicHat;
+    magicHat.setApplicantsList(list1);
+    magicHat.printFaculties();
 
 
     return app.exec();

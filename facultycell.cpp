@@ -2,6 +2,23 @@
 
 FacultyCell::FacultyCell() {}
 
+FacultyCell::FacultyCell(const FacultyCell &copy) {
+
+    *this = copy;
+
+}
+
+void FacultyCell::operator=(const FacultyCell &copy) {
+
+    m_capacity = copy.m_capacity;
+    m_name = copy.m_name;
+    m_code = copy.m_code;
+    m_studyForm = copy.m_studyForm;
+    m_type = copy.m_type;
+    m_pool = copy.m_pool;
+
+}
+
 QString FacultyCell::name() const {
     return m_name;
 }
@@ -98,6 +115,7 @@ Applicant *FacultyCell::getUnsuitableApplicant() {
         
         Applicant* applicant = new Applicant;
         *applicant = m_pool.first().second;
+        m_pool.removeFirst();
         return applicant;
         
     }

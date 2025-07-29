@@ -14,9 +14,12 @@ class FacultyCell : public QObject {
 public:
 
     FacultyCell();
+    FacultyCell(const FacultyCell& copy);
+    void operator=(const FacultyCell& copy);
 
     QString name() const;
     void setName(const QString &newName);
+
     int capacity() const;
     void setCapacity(int newCapacity);
 
