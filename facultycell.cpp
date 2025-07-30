@@ -136,6 +136,12 @@ QPair<PriorityInfo, Applicant*> FacultyCell::getUnsuitableApplicant() {
     return {PriorityInfo(), nullptr};
 }
 
+int FacultyCell::getPoolSize() {
+
+    return m_pool.size();
+
+}
+
 
 
 

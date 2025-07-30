@@ -7,7 +7,7 @@ MagicHat::MagicHat() {
         "Бюджет",
         "Особое право",
         "Отдельная квота",
-        "Целевое обучение"};
+        "Целевое"};
 
     QList<QPair<QList<QString>, QList<int>>> globalList = {
 
@@ -95,7 +95,7 @@ MagicHat::MagicHat() {
         QPair<QList<QString>, QList<int>>({
             {
              "10.03.01",
-             "Безопасность компьютерных систем (в сфере информационных технологий)",
+             "Безопасность компьютерных систем",
              "Очное"},
             {19, 2, 2, 8}
         }),
@@ -124,45 +124,10 @@ MagicHat::MagicHat() {
         }),
         QPair<QList<QString>, QList<int>>({
             {
-             "03.03.02",
-             "Физика и компьютерные технологии",
-             "Очное"},
-            {0, 0, 0, 3}
-        }),
-        QPair<QList<QString>, QList<int>>({
-            {
-             "03.03.02",
-             "Технологии беспроводной связи",
-             "Очное"},
-            {0, 0, 0, 4}
-        }),
-        QPair<QList<QString>, QList<int>>({
-            {
              "11.00.00",
              "Электроника, радиотехника и системы связи",
              "Очное"},
             {75, 12, 12, 0}
-        }),
-        QPair<QList<QString>, QList<int>>({
-            {
-             "11.03.01",
-             "Радиотехника",
-             "Очное"},
-            {0, 0, 0, 10}
-        }),
-        QPair<QList<QString>, QList<int>>({
-            {
-             "11.03.02",
-             "Искусственный интеллект и инфокоммуникации",
-             "Очное"},
-            {0, 0, 0, 15}
-        }),
-        QPair<QList<QString>, QList<int>>({
-            {
-             "11.03.03",
-             "Инновационные материалы и технологии электроники и наноэлектроники",
-             "Очное"},
-            {0, 0, 0, 12}
         }),
         //LANGUAGE
         QPair<QList<QString>, QList<int>>({
@@ -289,7 +254,6 @@ MagicHat::MagicHat() {
             {17, 2, 2, 3}
         }),
 
-
     };
 
 
@@ -319,6 +283,11 @@ MagicHat::MagicHat() {
         arr[3] = goal;
 
         for(int i = 0; i < 4; ++i){
+
+            if(arr[i] <= 0) {
+                continue;
+            }
+
             m_faculties.append(FacultyCell());
             m_faculties.last().setName(name);
             m_faculties.last().setCode(code);
@@ -327,6 +296,41 @@ MagicHat::MagicHat() {
             m_faculties.last().setCapacity(arr[i]);
         }
     }
+
+    m_faculties.append(FacultyCell());
+    m_faculties.last().setName("Радиотехника");
+    m_faculties.last().setCode("11.03.01");
+    m_faculties.last().setStudyForm("Очное");
+    m_faculties.last().setType("Целевое");
+    m_faculties.last().setCapacity(10);
+
+    m_faculties.append(FacultyCell());
+    m_faculties.last().setName("Искусственный интеллект и инфокоммуникации");
+    m_faculties.last().setCode("11.03.02");
+    m_faculties.last().setStudyForm("Очное");
+    m_faculties.last().setType("Целевое");
+    m_faculties.last().setCapacity(15);
+
+    m_faculties.append(FacultyCell());
+    m_faculties.last().setName("Инновационные материалы и технологии электроники и наноэлектроники");
+    m_faculties.last().setCode("11.03.03");
+    m_faculties.last().setStudyForm("Очное");
+    m_faculties.last().setType("Целевое");
+    m_faculties.last().setCapacity(12);
+
+    m_faculties.append(FacultyCell());
+    m_faculties.last().setName("Физика и компьютерные технологии");
+    m_faculties.last().setCode("03.03.02");
+    m_faculties.last().setStudyForm("Очное");
+    m_faculties.last().setType("Целевое");
+    m_faculties.last().setCapacity(3);
+
+    m_faculties.append(FacultyCell());
+    m_faculties.last().setName("Технологии беспроводной связи");
+    m_faculties.last().setCode("03.03.03");
+    m_faculties.last().setStudyForm("Очное");
+    m_faculties.last().setType("Целевое");
+    m_faculties.last().setCapacity(4);
 
 }
 
@@ -362,7 +366,7 @@ void MagicHat::printFaculties() {
         }
 
         qDebug() << elem.code() << elem.name() << elem.studyForm() <<
-            elem.type() << elem.capacity();
+            elem.type() << elem.capacity() << " -" << elem.pool().size();
 
     }
 
@@ -399,10 +403,13 @@ void MagicHat::startPriorityRoundSimulation() {
         i = (i + 1) % priorityList.size();
         
         Applicant* applicant = &priorityList[i];
-        PriorityInfo tempPriority;
+        PriorityInfo priority;
+
+        if(applicant->id() == 4525667)
+            qDebug() << "asdasd";
         
         if(applicant->priorities().size() > 0)
-            tempPriority = applicant->priorities().first();
+            priority = applicant->priorities().first();
         else {
             priorityList.removeOne(*applicant);
             continue;
@@ -415,12 +422,12 @@ void MagicHat::startPriorityRoundSimulation() {
             
             FacultyCell* facultyCell = &m_faculties[j];
             
-            if(facultyCell->isAbleToAdd(tempPriority)){
+            if(facultyCell->isAbleToAdd(priority)){
                 
                 deletePriority = false;
                 
                 applicant->priorities().removeFirst();
-                facultyCell->addToPool(tempPriority, *applicant);
+                facultyCell->addToPool(priority, *applicant);
                 priorityList.removeOne(*applicant);
                 
                 QPair<PriorityInfo, Applicant*> unsuitable = facultyCell->getUnsuitableApplicant();
@@ -446,6 +453,24 @@ void MagicHat::startPriorityRoundSimulation() {
         }
         
     }
+
+    for(auto& elem : m_faculties){
+
+        for(auto& elem1 : elem.pool()) {
+
+            for(int i = 0; i < m_applicantsList.size(); ++i) {
+
+
+                if(elem1.second.id() == 4525667)
+                    qDebug() << "asdasd";
+
+                if(elem1.second.id() == m_applicantsList[i].id()) {
+                    m_applicantsList.remove(i);
+                    --i;
+                }
+            }
+        }
+    }
     
     qDebug() << "Priority simulation completed";
     
@@ -455,19 +480,17 @@ void MagicHat::startGeneralRoundSimulation() {
     
     QList<Applicant> generalList;
     
-    for(auto& elem : m_applicantsList){
+    for(auto& applicant : m_applicantsList){
         
-        Applicant tempApplicant = elem;
+        Applicant tempApplicant = applicant;
         tempApplicant.priorities().clear();
         
-        for(const auto& elem1 : elem.priorities()){
+        for(const auto& priority : applicant.priorities()){
             
-            if(elem1.type() == "Бюджет"){
+            if(priority.type() == "Бюджет"){
                 
-                tempApplicant.addPriority(elem1);
+                tempApplicant.addPriority(priority);
             }
-            
-            
         }
         
         generalList.append(tempApplicant);
@@ -483,6 +506,9 @@ void MagicHat::startGeneralRoundSimulation() {
         
         Applicant* applicant = &generalList[i];
         PriorityInfo tempPriority;
+
+        if(applicant->id() == 4525667)
+            qDebug() << "asdasd";
         
         if(applicant->priorities().size() > 0)
             tempPriority = applicant->priorities().first();
@@ -513,8 +539,8 @@ void MagicHat::startGeneralRoundSimulation() {
                     unsuitable.second->addPriority(unsuitable.first);
                     generalList.append(*unsuitable.second);
                     
-                    delete unsuitable.second;
-                    unsuitable.second = nullptr;
+                    //delete unsuitable.second;
+                    //unsuitable.second = nullptr;
                     
                 }
             }
@@ -538,9 +564,69 @@ void MagicHat::startGeneralRoundSimulation() {
 void MagicHat::rebalanceBudgetaryPlaces() {
     
     
-    
-    
-    
+    for(auto& elem : m_faculties) {
+
+        if(elem.type() == "Бюджет") {
+
+            for(auto& elem1 : m_faculties) {
+
+                if(elem.name() == elem1.name() and elem.type() == elem1.type())
+                    continue;
+
+                if(elem.name() == elem1.name() and
+                    elem.studyForm() == elem1.studyForm() and
+                    elem.code() == elem1.code() and
+                    elem1.type() != "Бюджет") {
+
+                    elem.setCapacity(elem.capacity() + (elem1.capacity() - elem1.getPoolSize()));
+
+                }
+            }
+        }
+    }
+
+
+    FacultyCell* phisFirst = nullptr;
+    FacultyCell* phisSecond = nullptr;
+
+    for(int i = 0; i < m_faculties.size(); ++i){
+
+        if(m_faculties[i].name() == "Электроника, радиотехника и системы связи")
+            phisFirst =&m_faculties[i];
+        if(m_faculties[i].name() == "Физика и Радиофизика")
+            phisSecond =&m_faculties[i];
+
+    }
+
+
+    phisSecond->setCapacity(phisSecond->capacity() + (m_faculties[m_faculties.size() - 1].capacity() - m_faculties[m_faculties.size() - 1].getPoolSize()));
+    phisSecond->setCapacity(phisSecond->capacity() + (m_faculties[m_faculties.size() - 2].capacity() - m_faculties[m_faculties.size() - 2].getPoolSize()));
+    phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 3].capacity() - m_faculties[m_faculties.size() - 3].getPoolSize()));
+    phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 4].capacity() - m_faculties[m_faculties.size() - 4].getPoolSize()));
+    phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 5].capacity() - m_faculties[m_faculties.size() - 5].getPoolSize()));
+
+
+}
+
+void MagicHat::printStudents() {
+
+    for(int i = 0; i < m_faculties.size(); ++i) {
+
+        if(m_faculties[i].pool().size() == 0)
+            continue;
+
+        qDebug() << m_faculties[i].name();
+
+        for(const auto& elem : m_faculties[i].pool()){
+
+            qDebug() << elem.second.FIO();
+
+        }
+
+        qDebug() << "\n";
+
+    }
+
 }
 
 

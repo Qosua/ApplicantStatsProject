@@ -40,6 +40,8 @@ public:
     
     QPair<PriorityInfo, Applicant*> getUnsuitableApplicant();
 
+    int getPoolSize();
+
 signals:
     void nameChanged();
     void capacityChanged();

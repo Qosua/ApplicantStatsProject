@@ -54,6 +54,9 @@ void TableParser::parseTable() {
 
             Applicant applicant;
 
+            if(applicantId == 4525667)
+                qDebug() << "asdasd";
+
             applicant.setId(applicantId);
             applicant.setAdmissionFlag((m_doc->read(i, m_columnsNames["Согласие на зачисление"]).toString() == "Да" ? true : false));
             applicant.setFIO(m_doc->read(i, m_columnsNames["ФИО"]).toString());
