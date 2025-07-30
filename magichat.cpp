@@ -398,9 +398,6 @@ void MagicHat::startPriorityRoundSimulation() {
         
         Applicant* applicant = &priorityList[i];
         PriorityInfo priority;
-
-        if(applicant->id() == 4525667)
-            qDebug() << "asdasd";
         
         if(applicant->priorities().size() > 0)
             priority = applicant->priorities().first();
@@ -408,8 +405,6 @@ void MagicHat::startPriorityRoundSimulation() {
             priorityList.removeOne(*applicant);
             continue;
         }
-        
-        qDebug() << priorityList.size();
         
         bool deletePriority = true;
         for(int j = 0; j < m_faculties.size(); ++j){
@@ -500,9 +495,6 @@ void MagicHat::startGeneralRoundSimulation() {
         
         Applicant* applicant = &generalList[i];
         PriorityInfo tempPriority;
-
-        if(applicant->id() == 4525667)
-            qDebug() << "asdasd";
         
         if(applicant->priorities().size() > 0)
             tempPriority = applicant->priorities().first();
@@ -510,8 +502,6 @@ void MagicHat::startGeneralRoundSimulation() {
             generalList.removeOne(*applicant);
             continue;
         }
-        
-        qDebug() << generalList.size();
         
         bool deletePriority = true;
         for(int j = 0; j < m_faculties.size(); ++j){

@@ -54,9 +54,6 @@ void TableParser::parseTable() {
 
             Applicant applicant;
 
-            if(applicantId == 4525667)
-                qDebug() << "asdasd";
-
             applicant.setId(applicantId);
             applicant.setFIO(m_doc->read(i, m_columnsNames["ФИО"]).toString());
             applicant.setEmail(m_doc->read(i, m_columnsNames["E-mail"]).toString());
@@ -177,101 +174,101 @@ void TableParser::printStatsToConsole() const {
     
     qDebug() << ">>=====================================================================<<";
         
-    // int counter = 0;
-    // for(const auto& elem : *m_applicants)
-    //     for(const auto& priority : elem.priorities())
-    //         if(priority.type().contains("Внебюджет")) {
-    //             counter += 1;
-    //             break;
-    //         }
-    // qDebug() << "applicants count with at least one nonbudget priority -" << counter;
+    int counter = 0;
+    for(auto& elem : *m_applicants)
+        for(const auto& priority : elem.priorities())
+            if(priority.type().contains("Внебюджет")) {
+                counter += 1;
+                break;
+            }
+    qDebug() << " applicants count with at least one nonbudget priority -" << counter;
     
     
-    // counter = 0;
-    // for(const auto& elem : *m_applicants)
-    //     for(const auto& priority : elem.priorities())
-    //         if(priority.type().contains("Бюджет")) {
-    //             counter += 1;
-    //             break;
-    //         }
-    // qDebug() << "applicants count with at least one budget priority -" << counter;
+    counter = 0;
+    for(auto& elem : *m_applicants)
+        for(const auto& priority : elem.priorities())
+            if(priority.type().contains("Бюджет")) {
+                counter += 1;
+                break;
+            }
+    qDebug() << " applicants count with at least one budget priority -" << counter;
     
     
-    // counter = 0;
-    // for(const auto& elem : *m_applicants)
-    //     for(const auto& priority : elem.priorities())
-    //         if(priority.type().contains("Целевое")) {
-    //             counter += 1;
-    //             break;
-    //         }
-    // qDebug() << "applicants count with at least one goal priority -" << counter;
+    counter = 0;
+    for(auto& elem : *m_applicants)
+        for(const auto& priority : elem.priorities())
+            if(priority.type().contains("Целевое")) {
+                counter += 1;
+                break;
+            }
+    qDebug() << " applicants count with at least one goal priority -" << counter;
     
     
-    // counter = 0;
-    // for(const auto& elem : *m_applicants)
-    //     for(const auto& priority : elem.priorities())
-    //         if(priority.type().contains("Отдельная квота")) {
-    //             counter += 1;
-    //             break;
-    //         }
-    // qDebug() << "applicants count with at least one kvot priority -" << counter;
+    counter = 0;
+    for(auto& elem : *m_applicants)
+        for(const auto& priority : elem.priorities())
+            if(priority.type().contains("Отдельная квота")) {
+                counter += 1;
+                break;
+            }
+    qDebug() << " applicants count with at least one kvot priority -" << counter;
     
     
-    // counter = 0;
-    // for(const auto& elem : *m_applicants)
-    //     for(const auto& priority : elem.priorities())
-    //         if(priority.type().contains("Особое право")) {
-    //             counter += 1;
-    //             break;
-    //         }
-    // qDebug() << "applicants count with at least one special right -" << counter;
-    // qDebug() << ">-----------------------------------------------------------------------<";
+    counter = 0;
+    for(auto& elem : *m_applicants)
+        for(const auto& priority : elem.priorities())
+            if(priority.type().contains("Особое право")) {
+                counter += 1;
+                break;
+            }
+    qDebug() << " applicants count with at least one special right -" << counter;
+    qDebug() << ">-----------------------------------------------------------------------<";
     
-    // ////////////////////////////////////////////////////////////////////////////////////////
-    // counter = 0;
-    // for(const auto& elem : *m_applicants)
-    //     for(const auto& priority : elem.priorities())
-    //         if(priority.type().contains("Внебюджет")) {
-    //             counter += 1;
-    //         }
-    // qDebug() << "nonbudget priority count -" << counter;
-    
-    
-    // counter = 0;
-    // for(const auto& elem : *m_applicants)
-    //     for(const auto& priority : elem.priorities())
-    //         if(priority.type().contains("Бюджет")) {
-    //             counter += 1;
-    //         }
-    // qDebug() << "bidget priority count -" << counter;
+    ////////////////////////////////////////////////////////////////////////////////////////
+    counter = 0;
+    for(auto& elem : *m_applicants)
+        for(const auto& priority : elem.priorities())
+            if(priority.type().contains("Внебюджет")) {
+                counter += 1;
+            }
+    qDebug() << " nonbudget priority count -" << counter;
     
     
-    // counter = 0;
-    // for(const auto& elem : *m_applicants)
-    //     for(const auto& priority : elem.priorities())
-    //         if(priority.type().contains("Целевое")) {
-    //             counter += 1;
-    //         }
-    // qDebug() << "goal priority count -" << counter;
+    counter = 0;
+    for(auto& elem : *m_applicants)
+        for(const auto& priority : elem.priorities())
+            if(priority.type().contains("Бюджет")) {
+                counter += 1;
+            }
+    qDebug() << " bidget priority count -" << counter;
     
     
-    // counter = 0;
-    // for(const auto& elem : *m_applicants)
-    //     for(const auto& priority : elem.priorities())
-    //         if(priority.type().contains("Отдельная квота")) {
-    //             counter += 1;
-    //         }
-    // qDebug() << "kvot priority count -" << counter;
+    counter = 0;
+    for(auto& elem : *m_applicants)
+        for(const auto& priority : elem.priorities())
+            if(priority.type().contains("Целевое")) {
+                counter += 1;
+            }
+    qDebug() << " goal priority count -" << counter;
     
     
-    // counter = 0;
-    // for(const auto& elem : *m_applicants)
-    //     for(const auto& priority : elem.priorities())
-    //         if(priority.type().contains("Особое право")) {
-    //             counter += 1;
-    //         }
-    // qDebug() << "special right priority count -" << counter;
-    qDebug() << ">>=====================================================================<<";
+    counter = 0;
+    for(auto& elem : *m_applicants)
+        for(const auto& priority : elem.priorities())
+            if(priority.type().contains("Отдельная квота")) {
+                counter += 1;
+            }
+    qDebug() << " kvot priority count -" << counter;
+    
+    
+    counter = 0;
+    for(auto& elem : *m_applicants)
+        for(const auto& priority : elem.priorities())
+            if(priority.type().contains("Особое право")) {
+                counter += 1;
+            }
+    qDebug() << " special right priority count -" << counter;
+    qDebug() << ">>=====================================================================<<\n";
     
     
 }
