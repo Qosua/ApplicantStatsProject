@@ -348,15 +348,9 @@ void MagicHat::setApplicantsList(const QList<Applicant> &newApplicantsList)
 }
 
 void MagicHat::printFaculties() {
-
-    /*
-    for(const auto& elem : globalList) {
-
-        qDebug() << elem.first[0] << elem.first[1] << elem.first[2] <<
-            elem.second[0] << elem.second[1] << elem.second[2] << elem.second[3];
-
-    }
-    */
+    
+    qDebug() << "\n";
+    
     QString tempCode = m_faculties[0].code();
     for(const auto& elem : m_faculties) {
 
@@ -608,19 +602,23 @@ void MagicHat::rebalanceBudgetaryPlaces() {
 
 }
 
-void MagicHat::printStudents() {
+void MagicHat::printStatsToConsole() {
 
     for(int i = 0; i < m_faculties.size(); ++i) {
 
         if(m_faculties[i].pool().size() == 0)
             continue;
-
-        qDebug() << m_faculties[i].name();
-
+        
+        qDebug() << "\n>-----------" << m_faculties[i].name() << "|" <<
+            QString::number(m_faculties[i].pool().size()) + "/" + QString::number(m_faculties[i].capacity()) << "|"
+            << m_faculties[i].type() << "|"
+            << m_faculties[i].studyForm() << "------------<";
+        
+        int counter = m_faculties[i].pool().size();
         for(const auto& elem : m_faculties[i].pool()){
 
-            qDebug() << elem.second.FIO();
-
+            qDebug() << "" << counter <<  "-" <<  elem.second.id() << "-" << elem.second.FIO() << "-" << elem.first.egeScore();
+            counter -= 1;
         }
 
         qDebug() << "\n";

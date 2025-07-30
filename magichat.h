@@ -23,7 +23,7 @@ public:
     void startGeneralRoundSimulation();
     void rebalanceBudgetaryPlaces();
 
-    void printStudents();
+    void printStatsToConsole();
 
 signals:
     void applicantsListChanged();

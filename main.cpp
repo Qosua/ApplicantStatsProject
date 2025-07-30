@@ -90,10 +90,7 @@ int main(int argc, char *argv[])
     magicHat.rebalanceBudgetaryPlaces();
     magicHat.startGeneralRoundSimulation();
 
-    magicHat.printFaculties();
-    magicHat.printStudents();
-
-
+    magicHat.printStatsToConsole();
 
     return app.exec();
 }

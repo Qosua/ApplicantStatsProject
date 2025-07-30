@@ -58,7 +58,6 @@ void TableParser::parseTable() {
                 qDebug() << "asdasd";
 
             applicant.setId(applicantId);
-            applicant.setAdmissionFlag((m_doc->read(i, m_columnsNames["Согласие на зачисление"]).toString() == "Да" ? true : false));
             applicant.setFIO(m_doc->read(i, m_columnsNames["ФИО"]).toString());
             applicant.setEmail(m_doc->read(i, m_columnsNames["E-mail"]).toString());
             applicant.setPhoneNumber(m_doc->read(i, m_columnsNames["Телефон"]).toString());
@@ -80,6 +79,7 @@ void TableParser::parseTable() {
         info.setStudyForm(extractStudyForm(priorityFullName));
         info.setType(extractType(priorityFullName));
         info.setId(applicantId);
+        info.setAdmissionFlag((m_doc->read(i, m_columnsNames["Согласие на зачисление"]).toString() == "Да" ? true : false));
         
         tempHash[applicantId].addPriority(info);
 
@@ -103,16 +103,38 @@ QList<Applicant> TableParser::getApplicants(ApplicantsFilterFlags flag) {
         return newList;
     }
     if(flag == ApplicantsFilterFlags::AdmissionsTrue) {
-        for(const auto& elem : *m_applicants) {
-            if(elem.admissionFlag())
-                newList.append(elem);
+        for(auto& elem : *m_applicants) {
+            
+            Applicant applicant = elem;
+            applicant.priorities().clear();
+            
+            for(const auto& priority : elem.priorities()){
+                if(priority.admissionFlag()){
+                    applicant.addPriority(priority);
+                }
+            }
+            
+            if(applicant.priorities().size() != 0)
+                newList.append(applicant);
+            
         }
         return newList;
     }
     if(flag == ApplicantsFilterFlags::AdmissionsFalse) {
-        for(const auto& elem : *m_applicants) {
-            if(!elem.admissionFlag())
-                newList.append(elem);
+        for(auto& elem : *m_applicants) {
+            
+            Applicant applicant = elem;
+            applicant.priorities().clear();
+            
+            for(const auto& priority : elem.priorities()){
+                if(!priority.admissionFlag()){
+                    applicant.addPriority(priority);
+                }
+            }
+            
+            if(applicant.priorities().size() != 0)
+                newList.append(applicant);
+            
         }
         return newList;
     }

@@ -59,6 +59,9 @@ public:
     int id() const;
     void setId(int newId);
     
+    bool admissionFlag() const;
+    void setAdmissionFlag(bool newAdmissionsFlag);
+    
 signals:
     void egeScoreChanged();
     void egeAdditionalScoreChanged();
@@ -69,8 +72,8 @@ signals:
     void studyFormChanged();
     void typeChanged();
     void subjectScoresChanged();
-    
     void idChanged();
+    void admissionFlagChanged();
     
 private:
     int m_id;
@@ -82,6 +85,7 @@ private:
     QString m_studyForm; //Personal, Personal-NotPersonal,...
     QString m_type; //Budget, NonBudget,...
     QList<int> m_subjectScores;
+    bool m_admissionFlag;
     
     Q_PROPERTY(int egeScore READ egeScore WRITE setEgeScore NOTIFY egeScoreChanged FINAL)
     Q_PROPERTY(int egeAdditionalScore READ egeAdditionalScore WRITE setEgeAdditionalScore NOTIFY egeAdditionalScoreChanged FINAL)
@@ -92,6 +96,7 @@ private:
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged FINAL)
     Q_PROPERTY(QList<int> subjectScores READ subjectScores WRITE setSubjectScores NOTIFY subjectScoresChanged FINAL)
     Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged FINAL)
+    Q_PROPERTY(bool m_admissionFlag READ admissionFlag WRITE setAdmissionFlag NOTIFY admissionFlagChanged FINAL)
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -111,9 +116,6 @@ public:
     int id() const;
     void setId(int newId);
     
-    bool admissionFlag() const;
-    void setAdmissionFlag(bool newAdmissionFlag);
-    
     QList<PriorityInfo>& priorities();
     void setPriorities(const QList<PriorityInfo> &newPriorities);
     void addPriority(const PriorityInfo& info);
@@ -130,7 +132,6 @@ public:
 
 signals:
     void idChanged();
-    void admissionFlagChanged();
     void prioritiesChanged();
     void phoneNumberChanged();
     void emailChanged();
@@ -139,7 +140,6 @@ signals:
 private:
     
     int m_id;
-    bool m_admissionFlag;
     QList<PriorityInfo> m_priorities;
 
     QString m_phoneNumber;
@@ -147,7 +147,6 @@ private:
     QString m_FIO;
     
     Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged FINAL)
-    Q_PROPERTY(bool admissionFlag READ admissionFlag WRITE setAdmissionFlag NOTIFY admissionFlagChanged FINAL)
     Q_PROPERTY(QList<PriorityInfo> priorities READ priorities WRITE setPriorities NOTIFY prioritiesChanged FINAL)
     Q_PROPERTY(QString phoneNumber READ phoneNumber WRITE setPhoneNumber NOTIFY phoneNumberChanged FINAL)
     Q_PROPERTY(QString email READ email WRITE setEmail NOTIFY emailChanged FINAL)

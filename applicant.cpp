@@ -20,17 +20,6 @@ void Applicant::setId(int newId) {
     emit idChanged();
 }
 
-bool Applicant::admissionFlag() const {
-    return m_admissionFlag;
-}
-
-void Applicant::setAdmissionFlag(bool newAdmissionFlag) {
-    if (m_admissionFlag == newAdmissionFlag)
-        return;
-    m_admissionFlag = newAdmissionFlag;
-    emit admissionFlagChanged();
-}
-
 QList<PriorityInfo>& Applicant::priorities() {
     return m_priorities;
 }
@@ -179,7 +168,6 @@ void Applicant::setFIO(const QString &newFIO)
 
 void Applicant::operator=(const Applicant &copy) {
     m_id = copy.m_id;
-    m_admissionFlag = copy.m_admissionFlag;
     m_priorities = copy.m_priorities;
     m_FIO = copy.m_FIO;
     m_email = copy.m_email;
@@ -189,7 +177,6 @@ void Applicant::operator=(const Applicant &copy) {
 bool Applicant::operator==(const Applicant &copy) const {
     
     if((m_id == copy.m_id) and
-        (m_admissionFlag == copy.m_admissionFlag) and
         (m_priorities == copy.m_priorities) and
         (m_FIO == copy.m_FIO) and
         (m_email == copy.m_email) and
@@ -306,6 +293,19 @@ void PriorityInfo::setId(int newId)
     emit idChanged();
 }
 
+bool PriorityInfo::admissionFlag() const
+{
+    return m_admissionFlag;
+}
+
+void PriorityInfo::setAdmissionFlag(bool newAdmissionsFlag)
+{
+    if (m_admissionFlag == newAdmissionsFlag)
+        return;
+    m_admissionFlag = newAdmissionsFlag;
+    emit admissionFlagChanged();
+}
+
 PriorityInfo::PriorityInfo() {
     
 }
@@ -324,6 +324,7 @@ void PriorityInfo::operator=(const PriorityInfo &copy) {
     m_type = copy.m_type;
     m_subjectScores = copy.m_subjectScores;
     m_id = copy.m_id;
+    m_admissionFlag = copy.m_admissionFlag;
 }
 
 bool PriorityInfo::operator==(const PriorityInfo &copy) const {
@@ -335,7 +336,8 @@ bool PriorityInfo::operator==(const PriorityInfo &copy) const {
             (m_studyForm == copy.m_studyForm) and
             (m_type == copy.m_type) and
             (m_subjectScores == copy.m_subjectScores) and
-            (m_id == copy.m_id));
+            (m_id == copy.m_id) and
+            (m_admissionFlag == copy.m_admissionFlag));
 }
 
 bool PriorityInfo::operator!=(const PriorityInfo &copy) const {
@@ -366,7 +368,7 @@ bool PriorityInfo::operator <(const PriorityInfo &copy) const {
                                         
                                             *this;
                                             //qDebug() << "Why???" << __FILE__ << ":" << __LINE__;
-                                            return m_id < copy.m_id;
+                                            return m_id >= copy.m_id;
                                             
                                         }
                                         else return false;
