@@ -2,6 +2,48 @@
 
 MagicHat::MagicHat() {
 
+    QFile input("C:/Repos/Qt/ApplicantStatsProject/kcp.txt");
+    QTextStream stream(&input);
+
+    if(!input.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Не удалось открыть файл " << "C:/Repos/Qt/ApplicantStatsProject/kcp.txt" << "\n Ошибка: " << input.errorString();
+    }
+
+    QString line = stream.readLine();//read title line
+    line = stream.readLine();//read first line
+
+    while(line.isEmpty() or line[0] != "/") {
+
+        if(!line.isEmpty()) {
+
+            QList<QString> arr = line.split("\"");
+
+            for(int i = 0; i < arr.size(); ++i)
+                if(arr[i].isEmpty() or arr[i] == " ") {
+                    arr.removeAt(i);
+                    --i;
+                }
+
+            QString code = arr[0];
+            QString name = arr[1];
+            QString studyForm = arr[2];
+            QString type = arr[3];
+            QString kcp = arr[4];
+
+            m_faculties.append(FacultyCell());
+            m_faculties.last().setName(name);
+            m_faculties.last().setCode(code);
+            m_faculties.last().setStudyForm(studyForm);
+            m_faculties.last().setType(type);
+            m_faculties.last().setCapacity(kcp.toInt());
+
+        }
+
+        line = stream.readLine();
+
+    }
+
+    /*
     QString priorityArr[4] =
         {
         "Бюджет",
@@ -255,8 +297,10 @@ MagicHat::MagicHat() {
         }),
 
     };
+    */
 
 
+    /*
     for(const auto& elem : globalList) {
 
         QString name;
@@ -331,6 +375,7 @@ MagicHat::MagicHat() {
     m_faculties.last().setStudyForm("Очное");
     m_faculties.last().setType("Целевое");
     m_faculties.last().setCapacity(4);
+    */
 
 }
 
@@ -347,24 +392,6 @@ void MagicHat::setApplicantsList(const QList<Applicant> &newApplicantsList)
     emit applicantsListChanged();
 }
 
-void MagicHat::printFaculties() {
-    
-    qDebug() << "\n";
-    
-    QString tempCode = m_faculties[0].code();
-    for(const auto& elem : m_faculties) {
-
-        if(tempCode != elem.code()) {
-            qDebug() << "\n";
-            tempCode = elem.code();
-        }
-
-        qDebug() << elem.code() << elem.name() << elem.studyForm() <<
-            elem.type() << elem.capacity() << " -" << elem.pool().size();
-
-    }
-
-}
 
 void MagicHat::startPriorityRoundSimulation() {
     
@@ -495,6 +522,10 @@ void MagicHat::startGeneralRoundSimulation() {
         
         Applicant* applicant = &generalList[i];
         PriorityInfo tempPriority;
+
+        if(applicant->id() == 4239707){
+            qDebug() << "asdasd";
+        }
         
         if(applicant->priorities().size() > 0)
             tempPriority = applicant->priorities().first();
@@ -595,14 +626,16 @@ void MagicHat::rebalanceBudgetaryPlaces() {
 void MagicHat::printStatsToConsole() {
 
     for(int i = 0; i < m_faculties.size(); ++i) {
-
-        if(m_faculties[i].pool().size() == 0)
-            continue;
         
-        qDebug() << "\n>-----------" << m_faculties[i].name() << "|" <<
+        qDebug() << "\n>----" << m_faculties[i].code() << "|" <<  m_faculties[i].name() << "|" <<
             QString::number(m_faculties[i].pool().size()) + "/" + QString::number(m_faculties[i].capacity()) << "|"
             << m_faculties[i].type() << "|"
-            << m_faculties[i].studyForm() << "------------<";
+            << m_faculties[i].studyForm() << "----<";
+
+        if(m_faculties[i].pool().size() == 0) {
+            qDebug() << "НЕТ СТУДЕНТОВ\n";
+            continue;
+        }
         
         int counter = m_faculties[i].pool().size();
         for(const auto& elem : m_faculties[i].pool()){
@@ -617,6 +650,35 @@ void MagicHat::printStatsToConsole() {
 
 }
 
+void MagicHat::printFacultiesNames() {
+
+    for(const auto& elem : m_faculties){
+
+        qDebug() << elem.code() << elem.name() << elem.studyForm() << elem.type() << elem.capacity();
+
+    }
+
+}
+
+void MagicHat::printFaculties() {
+
+    qDebug() << "\n";
+
+    QString tempCode = m_faculties[0].code();
+    for(const auto& elem : m_faculties) {
+
+        if(tempCode != elem.code()) {
+            qDebug() << "\n";
+            tempCode = elem.code();
+        }
+
+        qDebug() << elem.code() + " " + elem.name() + "-" + elem.studyForm() + "-" +
+                        elem.type() + "-" + QString::number(elem.capacity()) + "-" +  QString::number(elem.pool().size()) + "-" +
+                        QString::number((elem.pool().size() != 0 ? elem.pool()[0].first.egeScore() : 0));
+
+    }
+
+}
 
 
 

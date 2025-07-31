@@ -283,6 +283,10 @@ QString TableParser::extractName(const QString& str) {
     
     for(int i = 9; (str.mid(i+2,4) != "Заоч" and str.mid(i+2,4) != "Очно" and str.mid(i+2,4) != "Очна");++i) {
         
+        if(str[i - 1] == str[i] and str[i] == " ")
+            continue;
+
+
         ans += str[i];
         
     }

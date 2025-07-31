@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QMap>
 #include <QList>
+#include <QFile>
+#include <QTextStream>
 
 #include "applicant.h"
 #include "facultycell.h"
@@ -24,6 +26,7 @@ public:
     void rebalanceBudgetaryPlaces();
 
     void printStatsToConsole();
+    void printFacultiesNames();
 
 signals:
     void applicantsListChanged();

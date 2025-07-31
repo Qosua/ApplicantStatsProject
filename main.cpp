@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     engine.load(url);
     */
     
-    TableParser parser("C:/Repos/Qt/ApplicantStatsProject/test.xlsx",
+    TableParser parser("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 31.07 вечер.xlsx",
                        "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
     parser.parseTable();
     
@@ -85,12 +85,17 @@ int main(int argc, char *argv[])
     
     MagicHat magicHat;
     magicHat.setApplicantsList(list1);
+
+    //magicHat.printFacultiesNames();
+
     //magicHat.printFaculties();
     magicHat.startPriorityRoundSimulation();
     magicHat.rebalanceBudgetaryPlaces();
     magicHat.startGeneralRoundSimulation();
 
     magicHat.printStatsToConsole();
+
+    //magicHat.printFaculties();
 
     return app.exec();
 }
