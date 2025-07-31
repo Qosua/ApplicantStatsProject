@@ -62,6 +62,9 @@ public:
     bool admissionFlag() const;
     void setAdmissionFlag(bool newAdmissionsFlag);
     
+    bool isBVI() const;
+    void setIsBVI(bool newIsBVI);
+    
 signals:
     void egeScoreChanged();
     void egeAdditionalScoreChanged();
@@ -75,6 +78,8 @@ signals:
     void idChanged();
     void admissionFlagChanged();
     
+    void isBVIChanged();
+    
 private:
     int m_id;
     int m_egeScore;
@@ -86,6 +91,7 @@ private:
     QString m_type; //Budget, NonBudget,...
     QList<int> m_subjectScores;
     bool m_admissionFlag;
+    bool m_isBVI;
     
     Q_PROPERTY(int egeScore READ egeScore WRITE setEgeScore NOTIFY egeScoreChanged FINAL)
     Q_PROPERTY(int egeAdditionalScore READ egeAdditionalScore WRITE setEgeAdditionalScore NOTIFY egeAdditionalScoreChanged FINAL)
@@ -97,6 +103,7 @@ private:
     Q_PROPERTY(QList<int> subjectScores READ subjectScores WRITE setSubjectScores NOTIFY subjectScoresChanged FINAL)
     Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged FINAL)
     Q_PROPERTY(bool m_admissionFlag READ admissionFlag WRITE setAdmissionFlag NOTIFY admissionFlagChanged FINAL)
+    Q_PROPERTY(bool isBVI READ isBVI WRITE setIsBVI NOTIFY isBVIChanged FINAL)
 };
 
 //////////////////////////////////////////////////////////////////////

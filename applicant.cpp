@@ -306,6 +306,19 @@ void PriorityInfo::setAdmissionFlag(bool newAdmissionsFlag)
     emit admissionFlagChanged();
 }
 
+bool PriorityInfo::isBVI() const
+{
+    return m_isBVI;
+}
+
+void PriorityInfo::setIsBVI(bool newIsBVI)
+{
+    if (m_isBVI == newIsBVI)
+        return;
+    m_isBVI = newIsBVI;
+    emit isBVIChanged();
+}
+
 PriorityInfo::PriorityInfo() {
     
 }
@@ -325,6 +338,7 @@ void PriorityInfo::operator=(const PriorityInfo &copy) {
     m_subjectScores = copy.m_subjectScores;
     m_id = copy.m_id;
     m_admissionFlag = copy.m_admissionFlag;
+    m_isBVI = copy.m_isBVI;
 }
 
 bool PriorityInfo::operator==(const PriorityInfo &copy) const {
@@ -337,7 +351,8 @@ bool PriorityInfo::operator==(const PriorityInfo &copy) const {
             (m_type == copy.m_type) and
             (m_subjectScores == copy.m_subjectScores) and
             (m_id == copy.m_id) and
-            (m_admissionFlag == copy.m_admissionFlag));
+            (m_admissionFlag == copy.m_admissionFlag) and
+            (m_isBVI == copy.m_isBVI));
 }
 
 bool PriorityInfo::operator!=(const PriorityInfo &copy) const {
@@ -345,6 +360,10 @@ bool PriorityInfo::operator!=(const PriorityInfo &copy) const {
 }
 
 bool PriorityInfo::operator <(const PriorityInfo &copy) const {
+    
+    if(m_isBVI == false and copy.m_isBVI == true) return true;
+    else
+        if(m_isBVI == true and copy.m_isBVI == false) return false;
     
     if(m_egeScore < copy.m_egeScore) return true;
     else
@@ -366,7 +385,6 @@ bool PriorityInfo::operator <(const PriorityInfo &copy) const {
                                     else
                                         if(m_subjectScores[2] == copy.m_subjectScores[2]) {
                                         
-                                            *this;
                                             //qDebug() << "Why???" << __FILE__ << ":" << __LINE__;
                                             return m_id >= copy.m_id;
                                             

@@ -27,15 +27,24 @@ public:
 
     void printStatsToConsole();
     void printFacultiesNames();
-
+    
+    QList<Applicant> uncountedApplicants() const;
+    void setUncountedApplicants(const QList<Applicant> &newUncountedApplicants);
+    
+    void printUncountedApplicants();
+    
 signals:
     void applicantsListChanged();
-
+    void uncountedApplicantsChanged();
+    
 private:
+    QList<Applicant> m_applicantsListCopy;
     QList<Applicant> m_applicantsList;
     QList<FacultyCell> m_faculties;
+    QList<Applicant> m_uncountedApplicants;
 
     Q_PROPERTY(QList<Applicant> applicantsList READ applicantsList WRITE setApplicantsList NOTIFY applicantsListChanged FINAL)
+    Q_PROPERTY(QList<Applicant> uncountedApplicants READ uncountedApplicants WRITE setUncountedApplicants NOTIFY uncountedApplicantsChanged FINAL)
 };
 
 #endif // MAGICHAT_H
