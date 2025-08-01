@@ -77,8 +77,9 @@ void TableParser::parseTable() {
         info.setType(extractType(priorityFullName));
         info.setId(applicantId);
         info.setAdmissionFlag((m_doc->read(i, m_columnsNames["Согласие на зачисление"]).toString() == "Да" ? true : false));
-        info.setIsBVI(((m_doc->read(i, m_columnsNames["Сумма баллов"]).toInt() <= 10) ? true : false));
-        
+        info.setIsBVI(((m_doc->read(i, m_columnsNames["Без вступительных испытаний"]).toString() == "Да") ? true : false));
+        info.setDivision(m_doc->read(i, m_columnsNames["Подразделение"]).toString());
+
         tempHash[applicantId].addPriority(info);
 
     }

@@ -65,6 +65,9 @@ public:
     bool isBVI() const;
     void setIsBVI(bool newIsBVI);
     
+    QString division() const;
+    void setDivision(const QString &newDivision);
+
 signals:
     void egeScoreChanged();
     void egeAdditionalScoreChanged();
@@ -80,6 +83,8 @@ signals:
     
     void isBVIChanged();
     
+    void divisionChanged();
+
 private:
     int m_id;
     int m_egeScore;
@@ -89,6 +94,7 @@ private:
     QString m_name;
     QString m_studyForm; //Personal, Personal-NotPersonal,...
     QString m_type; //Budget, NonBudget,...
+    QString m_division;
     QList<int> m_subjectScores;
     bool m_admissionFlag;
     bool m_isBVI;
@@ -104,6 +110,7 @@ private:
     Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged FINAL)
     Q_PROPERTY(bool m_admissionFlag READ admissionFlag WRITE setAdmissionFlag NOTIFY admissionFlagChanged FINAL)
     Q_PROPERTY(bool isBVI READ isBVI WRITE setIsBVI NOTIFY isBVIChanged FINAL)
+    Q_PROPERTY(QString division READ division WRITE setDivision NOTIFY divisionChanged FINAL)
 };
 
 //////////////////////////////////////////////////////////////////////

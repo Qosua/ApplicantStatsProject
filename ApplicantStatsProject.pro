@@ -1,4 +1,4 @@
-QT += quick core
+QT += quick core gui widgets
 
 SOURCES += \
         applicant.cpp \
@@ -7,8 +7,10 @@ SOURCES += \
         main.cpp \
         tableparser.cpp
 
-resources.files = main.qml 
-resources.prefix = /$${TARGET}
+resources.files += main.qml
+resources.files += RightBar.qml
+resources.files += CustomButton.qml
+resources.prefix = /
 RESOURCES += resources
 
 INCLUDEPATH += QXlsx\source
@@ -33,4 +35,5 @@ HEADERS += \
     xlsx.h
 
 DISTFILES += \
+    CustomButton.qml \
     columnsNames

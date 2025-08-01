@@ -319,6 +319,19 @@ void PriorityInfo::setIsBVI(bool newIsBVI)
     emit isBVIChanged();
 }
 
+QString PriorityInfo::division() const
+{
+    return m_division;
+}
+
+void PriorityInfo::setDivision(const QString &newDivision)
+{
+    if (m_division == newDivision)
+        return;
+    m_division = newDivision;
+    emit divisionChanged();
+}
+
 PriorityInfo::PriorityInfo() {
     
 }
@@ -339,6 +352,7 @@ void PriorityInfo::operator=(const PriorityInfo &copy) {
     m_id = copy.m_id;
     m_admissionFlag = copy.m_admissionFlag;
     m_isBVI = copy.m_isBVI;
+    m_division = copy.m_division;
 }
 
 bool PriorityInfo::operator==(const PriorityInfo &copy) const {
@@ -352,7 +366,8 @@ bool PriorityInfo::operator==(const PriorityInfo &copy) const {
             (m_subjectScores == copy.m_subjectScores) and
             (m_id == copy.m_id) and
             (m_admissionFlag == copy.m_admissionFlag) and
-            (m_isBVI == copy.m_isBVI));
+            (m_isBVI == copy.m_isBVI) and
+            (m_division == copy.m_division));
 }
 
 bool PriorityInfo::operator!=(const PriorityInfo &copy) const {

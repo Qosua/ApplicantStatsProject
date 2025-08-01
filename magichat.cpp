@@ -59,7 +59,6 @@ void MagicHat::setApplicantsList(const QList<Applicant> &newApplicantsList)
     emit applicantsListChanged();
 }
 
-
 void MagicHat::startPriorityRoundSimulation() {
     
     QList<Applicant> priorityList;
@@ -71,7 +70,7 @@ void MagicHat::startPriorityRoundSimulation() {
         
         for(const auto& elem1 : elem.priorities()){
             
-            if(elem1.type() != "Бюджет"){
+            if(elem1.type() != "Бюджет" or elem1.isBVI()) {
                 
                 tempApplicant.addPriority(elem1);
             }
@@ -311,7 +310,7 @@ void MagicHat::printStatsToConsole() {
         int counter = m_faculties[i].pool().size();
         for(const auto& elem : m_faculties[i].pool()){
 
-            qDebug() << "" << counter <<  "-" <<  elem.second.id() << "-" << elem.second.FIO() << "-" << elem.first.egeScore();
+            qDebug() << "" << counter <<  "-" <<  elem.second.id() << "-" << elem.second.FIO() << "-" << elem.first.egeScore() << (elem.first.isBVI() ? "БВИ" : "");
             counter -= 1;
         }
 
