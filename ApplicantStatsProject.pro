@@ -1,15 +1,14 @@
-QT += quick core gui widgets
+QT += quick core gui widgets charts
 
 SOURCES += \
         applicant.cpp \
         facultycell.cpp \
         magichat.cpp \
         main.cpp \
+        mainwindow.cpp \
         tableparser.cpp
 
-resources.files += main.qml
-resources.files += RightBar.qml
-resources.files += CustomButton.qml
+resources.files += styles/white_style.qss
 resources.prefix = /
 RESOURCES += resources
 
@@ -31,9 +30,13 @@ HEADERS += \
     applicant.h \
     facultycell.h \
     magichat.h \
+    mainwindow.h \
     tableparser.h \
     xlsx.h
 
 DISTFILES += \
     CustomButton.qml \
     columnsNames
+
+FORMS += \
+    mainwindow.ui

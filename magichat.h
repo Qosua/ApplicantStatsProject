@@ -44,9 +44,9 @@ private:
     QList<FacultyCell> m_faculties;
     QList<Applicant> m_uncountedApplicants;
 
-    Q_PROPERTY(QList<Applicant> applicantsList READ applicantsList WRITE setApplicantsList NOTIFY applicantsListChanged FINAL)
-    Q_PROPERTY(QList<Applicant> uncountedApplicants READ uncountedApplicants WRITE setUncountedApplicants NOTIFY uncountedApplicantsChanged FINAL)
-    Q_PROPERTY(QList<FacultyCell> faculties READ faculties WRITE setFaculties NOTIFY facultiesChanged FINAL)
+    Q_PROPERTY(QList<Applicant> applicantsList READ applicantsList NOTIFY applicantsListChanged FINAL)
+    Q_PROPERTY(QList<Applicant> uncountedApplicants READ uncountedApplicants NOTIFY uncountedApplicantsChanged FINAL)
+    Q_PROPERTY(QList<FacultyCell> faculties READ faculties NOTIFY facultiesChanged FINAL)
 };
 
 #endif // MAGICHAT_H
