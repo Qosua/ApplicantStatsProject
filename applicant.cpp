@@ -384,7 +384,7 @@ bool PriorityInfo::operator <(const PriorityInfo &copy) const {
     else
         if(m_egeScore == copy.m_egeScore) {
         
-            if(m_egeAdditionalScore < copy.m_egeAdditionalScore) return true;
+            if(m_egeAdditionalScore > copy.m_egeAdditionalScore) return true;
             else
                 if(m_egeAdditionalScore == copy.m_egeAdditionalScore) {
                 

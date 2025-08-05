@@ -9,6 +9,7 @@
 
 #include "applicant.h"
 #include "facultycell.h"
+#include "xlsx.h"
 
 class MagicHat : public QObject {
 
@@ -32,6 +33,8 @@ public:
     void setUncountedApplicants(const QList<Applicant> &newUncountedApplicants);
     
     void printUncountedApplicants();
+
+    void printToExcel();
     
 signals:
     void applicantsListChanged();

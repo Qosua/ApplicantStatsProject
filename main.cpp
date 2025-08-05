@@ -12,43 +12,44 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     
-    // TableParser parser("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 01.08 обед.xlsx",
-    //                    "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
-    // parser.parseTable();
+    TableParser parser("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 05.08 1230.xlsx",
+                       "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
+    parser.parseTable();
     
-    // QList<Applicant> list1 = parser.getApplicants(ApplicantsFilterFlags::AdmissionsTrue);
-    // qDebug() << list1.size();
+    QList<Applicant> list1 = parser.getApplicants(ApplicantsFilterFlags::AdmissionsTrue);
+    qDebug() << list1.size();
 
     
-    // for(int i = 0; i < list1.size(); ++i)
-    //     list1[i].deletePriority(PrioritiesFlags::NonBudget);
+    for(int i = 0; i < list1.size(); ++i)
+        list1[i].deletePriority(PrioritiesFlags::NonBudget);
     
     
-    // MagicHat magicHat;
-    // magicHat.setApplicantsList(list1);
+    MagicHat magicHat;
+    magicHat.setApplicantsList(list1);
 
-    // //magicHat.printFacultiesNames();
-    // //magicHat.printFaculties();
+    //magicHat.printFacultiesNames();
+    //magicHat.printFaculties();
     
-    // magicHat.startPriorityRoundSimulation();
-    // magicHat.rebalanceBudgetaryPlaces();
-    // magicHat.startGeneralRoundSimulation();
+    magicHat.startPriorityRoundSimulation();
+    magicHat.rebalanceBudgetaryPlaces();
+    magicHat.startGeneralRoundSimulation();
 
-    // magicHat.printStatsToConsole();
-    // magicHat.printUncountedApplicants();
+    magicHat.printStatsToConsole();
+    magicHat.printUncountedApplicants();
+    magicHat.printToExcel();
 
 
-    QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    // QQmlApplicationEngine engine;
+    // const QUrl url(QStringLiteral("qrc:/main.qml"));
 
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app,[url](QObject *obj, const QUrl &objUrl) {
-                         if (!obj && url == objUrl)
-                             QCoreApplication::exit(-1);
-                     },
-                     Qt::QueuedConnection);
+    // QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+    //                  &app,[url](QObject *obj, const QUrl &objUrl) {
+    //                      if (!obj && url == objUrl)
+    //                          QCoreApplication::exit(-1);
+    //                  },
+    //                  Qt::QueuedConnection);
 
-    engine.load(url);
+    // engine.load(url);
 
 
     return app.exec();

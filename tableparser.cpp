@@ -38,6 +38,8 @@ void TableParser::parseTable() {
     
     m_doc = new QXlsx::Document(m_tablePath);
     m_applicants = new QList<Applicant>;
+
+    qDebug() << m_doc->read(1, 1).toString();
     
     setColumnsNames();
     
@@ -150,6 +152,8 @@ bool TableParser::setColumnsNames() {
         qDebug() << "Не удалось открыть файл " << m_columnsNamesFilePath << "\n Ошибка: " << file.errorString();
         return false;
     }
+
+    qDebug() << "\n Ошибка: " << file.errorString();
     
     QTextStream stream(&file);
     QString name;
