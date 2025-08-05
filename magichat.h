@@ -25,20 +25,18 @@ public:
     void startPriorityRoundSimulation();
     void startGeneralRoundSimulation();
     void rebalanceBudgetaryPlaces();
-
-    void printStatsToConsole();
-    void printFacultiesNames();
     
     QList<Applicant> uncountedApplicants() const;
-    void setUncountedApplicants(const QList<Applicant> &newUncountedApplicants);
+    QList<FacultyCell> faculties() const;
     
     void printUncountedApplicants();
-
+    void printStatsToConsole();
     void printToExcel();
     
 signals:
     void applicantsListChanged();
     void uncountedApplicantsChanged();
+    void facultiesChanged();
     
 private:
     QList<Applicant> m_applicantsListCopy;
@@ -48,6 +46,7 @@ private:
 
     Q_PROPERTY(QList<Applicant> applicantsList READ applicantsList WRITE setApplicantsList NOTIFY applicantsListChanged FINAL)
     Q_PROPERTY(QList<Applicant> uncountedApplicants READ uncountedApplicants WRITE setUncountedApplicants NOTIFY uncountedApplicantsChanged FINAL)
+    Q_PROPERTY(QList<FacultyCell> faculties READ faculties WRITE setFaculties NOTIFY facultiesChanged FINAL)
 };
 
 #endif // MAGICHAT_H

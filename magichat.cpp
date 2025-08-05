@@ -320,25 +320,8 @@ void MagicHat::printStatsToConsole() {
 
 }
 
-void MagicHat::printFacultiesNames() {
-
-    for(const auto& elem : m_faculties){
-
-        qDebug() << elem.code() << elem.name() << elem.studyForm() << elem.type() << elem.capacity();
-
-    }
-
-}
-
 QList<Applicant> MagicHat::uncountedApplicants() const {
     return m_uncountedApplicants;
-}
-
-void MagicHat::setUncountedApplicants(const QList<Applicant> &newUncountedApplicants) {
-    if (m_uncountedApplicants == newUncountedApplicants)
-        return;
-    m_uncountedApplicants = newUncountedApplicants;
-    emit uncountedApplicantsChanged();
 }
 
 void MagicHat::printUncountedApplicants() {
@@ -477,6 +460,11 @@ void MagicHat::printToExcel() {
         qDebug() << "NOT OK";
     }
 
+}
+
+QList<FacultyCell> MagicHat::faculties() const
+{
+    return m_faculties;
 }
 
 void MagicHat::printFaculties() {
