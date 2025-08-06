@@ -14,27 +14,27 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     
-    // TableParser parser("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 05.08 1230.xlsx",
-    //                    "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
-    // parser.parseTable();
+    TableParser parser("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 05.08 1230.xlsx",
+                       "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
+    parser.parseTable();
     
-    // QList<Applicant> list1 = parser.getApplicants(ApplicantsFilterFlags::AdmissionsTrue);
+    QList<Applicant> list1 = parser.getApplicants(ApplicantsFilterFlags::AdmissionsTrue);
     
-    // for(int i = 0; i < list1.size(); ++i)
-    //     list1[i].deletePriority(PrioritiesFlags::NonBudget);
+    for(int i = 0; i < list1.size(); ++i)
+        list1[i].deletePriority(PrioritiesFlags::NonBudget);
     
     
-    // MagicHat magicHat;
-    // magicHat.setApplicantsList(list1);
+    MagicHat magicHat;
+    magicHat.setApplicantsList(list1);
     
-    // magicHat.startPriorityRoundSimulation();
-    // magicHat.rebalanceBudgetaryPlaces();
-    // magicHat.startGeneralRoundSimulation();
+    magicHat.startPriorityRoundSimulation();
+    magicHat.rebalanceBudgetaryPlaces();
+    magicHat.startGeneralRoundSimulation();
 
-    // magicHat.printStatsToConsole();
-    // magicHat.printUncountedApplicants();
-    // magicHat.printToExcel();
-    //magicHat.printFaculties();
+    magicHat.printStatsToConsole();
+    magicHat.printUncountedApplicants();
+    magicHat.printToExcel();
+    magicHat.printFaculties();
     
     QFile file(":/styles/white_style.qss");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     app.setStyleSheet(file.readAll());
     
     MainWindow mainWindow;
-    mainWindow.setStatistics(QList<Applicant>(),QList<FacultyCell>());
+    mainWindow.setMathStatistics(magicHat.uncountedApplicants(),magicHat.faculties());
     mainWindow.show();
 
     return app.exec();

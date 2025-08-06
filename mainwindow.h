@@ -9,6 +9,7 @@
 #include <QVBoxLayout>
 #include <QBarCategoryAxis>
 #include <QValueAxis>
+#include <QFile>
 
 #include "applicant.h"
 #include "facultycell.h"
@@ -24,7 +25,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     
-    void setStatistics(const QList<Applicant>& unCountedApplicants, const QList<FacultyCell>& faculties);
+    void setMathStatistics(const QList<Applicant>& unCountedApplicants, const QList<FacultyCell>& faculties);
 
 private:
     Ui::MainWindow *ui;
