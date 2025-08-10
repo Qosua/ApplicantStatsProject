@@ -5,6 +5,14 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) {
     ui->setupUi(this);
+
+    QFile file(":/styles/white_style.qss");
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Не удалось открыть файл: :/styles/white_style.qss \n Ошибка: " << file.errorString();
+    }
+
+    this->setStyleSheet(file.readAll());
+
 }
 
 MainWindow::~MainWindow()
@@ -26,11 +34,11 @@ void MainWindow::setMathStatistics(const QList<Applicant> &unCountedApplicants, 
     int kbKcp = 0;
     int kbPlaces = 0;
     
-    QFile input("C:/Repos/Qt/ApplicantStatsProject/kcp.txt");
+    QFile input("C:/Repos/Qt/ApplicantStatsProject/кцп_бакалавры.txt");
     QTextStream stream(&input);
     
     if(!input.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Не удалось открыть файл " << "C:/Repos/Qt/ApplicantStatsProject/kcp.txt" << "\n Ошибка: " << input.errorString();
+        qDebug() << "Не удалось открыть файл " << "C:/Repos/Qt/ApplicantStatsProject/кцп_бакалавры.txt" << "\n Ошибка: " << input.errorString();
     }
     
     QString line = stream.readLine();//read title line

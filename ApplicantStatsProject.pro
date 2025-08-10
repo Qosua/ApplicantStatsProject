@@ -6,7 +6,7 @@ SOURCES += \
         magichat.cpp \
         main.cpp \
         mainwindow.cpp \
-        tableparser.cpp
+        tableparserbachelor.cpp
 
 resources.files += styles/white_style.qss
 resources.prefix = /
@@ -31,7 +31,7 @@ HEADERS += \
     facultycell.h \
     magichat.h \
     mainwindow.h \
-    tableparser.h \
+    tableparserbachelor.h \
     xlsx.h
 
 DISTFILES += \

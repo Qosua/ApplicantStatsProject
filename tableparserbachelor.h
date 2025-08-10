@@ -1,5 +1,5 @@
-#ifndef TABLEPARSER_H
-#define TABLEPARSER_H
+#ifndef TABLEPARSERBACHELOR_H
+#define TABLEPARSERBACHELOR_H
 
 #include <QList>
 #include <QMap>
@@ -17,12 +17,12 @@ enum ApplicantsFilterFlags {
     AdmissionsFalse  = 1 << 2,
 };
 
-class TableParser {
+class TableParserBachelor {
     
 public:
-    TableParser() = delete;
-    TableParser(const QString& tablePath, const QString& columnsNamesFilePath);
-    ~TableParser();
+    TableParserBachelor() = delete;
+    TableParserBachelor(const QString& tablePath, const QString& columnsNamesFilePath);
+    ~TableParserBachelor();
     
     void parseTable();
     QList<Applicant> getApplicants(ApplicantsFilterFlags flag);
@@ -44,4 +44,4 @@ private:
     
 };
 
-#endif // TABLEPARSER_H
+#endif // TABLEPARSERBACHELOR_H

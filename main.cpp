@@ -5,7 +5,7 @@
 #include <QApplication>
 #include <QFile>
 
-#include "tableparser.h"
+#include "tableparserbachelor.h"
 #include "magichat.h"
 #include "facultycell.h"
 #include "mainwindow.h"
@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     
-    TableParser parser("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 05.08 1230.xlsx",
+    TableParserBachelor parser("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 05.08 1230.xlsx",
                        "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
     parser.parseTable();
     
@@ -35,13 +35,6 @@ int main(int argc, char *argv[])
     magicHat.printUncountedApplicants();
     magicHat.printToExcel();
     magicHat.printFaculties();
-    
-    QFile file(":/styles/white_style.qss");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Не удалось открыть файл: :/styles/white_style.qss \n Ошибка: " << file.errorString();
-    }
-    
-    app.setStyleSheet(file.readAll());
     
     MainWindow mainWindow;
     mainWindow.setMathStatistics(magicHat.uncountedApplicants(),magicHat.faculties());

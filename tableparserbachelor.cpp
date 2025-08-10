@@ -1,6 +1,6 @@
-#include "tableparser.h"
+#include "tableparserbachelor.h"
 
-TableParser::TableParser(const QString& tablePath, const QString& columnsNamesFilePath) {
+TableParserBachelor::TableParserBachelor(const QString& tablePath, const QString& columnsNamesFilePath) {
     
     if(!QFile::exists(tablePath)) {
         qDebug() << "CAN NOT FIND TABLE FILE" << tablePath << __FILE__ << ":" << __LINE__;
@@ -17,7 +17,7 @@ TableParser::TableParser(const QString& tablePath, const QString& columnsNamesFi
     
 }
 
-TableParser::~TableParser() {
+TableParserBachelor::~TableParserBachelor() {
     delete m_doc;
     m_doc = nullptr;
     
@@ -25,7 +25,7 @@ TableParser::~TableParser() {
     m_applicants = nullptr;
 }
 
-void TableParser::parseTable() {
+void TableParserBachelor::parseTable() {
     
     if(m_doc) {
         delete m_doc;
@@ -95,7 +95,7 @@ void TableParser::parseTable() {
     
 }
 
-QList<Applicant> TableParser::getApplicants(ApplicantsFilterFlags flag) {
+QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag) {
     
     QList<Applicant> newList;
     
@@ -144,7 +144,7 @@ QList<Applicant> TableParser::getApplicants(ApplicantsFilterFlags flag) {
     
 }
 
-bool TableParser::setColumnsNames() {
+bool TableParserBachelor::setColumnsNames() {
     
     QFile file(m_columnsNamesFilePath);
     
@@ -176,7 +176,7 @@ bool TableParser::setColumnsNames() {
     
 }
 
-void TableParser::printStatsToConsole() const {
+void TableParserBachelor::printStatsToConsole() const {
     
     qDebug() << ">>=====================================================================<<";
         
@@ -279,11 +279,11 @@ void TableParser::printStatsToConsole() const {
     
 }
 
-QString TableParser::extractCode(const QString& str) {
+QString TableParserBachelor::extractCode(const QString& str) {
     return str.mid(0,8);
 }
 
-QString TableParser::extractName(const QString& str) {
+QString TableParserBachelor::extractName(const QString& str) {
     
     QString ans;
     
@@ -301,7 +301,7 @@ QString TableParser::extractName(const QString& str) {
     
 }
 
-QString TableParser::extractStudyForm(const QString& str) {
+QString TableParserBachelor::extractStudyForm(const QString& str) {
     
     if(str.contains("Очное") or str.contains("Очная")){
         return "Очное";
@@ -315,7 +315,7 @@ QString TableParser::extractStudyForm(const QString& str) {
     return "ОШИБКА ФОРМЫ ОБУЧЕНИЯ";
 }
 
-QString TableParser::extractType(const QString& str) {
+QString TableParserBachelor::extractType(const QString& str) {
     if(str.contains("Бюджет")){
         return "Бюджет";
     }

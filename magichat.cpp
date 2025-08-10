@@ -2,7 +2,7 @@
 
 MagicHat::MagicHat() {
 
-    QFile input("C:/Repos/Qt/ApplicantStatsProject/kcp.txt");
+    QFile input("C:/Repos/Qt/ApplicantStatsProject/кцп_бакалавры.txt");
     QTextStream stream(&input);
 
     if(!input.open(QIODevice::ReadOnly | QIODevice::Text)) {
