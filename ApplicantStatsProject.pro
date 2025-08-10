@@ -6,9 +6,12 @@ SOURCES += \
         magichat.cpp \
         main.cpp \
         mainwindow.cpp \
-        tableparserbachelor.cpp
+        tableparserbachelor.cpp \
+        tableparsermaster.cpp
 
-resources.files += styles/white_style.qss
+resources.files = styles/white_style.qss
+resources.files += programInfo/kcpBachelors.txt
+resources.files += programInfo/kcpMasters.txt
 resources.prefix = /
 RESOURCES += resources
 
@@ -32,6 +35,7 @@ HEADERS += \
     magichat.h \
     mainwindow.h \
     tableparserbachelor.h \
+    tableparsermaster.h \
     xlsx.h
 
 DISTFILES += \

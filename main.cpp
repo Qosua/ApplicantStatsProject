@@ -14,31 +14,48 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     
-    TableParserBachelor parser("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 05.08 1230.xlsx",
-                       "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
-    parser.parseTable();
+    // TableParserBachelor parserBachelor("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 05.08 1230.xlsx",
+    //                            "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
+    // parserBachelor.parseTable();
+    // QList<Applicant> list1 = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue);
     
-    QList<Applicant> list1 = parser.getApplicants(ApplicantsFilterFlags::AdmissionsTrue);
+    // for(int i = 0; i < list1.size(); ++i)
+    //     list1[i].deletePriority(PrioritiesFlags::NonBudget);
+    
+    
+    // MagicHat magicHatBachelor;
+    // magicHatBachelor.setKCP(":/programInfo/kcpBachelors.txt");
+    // magicHatBachelor.setApplicantsList(list1);
+    
+    // magicHatBachelor.startPriorityRoundSimulation();
+    // magicHatBachelor.rebalanceBudgetaryPlaces();
+    // magicHatBachelor.startGeneralRoundSimulation();
+
+    // magicHatBachelor.printStatsToConsole();
+    // magicHatBachelor.printUncountedApplicants();
+    
+    TableParserBachelor parserMaster("C:/Repos/Qt/ApplicantStatsProject/Выгрузка маги 09.08.xlsx",
+                                     "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
+    parserMaster.parseTable();
+    QList<Applicant> list1 = parserMaster.getApplicants(ApplicantsFilterFlags::AdmissionsTrue);
     
     for(int i = 0; i < list1.size(); ++i)
         list1[i].deletePriority(PrioritiesFlags::NonBudget);
     
+    MagicHat magicHatMaster;
+    magicHatMaster.setKCP(":/programInfo/kcpMasters.txt");
+    magicHatMaster.setApplicantsList(list1);
     
-    MagicHat magicHat;
-    magicHat.setApplicantsList(list1);
+    magicHatMaster.startPriorityRoundSimulation();
+    magicHatMaster.rebalanceBudgetaryPlaces();
+    magicHatMaster.startGeneralRoundSimulation();
     
-    magicHat.startPriorityRoundSimulation();
-    magicHat.rebalanceBudgetaryPlaces();
-    magicHat.startGeneralRoundSimulation();
-
-    magicHat.printStatsToConsole();
-    magicHat.printUncountedApplicants();
-    magicHat.printToExcel();
-    magicHat.printFaculties();
+    magicHatMaster.printStatsToConsole();
+    magicHatMaster.printUncountedApplicants();
     
-    MainWindow mainWindow;
-    mainWindow.setMathStatistics(magicHat.uncountedApplicants(),magicHat.faculties());
-    mainWindow.show();
+    // MainWindow mainWindow;
+    // mainWindow.setMathStatistics(magicHat.uncountedApplicants(),magicHat.faculties());
+    // mainWindow.show();
 
     return app.exec();
 }

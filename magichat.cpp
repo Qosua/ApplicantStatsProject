@@ -1,49 +1,6 @@
 #include "magichat.h"
 
-MagicHat::MagicHat() {
-
-    QFile input("C:/Repos/Qt/ApplicantStatsProject/кцп_бакалавры.txt");
-    QTextStream stream(&input);
-
-    if(!input.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Не удалось открыть файл " << "C:/Repos/Qt/ApplicantStatsProject/kcp.txt" << "\n Ошибка: " << input.errorString();
-    }
-
-    QString line = stream.readLine();//read title line
-    line = stream.readLine();//read first line
-
-    while(line.isEmpty() or line[0] != "/") {
-
-        if(!line.isEmpty()) {
-
-            QList<QString> arr = line.split("\"");
-
-            for(int i = 0; i < arr.size(); ++i)
-                if(arr[i].isEmpty() or arr[i] == " ") {
-                    arr.removeAt(i);
-                    --i;
-                }
-
-            QString code = arr[0];
-            QString name = arr[1];
-            QString studyForm = arr[2];
-            QString type = arr[3];
-            QString kcp = arr[4];
-
-            m_faculties.append(FacultyCell());
-            m_faculties.last().setName(name);
-            m_faculties.last().setCode(code);
-            m_faculties.last().setStudyForm(studyForm);
-            m_faculties.last().setType(type);
-            m_faculties.last().setCapacity(kcp.toInt());
-
-        }
-
-        line = stream.readLine();
-
-    }
-    
-}
+MagicHat::MagicHat() {}
 
 QList<Applicant> MagicHat::applicantsList() const
 {
@@ -142,10 +99,6 @@ void MagicHat::startPriorityRoundSimulation() {
 
             for(int i = 0; i < m_applicantsList.size(); ++i) {
 
-
-                if(elem1.second.id() == 4525667)
-                    qDebug() << "asdasd";
-
                 if(elem1.second.id() == m_applicantsList[i].id()) {
                     m_applicantsList.remove(i);
                     --i;
@@ -188,10 +141,6 @@ void MagicHat::startGeneralRoundSimulation() {
         
         Applicant* applicant = &generalList[i];
         PriorityInfo tempPriority;
-
-        if(applicant->id() == 4239707){
-            qDebug() << "asdasd";
-        }
         
         if(applicant->priorities().size() > 0)
             tempPriority = applicant->priorities().first();
@@ -268,24 +217,24 @@ void MagicHat::rebalanceBudgetaryPlaces() {
     }
 
 
-    FacultyCell* phisFirst = nullptr;
-    FacultyCell* phisSecond = nullptr;
+    // FacultyCell* phisFirst = nullptr;
+    // FacultyCell* phisSecond = nullptr;
 
-    for(int i = 0; i < m_faculties.size(); ++i){
+    // for(int i = 0; i < m_faculties.size(); ++i){
 
-        if(m_faculties[i].name() == "Электроника, радиотехника и системы связи")
-            phisFirst =&m_faculties[i];
-        if(m_faculties[i].name() == "Физика и Радиофизика")
-            phisSecond =&m_faculties[i];
+    //     if(m_faculties[i].name() == "Электроника, радиотехника и системы связи")
+    //         phisFirst =&m_faculties[i];
+    //     if(m_faculties[i].name() == "Физика и Радиофизика")
+    //         phisSecond =&m_faculties[i];
 
-    }
+    // }
 
 
-    phisSecond->setCapacity(phisSecond->capacity() + (m_faculties[m_faculties.size() - 1].capacity() - m_faculties[m_faculties.size() - 1].getPoolSize()));
-    phisSecond->setCapacity(phisSecond->capacity() + (m_faculties[m_faculties.size() - 2].capacity() - m_faculties[m_faculties.size() - 2].getPoolSize()));
-    phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 3].capacity() - m_faculties[m_faculties.size() - 3].getPoolSize()));
-    phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 4].capacity() - m_faculties[m_faculties.size() - 4].getPoolSize()));
-    phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 5].capacity() - m_faculties[m_faculties.size() - 5].getPoolSize()));
+    // phisSecond->setCapacity(phisSecond->capacity() + (m_faculties[m_faculties.size() - 1].capacity() - m_faculties[m_faculties.size() - 1].getPoolSize()));
+    // phisSecond->setCapacity(phisSecond->capacity() + (m_faculties[m_faculties.size() - 2].capacity() - m_faculties[m_faculties.size() - 2].getPoolSize()));
+    // phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 3].capacity() - m_faculties[m_faculties.size() - 3].getPoolSize()));
+    // phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 4].capacity() - m_faculties[m_faculties.size() - 4].getPoolSize()));
+    // phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 5].capacity() - m_faculties[m_faculties.size() - 5].getPoolSize()));
 
 
 }
@@ -460,6 +409,51 @@ void MagicHat::printToExcel() {
         qDebug() << "NOT OK";
     }
 
+}
+
+void MagicHat::setKCP(const QString &path) {
+    
+    QFile input(path);
+    
+    if(!input.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Не удалось открыть файл " << path << "\n Ошибка: " << input.errorString();
+    }
+    
+    QTextStream stream(&input);
+    QString line = stream.readLine();//read title line
+    line = stream.readLine();//read first line
+    
+    while(line.isEmpty() or line[0] != "/") {
+        
+        if(!line.isEmpty()) {
+            
+            QList<QString> arr = line.split("\"");
+            
+            for(int i = 0; i < arr.size(); ++i)
+                if(arr[i].isEmpty() or arr[i] == " ") {
+                    arr.removeAt(i);
+                    --i;
+                }
+            
+            QString code = arr[0];
+            QString name = arr[1];
+            QString studyForm = arr[2];
+            QString type = arr[3];
+            QString kcp = arr[4];
+            
+            m_faculties.append(FacultyCell());
+            m_faculties.last().setName(name);
+            m_faculties.last().setCode(code);
+            m_faculties.last().setStudyForm(studyForm);
+            m_faculties.last().setType(type);
+            m_faculties.last().setCapacity(kcp.toInt());
+            
+        }
+        
+        line = stream.readLine();
+        
+    }
+    
 }
 
 QList<FacultyCell> MagicHat::faculties() const

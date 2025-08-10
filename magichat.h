@@ -33,6 +33,8 @@ public:
     void printStatsToConsole();
     void printToExcel();
     
+    void setKCP(const QString& path);
+    
 signals:
     void applicantsListChanged();
     void uncountedApplicantsChanged();

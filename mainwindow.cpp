@@ -34,11 +34,11 @@ void MainWindow::setMathStatistics(const QList<Applicant> &unCountedApplicants, 
     int kbKcp = 0;
     int kbPlaces = 0;
     
-    QFile input("C:/Repos/Qt/ApplicantStatsProject/кцп_бакалавры.txt");
+    QFile input(":/programInfo/kcpBachelors.txt");
     QTextStream stream(&input);
     
     if(!input.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Не удалось открыть файл " << "C:/Repos/Qt/ApplicantStatsProject/кцп_бакалавры.txt" << "\n Ошибка: " << input.errorString();
+        qDebug() << "Не удалось открыть файл " << ":/programInfo/kcpBachelors.txt" << "\n Ошибка: " << input.errorString();
     }
     
     QString line = stream.readLine();//read title line
