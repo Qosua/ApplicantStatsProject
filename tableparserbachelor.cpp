@@ -38,8 +38,6 @@ void TableParserBachelor::parseTable() {
     
     m_doc = new QXlsx::Document(m_tablePath);
     m_applicants = new QList<Applicant>;
-
-    qDebug() << m_doc->read(1, 1).toString();
     
     setColumnsNames();
     
@@ -83,7 +81,6 @@ void TableParserBachelor::parseTable() {
         info.setDivision(m_doc->read(i, m_columnsNames["Подразделение"]).toString());
 
         tempHash[applicantId].addPriority(info);
-
     }
     
     *m_applicants = tempHash.values();

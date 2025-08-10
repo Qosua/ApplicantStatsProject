@@ -10,12 +10,7 @@
 
 #include "xlsx.h"
 #include "applicant.h"
-
-enum ApplicantsFilterFlags {
-    All              = 1 << 0,
-    AdmissionsTrue   = 1 << 1,
-    AdmissionsFalse  = 1 << 2,
-};
+#include "tableparserbachelor.h"
 
 class TableParserMaster {
     

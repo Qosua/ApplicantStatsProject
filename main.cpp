@@ -5,7 +5,7 @@
 #include <QApplication>
 #include <QFile>
 
-#include "tableparserbachelor.h"
+#include "tableparsermaster.h"
 #include "magichat.h"
 #include "facultycell.h"
 #include "mainwindow.h"
@@ -34,10 +34,13 @@ int main(int argc, char *argv[])
     // magicHatBachelor.printStatsToConsole();
     // magicHatBachelor.printUncountedApplicants();
     
-    TableParserBachelor parserMaster("C:/Repos/Qt/ApplicantStatsProject/Выгрузка маги 09.08.xlsx",
-                                     "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
+    TableParserMaster parserMaster("C:/Repos/Qt/ApplicantStatsProject/Выгрузка маги 09.08.xlsx",
+                                   "C:/Repos/Qt/ApplicantStatsProject/columnsNames.txt");
     parserMaster.parseTable();
+    QList<Applicant> list11 = parserMaster.getApplicants(ApplicantsFilterFlags::All);
     QList<Applicant> list1 = parserMaster.getApplicants(ApplicantsFilterFlags::AdmissionsTrue);
+    
+    qDebug() << list11.size() << list1.size();
     
     for(int i = 0; i < list1.size(); ++i)
         list1[i].deletePriority(PrioritiesFlags::NonBudget);

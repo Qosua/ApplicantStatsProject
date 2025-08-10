@@ -70,6 +70,9 @@ void TableParserMaster::parseTable() {
         info.setEgeScore(m_doc->read(i, m_columnsNames["Сумма баллов"]).toInt());
         info.setEgeAdditionalScore(m_doc->read(i, m_columnsNames["Сумма баллов за инд.дост.(конкурсные)"]).toInt());
         info.setPriorityNumber(m_doc->read(i, m_columnsNames["Приоритет"]).toInt());
+        info.addSubject(-1);
+        info.addSubject(-1);
+        info.addSubject(-1);
         
         info.setCode(extractCode(priorityFullName));
         info.setName(extractName(priorityFullName));

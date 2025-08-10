@@ -259,7 +259,7 @@ void MagicHat::printStatsToConsole() {
         int counter = m_faculties[i].pool().size();
         for(const auto& elem : m_faculties[i].pool()){
 
-            qDebug() << "" << counter <<  "-" <<  elem.second.id() << "-" << elem.second.FIO() << "-" << elem.first.egeScore() << elem.first.egeAdditionalScore() << (elem.first.isBVI() ? "БВИ" : "");
+            qDebug() << "" << counter <<  "-" <<  elem.second.id() << "-" << elem.second.FIO() << "-" << elem.first.egeScore() << elem.first.egeAdditionalScore() << (elem.first.isBVI() ? "БВИ" : "") << "Проритет -" << elem.first.priorityNumber();
             counter -= 1;
         }
 
@@ -309,7 +309,7 @@ void MagicHat::printUncountedApplicants() {
             for(const auto& scores : elem.priorities())
                 temp += QString::number(scores.egeScore()) + " ";
             
-            qDebug () << elem.id() << elem.FIO() << "{" << temp << "}";
+            qDebug () << elem.id() << elem.FIO() << "{" << temp << "}" << elem.priorities()[0].name();
         
     }
     
