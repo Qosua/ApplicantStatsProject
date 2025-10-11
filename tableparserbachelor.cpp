@@ -44,7 +44,7 @@ void TableParserBachelor::parseTable() {
     QHash<int, Applicant> tempHash;
     int applicantId = 0;
     
-    //The first line is names row so we start from the second
+    //The first line is column's names so we start from the second
     for(int i = 2; m_doc->read(i, 1).isValid(); ++i){
         
         applicantId = m_doc->read(i, m_columnsNames["Уникальный код"]).toInt();
@@ -71,13 +71,15 @@ void TableParserBachelor::parseTable() {
         info.addSubject(m_doc->read(i, m_columnsNames["Предмет 1"]).toInt());
         info.addSubject(m_doc->read(i, m_columnsNames["Предмет 2"]).toInt());
         info.addSubject(m_doc->read(i, m_columnsNames["Предмет 3"]).toInt());
+        
         info.setCode(extractCode(priorityFullName));
         info.setName(extractName(priorityFullName));
         info.setStudyForm(extractStudyForm(priorityFullName));
         info.setType(extractType(priorityFullName));
+        
         info.setId(applicantId);
-        info.setAdmissionFlag((m_doc->read(i, m_columnsNames["Согласие на зачисление"]).toString() == "Да" ? true : false));
-        info.setIsBVI(((m_doc->read(i, m_columnsNames["Без вступительных испытаний"]).toString() == "Да") ? true : false));
+        info.setAdmissionFlag((m_doc->read(i, m_columnsNames["Согласие на зачисление"]).toString().toLower() == "да" ? true : false));
+        info.setIsBVI(((m_doc->read(i, m_columnsNames["Без вступительных испытаний"]).toString().toLower() == "да") ? true : false));
         info.setDivision(m_doc->read(i, m_columnsNames["Подразделение"]).toString());
 
         tempHash[applicantId].addPriority(info);
@@ -153,11 +155,9 @@ bool TableParserBachelor::setColumnsNames() {
     QFile file(m_columnsNamesFilePath);
     
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Не удалось открыть файл " << m_columnsNamesFilePath << "\n Ошибка: " << file.errorString();
+        qDebug() << "Не удалось открыть файл " << m_columnsNamesFilePath << "\n\tОшибка: " << file.errorString();
         return false;
     }
-
-    qDebug() << "\n Ошибка: " << file.errorString();
     
     QTextStream stream(&file);
     QString line;
@@ -166,14 +166,30 @@ bool TableParserBachelor::setColumnsNames() {
         
         line = stream.readLine();
 
-        if(line[0] == '#')
+        if(line.isEmpty() or line[0] == '#')
             continue;
+        
+        QStringList list = line.split('=');
+        
+        while(list[0].last(1) == ' ')
+            list[0].removeLast();
+        
+        while(list[0].first(1) == ' ')
+            list[0].removeFirst();
+        
+        while(list[1].last(1) == ' ')
+            list[1].removeLast();
+        
+        while(list[1].first(1) == ' ')
+            list[1].removeFirst();
+        
+        list[1] = list[1].mid(1,list[1].size() - 2);
         
         for(int i = 1; m_doc->read(1, i).isValid(); ++i){
             
-            if(m_doc->read(1, i).toString() == name){
+            if(m_doc->read(1, i).toString() == list[1]){
                 
-                m_columnsNames[name] = i;
+                m_columnsNames[list[0]] = i;
                 break;
             }
         }
@@ -298,7 +314,6 @@ QString TableParserBachelor::extractName(const QString& str) {
         
         if(str[i - 1] == str[i] and str[i] == " ")
             continue;
-
 
         ans += str[i];
         

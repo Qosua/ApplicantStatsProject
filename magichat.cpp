@@ -18,7 +18,7 @@ void MagicHat::setApplicantsList(const QList<Applicant> &newApplicantsList)
 
 void MagicHat::startPriorityRoundSimulation() {
     
-    QList<Applicant> priorityList;
+    QList<Applicant> applicantsList;
     
     for(auto& elem : m_applicantsList){
         
@@ -35,24 +35,24 @@ void MagicHat::startPriorityRoundSimulation() {
             
         }
         
-        priorityList.append(tempApplicant);
+        applicantsList.append(tempApplicant);
         
     }
     
-    for(int i = -1; priorityList.size() > 0;) {
+    for(int i = -1; applicantsList.size() > 0;) {
         
-        if(priorityList.size() == 0)
+        if(applicantsList.size() == 0) //???
             break;
         
-        i = (i + 1) % priorityList.size();
+        i = (i + 1) % applicantsList.size();
         
-        Applicant* applicant = &priorityList[i];
+        Applicant* applicant = &applicantsList[i];
         PriorityInfo priority;
         
         if(applicant->priorities().size() > 0)
             priority = applicant->priorities().first();
         else {
-            priorityList.removeOne(*applicant);
+            applicantsList.removeOne(*applicant);
             continue;
         }
         
@@ -67,14 +67,14 @@ void MagicHat::startPriorityRoundSimulation() {
                 
                 applicant->priorities().removeFirst();
                 facultyCell->addToPool(priority, *applicant);
-                priorityList.removeOne(*applicant);
+                applicantsList.removeOne(*applicant);
                 
                 QPair<PriorityInfo, Applicant*> unsuitable = facultyCell->getUnsuitableApplicant();
                 
                 if(unsuitable.second != nullptr){
                     
                     unsuitable.second->addPriority(unsuitable.first);
-                    priorityList.append(*unsuitable.second);
+                    applicantsList.append(*unsuitable.second);
                     
                     delete unsuitable.second;
                     unsuitable.second = nullptr;
@@ -83,13 +83,8 @@ void MagicHat::startPriorityRoundSimulation() {
             }
         }
         
-        if(deletePriority){
-            
+        if(deletePriority)
             applicant->priorities().removeFirst();
-            int a = 0;
-            a += 1;
-            
-        }
         
     }
 
@@ -177,13 +172,8 @@ void MagicHat::startGeneralRoundSimulation() {
             }
         }
         
-        if(deletePriority){
-            
+        if(deletePriority)
             applicant->priorities().removeFirst();
-            int a = 0;
-            a += 1;
-            
-        }
         
     }
     
