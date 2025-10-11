@@ -20,12 +20,12 @@ public:
     ~TableParserMaster();
     
     void parseTable();
-    QList<Applicant> getApplicants(ApplicantsFilterFlags flag);
+    QList<Applicant> getApplicants(ApplicantsFilterFlags flag, PrioritiesFlags priorityToDelete);
     
 private:
-    
     bool setColumnsNames();
     void printStatsToConsole() const;
+    
     QString extractCode(const QString& str);
     QString extractName(const QString& str);
     QString extractStudyForm(const QString& str);

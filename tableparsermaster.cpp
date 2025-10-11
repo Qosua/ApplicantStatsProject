@@ -96,12 +96,16 @@ void TableParserMaster::parseTable() {
     
 }
 
-QList<Applicant> TableParserMaster::getApplicants(ApplicantsFilterFlags flag) {
+QList<Applicant> TableParserMaster::getApplicants(ApplicantsFilterFlags flag, PrioritiesFlags priorityToDelete) {
     
     QList<Applicant> newList;
     
     if(flag == ApplicantsFilterFlags::All) {
         newList = *m_applicants;
+        
+        for(int i = 0; i < newList.size(); ++i)
+            newList[i].deletePriority(priorityToDelete);
+        
         return newList;
     }
     if(flag == ApplicantsFilterFlags::AdmissionsTrue) {
@@ -110,16 +114,17 @@ QList<Applicant> TableParserMaster::getApplicants(ApplicantsFilterFlags flag) {
             Applicant applicant = elem;
             applicant.priorities().clear();
             
-            for(const auto& priority : elem.priorities()){
-                if(priority.admissionFlag()){
+            for(const auto& priority : elem.priorities())
+                if(priority.admissionFlag())
                     applicant.addPriority(priority);
-                }
-            }
             
             if(applicant.priorities().size() != 0)
                 newList.append(applicant);
-            
         }
+        
+        for(int i = 0; i < newList.size(); ++i)
+            newList[i].deletePriority(priorityToDelete);
+        
         return newList;
     }
     if(flag == ApplicantsFilterFlags::AdmissionsFalse) {
@@ -128,16 +133,18 @@ QList<Applicant> TableParserMaster::getApplicants(ApplicantsFilterFlags flag) {
             Applicant applicant = elem;
             applicant.priorities().clear();
             
-            for(const auto& priority : elem.priorities()){
-                if(!priority.admissionFlag()){
+            for(const auto& priority : elem.priorities())
+                if(!priority.admissionFlag())
                     applicant.addPriority(priority);
-                }
-            }
             
             if(applicant.priorities().size() != 0)
                 newList.append(applicant);
             
         }
+        
+        for(int i = 0; i < newList.size(); ++i)
+            newList[i].deletePriority(priorityToDelete);
+        
         return newList;
     }
     
@@ -150,24 +157,41 @@ bool TableParserMaster::setColumnsNames() {
     QFile file(m_columnsNamesFilePath);
     
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Не удалось открыть файл " << m_columnsNamesFilePath << "\n Ошибка: " << file.errorString();
+        qDebug() << "Не удалось открыть файл " << m_columnsNamesFilePath << "\n\tОшибка: " << file.errorString();
         return false;
     }
-
-    qDebug() << "\n Ошибка: " << file.errorString();
     
     QTextStream stream(&file);
-    QString name;
+    QString line;
     
     while(!stream.atEnd()) {
         
-        name = stream.readLine();
+        line = stream.readLine();
+        
+        if(line.isEmpty() or line[0] == '#')
+            continue;
+        
+        QStringList list = line.split('=');
+        
+        while(list[0].last(1) == ' ')
+            list[0].removeLast();
+        
+        while(list[0].first(1) == ' ')
+            list[0].removeFirst();
+        
+        while(list[1].last(1) == ' ')
+            list[1].removeLast();
+        
+        while(list[1].first(1) == ' ')
+            list[1].removeFirst();
+        
+        list[1] = list[1].mid(1,list[1].size() - 2);
         
         for(int i = 1; m_doc->read(1, i).isValid(); ++i){
             
-            if(m_doc->read(1, i).toString() == name){
+            if(m_doc->read(1, i).toString() == list[1]){
                 
-                m_columnsNames[name] = i;
+                m_columnsNames[list[0]] = i;
                 break;
             }
         }
