@@ -94,7 +94,7 @@ void TableParserBachelor::parseTable() {
     
 }
 
-QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, PrioritiesFlags priorityToDelete) {
+QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, PriorityType priorityToDelete) {
     
     QList<Applicant> newList;
     

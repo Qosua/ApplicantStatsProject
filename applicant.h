@@ -6,7 +6,7 @@
 #include <QList>
 #include <algorithm>
 
-enum PrioritiesFlags {
+enum PriorityType {
     NonBudget      = 1 << 3,
     Budget         = 1 << 4,
     SpecialRight   = 1 << 5,
@@ -19,7 +19,6 @@ class PriorityInfo : public QObject {
     Q_OBJECT
     
 public:
-    
     PriorityInfo();
     PriorityInfo(const PriorityInfo& copy);
     void operator=(const PriorityInfo& copy);
@@ -68,23 +67,6 @@ public:
     QString division() const;
     void setDivision(const QString &newDivision);
 
-signals:
-    void egeScoreChanged();
-    void egeAdditionalScoreChanged();
-    void priorityNumberChanged();
-    void priorityNameChanged();
-    void codeChanged();
-    void nameChanged();
-    void studyFormChanged();
-    void typeChanged();
-    void subjectScoresChanged();
-    void idChanged();
-    void admissionFlagChanged();
-    
-    void isBVIChanged();
-    
-    void divisionChanged();
-
 private:
     int m_id;
     int m_egeScore;
@@ -98,6 +80,21 @@ private:
     QList<int> m_subjectScores;
     bool m_admissionFlag;
     bool m_isBVI;
+    
+signals:
+    void egeScoreChanged();
+    void egeAdditionalScoreChanged();
+    void priorityNumberChanged();
+    void priorityNameChanged();
+    void codeChanged();
+    void nameChanged();
+    void studyFormChanged();
+    void typeChanged();
+    void subjectScoresChanged();
+    void idChanged();
+    void admissionFlagChanged();
+    void isBVIChanged();
+    void divisionChanged();
     
     // Q_PROPERTY(int egeScore READ egeScore WRITE setEgeScore NOTIFY egeScoreChanged FINAL)
     // Q_PROPERTY(int egeAdditionalScore READ egeAdditionalScore WRITE setEgeAdditionalScore NOTIFY egeAdditionalScoreChanged FINAL)
@@ -120,7 +117,6 @@ class Applicant : public QObject {
     Q_OBJECT
     
 public:
-    
     Applicant();
     Applicant(const Applicant& copy);
     void operator=(const Applicant& copy);
@@ -133,7 +129,7 @@ public:
     QList<PriorityInfo>& priorities();
     void setPriorities(const QList<PriorityInfo> &newPriorities);
     void addPriority(const PriorityInfo& info);
-    void deletePriority(PrioritiesFlags flag);
+    void deletePriority(PriorityType flag);
 
     QString phoneNumber() const;
     void setPhoneNumber(const QString &newPhoneNumber);
@@ -144,21 +140,20 @@ public:
     QString FIO() const;
     void setFIO(const QString &newFIO);
 
-signals:
-    void idChanged();
-    void prioritiesChanged();
-    void phoneNumberChanged();
-    void emailChanged();
-    void FIOChanged();
-
 private:
-    
     int m_id;
     QList<PriorityInfo> m_priorities;
 
     QString m_phoneNumber;
     QString m_email;
     QString m_FIO;
+    
+signals:
+    void idChanged();
+    void prioritiesChanged();
+    void phoneNumberChanged();
+    void emailChanged();
+    void FIOChanged();
     
     // Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged FINAL)
     // Q_PROPERTY(QList<PriorityInfo> priorities READ priorities WRITE setPriorities NOTIFY prioritiesChanged FINAL)

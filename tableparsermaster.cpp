@@ -96,7 +96,7 @@ void TableParserMaster::parseTable() {
     
 }
 
-QList<Applicant> TableParserMaster::getApplicants(ApplicantsFilterFlags flag, PrioritiesFlags priorityToDelete) {
+QList<Applicant> TableParserMaster::getApplicants(ApplicantsFilterFlags flag, PriorityType priorityToDelete) {
     
     QList<Applicant> newList;
     

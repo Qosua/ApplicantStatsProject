@@ -20,7 +20,7 @@ public:
     ~TableParserMaster();
     
     void parseTable();
-    QList<Applicant> getApplicants(ApplicantsFilterFlags flag, PrioritiesFlags priorityToDelete);
+    QList<Applicant> getApplicants(ApplicantsFilterFlags flag, PriorityType priorityToDelete);
     
 private:
     bool setColumnsNames();

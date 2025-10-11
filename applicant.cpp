@@ -82,10 +82,10 @@ void Applicant::addPriority(const PriorityInfo &info) {
     
 }
 
-void Applicant::deletePriority(PrioritiesFlags flag) {
+void Applicant::deletePriority(PriorityType flag) {
     
     switch(flag){
-        case PrioritiesFlags::Budget: {
+        case PriorityType::Budget: {
             for(int i = 0; i < m_priorities.size(); ++i)
                 if(m_priorities[i].type() == "Бюджет") {
                     m_priorities.removeOne(m_priorities[i]);
@@ -93,7 +93,7 @@ void Applicant::deletePriority(PrioritiesFlags flag) {
                 }
         }break;
             
-        case PrioritiesFlags::NonBudget: {
+        case PriorityType::NonBudget: {
             for(int i = 0; i < m_priorities.size(); ++i)
                 if(m_priorities[i].type() == "Внебюджет") {
                     m_priorities.removeOne(m_priorities[i]);
@@ -101,7 +101,7 @@ void Applicant::deletePriority(PrioritiesFlags flag) {
                 }
         }break;
             
-        case PrioritiesFlags::SpecialRight: {
+        case PriorityType::SpecialRight: {
             for(int i = 0; i < m_priorities.size(); ++i)
                 if(m_priorities[i].type() == "Особое право") {
                     m_priorities.removeOne(m_priorities[i]);
@@ -109,7 +109,7 @@ void Applicant::deletePriority(PrioritiesFlags flag) {
                 }
         }break;
             
-        case PrioritiesFlags::Kvot: {
+        case PriorityType::Kvot: {
             for(int i = 0; i < m_priorities.size(); ++i)
                 if(m_priorities[i].type() == "Отдельная квота") {
                     m_priorities.removeOne(m_priorities[i]);
@@ -117,7 +117,7 @@ void Applicant::deletePriority(PrioritiesFlags flag) {
                 }
         }break;
             
-        case PrioritiesFlags::CompanySponsor: {
+        case PriorityType::CompanySponsor: {
             for(int i = 0; i < m_priorities.size(); ++i)
                 if(m_priorities[i].type() == "Целевое") {
                     m_priorities.removeOne(m_priorities[i]);

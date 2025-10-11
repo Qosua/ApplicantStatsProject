@@ -43,7 +43,7 @@ signals:
 private:
     QList<Applicant> m_applicantsListCopy;
     QList<Applicant> m_applicantsList;
-    QList<FacultyCell> m_faculties;
+    QList<FacultyCell> m_facultyCells;
     QList<Applicant> m_uncountedApplicants;
 
     // Q_PROPERTY(QList<Applicant> applicantsList READ applicantsList NOTIFY applicantsListChanged FINAL)

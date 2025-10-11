@@ -25,7 +25,7 @@ public:
     ~TableParserBachelor();
     
     void parseTable();
-    QList<Applicant> getApplicants(ApplicantsFilterFlags flag, PrioritiesFlags infoFlag);
+    QList<Applicant> getApplicants(ApplicantsFilterFlags flag, PriorityType infoFlag);
     
 private:
     bool setColumnsNames();

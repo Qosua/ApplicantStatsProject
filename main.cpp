@@ -16,11 +16,11 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setStyle(QStyleFactory::create("windows11"));
     
-    TableParserBachelor parserBachelor("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 05.08 1230.xlsx",
+    TableParserBachelor parserBachelor("C:/Repos/Qt/ApplicantStatsProject/data/Выгрузка все 05.08 1230.xlsx",
                                         ":/programInfo/columnsNames.txt");
     parserBachelor.parseTable();
     QList<Applicant> list1 = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue,
-                                                          PrioritiesFlags::NonBudget);
+                                                          PriorityType::NonBudget);
     
     MagicHat magicHatBachelor;
     magicHatBachelor.setKCP(":/programInfo/kcpBachelors.txt");

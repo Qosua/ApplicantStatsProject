@@ -57,9 +57,9 @@ void MagicHat::startPriorityRoundSimulation() {
         }
         
         bool deletePriority = true;
-        for(int j = 0; j < m_faculties.size(); ++j){
+        for(int j = 0; j < m_facultyCells.size(); ++j){
             
-            FacultyCell* facultyCell = &m_faculties[j];
+            FacultyCell* facultyCell = &m_facultyCells[j];
             
             if(facultyCell->isAbleToAdd(priority)){
                 
@@ -88,7 +88,7 @@ void MagicHat::startPriorityRoundSimulation() {
         
     }
 
-    for(auto& elem : m_faculties){
+    for(auto& elem : m_facultyCells){
 
         for(auto& elem1 : elem.pool()) {
 
@@ -146,9 +146,9 @@ void MagicHat::startGeneralRoundSimulation() {
         }
         
         bool deletePriority = true;
-        for(int j = 0; j < m_faculties.size(); ++j){
+        for(int j = 0; j < m_facultyCells.size(); ++j){
             
-            FacultyCell* facultyCell = &m_faculties[j];
+            FacultyCell* facultyCell = &m_facultyCells[j];
             
             if(facultyCell->isAbleToAdd(tempPriority)){
                 
@@ -184,70 +184,73 @@ void MagicHat::startGeneralRoundSimulation() {
 
 void MagicHat::rebalanceBudgetaryPlaces() {
     
-    
-    for(auto& elem : m_faculties) {
+    for(auto& elem : m_facultyCells) {
 
-        if(elem.type() == "Бюджет") {
+        if(elem.type() != "Бюджет")
+            continue;
+        //Skip Physics faculty for now
+        if(elem.code().mid(0,2) == "03" or elem.code().mid(0,2) == "11")
+            continue;
 
-            for(auto& elem1 : m_faculties) {
-                
-                if(elem.name() != elem1.name() or (elem.name() == elem1.name() and elem.type() == elem1.type()))
-                    continue;
-                
-                if(elem.name() == elem1.name() and
-                    elem.studyForm() == elem1.studyForm() and
-                    elem.code() == elem1.code() and
-                    elem1.type() != "Бюджет") {
+        for(auto& elem1 : m_facultyCells) {
+            
+            if(elem.name() != elem1.name())
+                continue;
+            if(elem.type() == elem1.type())
+                continue;
+            
+            if(elem.studyForm() == elem1.studyForm() and
+                elem.code() == elem1.code() and
+                elem1.type() != "Бюджет") {
 
-                    elem.setCapacity(elem.capacity() + (elem1.capacity() - elem1.getPoolSize()));
-
-                }
+                elem.setCapacity(elem.capacity() + (elem1.capacity() - elem1.getPoolSize()));
             }
         }
+        
     }
-
-
-    // FacultyCell* phisFirst = nullptr;
-    // FacultyCell* phisSecond = nullptr;
-
-    // for(int i = 0; i < m_faculties.size(); ++i){
-
-    //     if(m_faculties[i].name() == "Электроника, радиотехника и системы связи")
-    //         phisFirst =&m_faculties[i];
-    //     if(m_faculties[i].name() == "Физика и Радиофизика")
-    //         phisSecond =&m_faculties[i];
-
-    // }
-
-
-    // phisSecond->setCapacity(phisSecond->capacity() + (m_faculties[m_faculties.size() - 1].capacity() - m_faculties[m_faculties.size() - 1].getPoolSize()));
-    // phisSecond->setCapacity(phisSecond->capacity() + (m_faculties[m_faculties.size() - 2].capacity() - m_faculties[m_faculties.size() - 2].getPoolSize()));
-    // phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 3].capacity() - m_faculties[m_faculties.size() - 3].getPoolSize()));
-    // phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 4].capacity() - m_faculties[m_faculties.size() - 4].getPoolSize()));
-    // phisFirst->setCapacity(phisFirst->capacity() + (m_faculties[m_faculties.size() - 5].capacity() - m_faculties[m_faculties.size() - 5].getPoolSize()));
-
-
+    
+    
+    //Fix Physics rebalance
+    for(auto& elem : m_facultyCells) {
+        
+        if(elem.type() != "Бюджет")
+            continue;
+        if(elem.code().mid(0,2) != "03" and elem.code().mid(0,2) != "11")
+            continue;
+            
+        for(auto& elem1 : m_facultyCells) {
+            
+            if(elem.type() == elem1.type())
+                continue;
+            if(elem1.code().mid(0,2) != elem.code().mid(0,2))
+                continue;
+            
+            if(elem.studyForm() == elem1.studyForm()) 
+                elem.setCapacity(elem.capacity() + (elem1.capacity() - elem1.getPoolSize()));
+            
+        }
+    }
 }
 
 void MagicHat::printStatsToConsole() {
     
     int globalCounter = 0;
 
-    for(int i = 0; i < m_faculties.size(); ++i) {
+    for(int i = 0; i < m_facultyCells.size(); ++i) {
         
-        qDebug() << "\n>----" << m_faculties[i].code() << "|" <<  m_faculties[i].name() << "|" <<
-            QString::number(m_faculties[i].pool().size()) + "/" + QString::number(m_faculties[i].capacity()) << "|"
-            << m_faculties[i].type() << "|"
-            << m_faculties[i].studyForm() << "----<";
+        qDebug() << "\n>----" << m_facultyCells[i].code() << "|" <<  m_facultyCells[i].name() << "|" <<
+            QString::number(m_facultyCells[i].pool().size()) + "/" + QString::number(m_facultyCells[i].capacity()) << "|"
+            << m_facultyCells[i].type() << "|"
+            << m_facultyCells[i].studyForm() << "----<";
 
-        if(m_faculties[i].pool().size() == 0) {
+        if(m_facultyCells[i].pool().size() == 0) {
             qDebug() << "НЕТ СТУДЕНТОВ\n";
             continue;
         }
         
-        globalCounter += m_faculties[i].pool().size();
-        int counter = m_faculties[i].pool().size();
-        for(const auto& elem : m_faculties[i].pool()){
+        globalCounter += m_facultyCells[i].pool().size();
+        int counter = m_facultyCells[i].pool().size();
+        for(const auto& elem : m_facultyCells[i].pool()){
 
             qDebug() << "" << counter <<  "-" <<  elem.second.id() << "-" << elem.second.FIO() << "-" << elem.first.egeScore() << elem.first.egeAdditionalScore() << (elem.first.isBVI() ? "БВИ" : "") << "Проритет -" << elem.first.priorityNumber();
             counter -= 1;
@@ -318,57 +321,57 @@ void MagicHat::printToExcel() {
     int globalCounter = 0;
 
     newDoc.selectSheet("ПМИ");
-    for(int i = 0; i < m_faculties.size(); ++i) {
+    for(int i = 0; i < m_facultyCells.size(); ++i) {
 
-        if(m_faculties[i].name() == "Прикладное программирование и информационные технологии" and m_faculties[i].type() == "Бюджет") {
+        if(m_facultyCells[i].name() == "Прикладное программирование и информационные технологии" and m_facultyCells[i].type() == "Бюджет") {
 
-            globalCounter += m_faculties[i].pool().size();
-            int counter = m_faculties[i].pool().size();
-            for(int j = 0; j < m_faculties[i].pool().size() ; ++j){
+            globalCounter += m_facultyCells[i].pool().size();
+            int counter = m_facultyCells[i].pool().size();
+            for(int j = 0; j < m_facultyCells[i].pool().size() ; ++j){
 
-                newDoc.write(j + 1, 1, m_faculties[i].pool()[j].second.id());
-                newDoc.write(j + 1, 2, m_faculties[i].pool()[j].second.FIO());
-                newDoc.write(j + 1, 3, m_faculties[i].pool()[j].first.egeScore());
-                newDoc.write(j + 1, 4, m_faculties[i].pool()[j].first.egeAdditionalScore());
-                newDoc.write(j + 1, 5, m_faculties[i].pool()[j].first.name());
+                newDoc.write(j + 1, 1, m_facultyCells[i].pool()[j].second.id());
+                newDoc.write(j + 1, 2, m_facultyCells[i].pool()[j].second.FIO());
+                newDoc.write(j + 1, 3, m_facultyCells[i].pool()[j].first.egeScore());
+                newDoc.write(j + 1, 4, m_facultyCells[i].pool()[j].first.egeAdditionalScore());
+                newDoc.write(j + 1, 5, m_facultyCells[i].pool()[j].first.name());
             }
         }
     }
 
 
     newDoc.selectSheet("МКН");
-    for(int i = 0; i < m_faculties.size(); ++i) {
+    for(int i = 0; i < m_facultyCells.size(); ++i) {
 
-        if(m_faculties[i].name() == "Программирование, алгоритмы и анализ данных" and m_faculties[i].type() == "Бюджет") {
+        if(m_facultyCells[i].name() == "Программирование, алгоритмы и анализ данных" and m_facultyCells[i].type() == "Бюджет") {
 
-            globalCounter += m_faculties[i].pool().size();
-            int counter = m_faculties[i].pool().size();
-            for(int j = 0; j < m_faculties[i].pool().size() ; ++j){
+            globalCounter += m_facultyCells[i].pool().size();
+            int counter = m_facultyCells[i].pool().size();
+            for(int j = 0; j < m_facultyCells[i].pool().size() ; ++j){
 
-                newDoc.write(j + 1, 1, m_faculties[i].pool()[j].second.id());
-                newDoc.write(j + 1, 2, m_faculties[i].pool()[j].second.FIO());
-                newDoc.write(j + 1, 3, m_faculties[i].pool()[j].first.egeScore());
-                newDoc.write(j + 1, 4, m_faculties[i].pool()[j].first.egeAdditionalScore());
-                newDoc.write(j + 1, 5, m_faculties[i].pool()[j].first.name());
+                newDoc.write(j + 1, 1, m_facultyCells[i].pool()[j].second.id());
+                newDoc.write(j + 1, 2, m_facultyCells[i].pool()[j].second.FIO());
+                newDoc.write(j + 1, 3, m_facultyCells[i].pool()[j].first.egeScore());
+                newDoc.write(j + 1, 4, m_facultyCells[i].pool()[j].first.egeAdditionalScore());
+                newDoc.write(j + 1, 5, m_facultyCells[i].pool()[j].first.name());
             }
         }
     }
 
 
     newDoc.selectSheet("ИБ");
-    for(int i = 0; i < m_faculties.size(); ++i) {
+    for(int i = 0; i < m_facultyCells.size(); ++i) {
 
-        if(m_faculties[i].name() == "Безопасность компьютерных систем" and m_faculties[i].type() == "Бюджет") {
+        if(m_facultyCells[i].name() == "Безопасность компьютерных систем" and m_facultyCells[i].type() == "Бюджет") {
 
-            globalCounter += m_faculties[i].pool().size();
-            int counter = m_faculties[i].pool().size();
-            for(int j = 0; j < m_faculties[i].pool().size() ; ++j){
+            globalCounter += m_facultyCells[i].pool().size();
+            int counter = m_facultyCells[i].pool().size();
+            for(int j = 0; j < m_facultyCells[i].pool().size() ; ++j){
 
-                newDoc.write(j + 1, 1, m_faculties[i].pool()[j].second.id());
-                newDoc.write(j + 1, 2, m_faculties[i].pool()[j].second.FIO());
-                newDoc.write(j + 1, 3, m_faculties[i].pool()[j].first.egeScore());
-                newDoc.write(j + 1, 4, m_faculties[i].pool()[j].first.egeAdditionalScore());
-                newDoc.write(j + 1, 5, m_faculties[i].pool()[j].first.name());
+                newDoc.write(j + 1, 1, m_facultyCells[i].pool()[j].second.id());
+                newDoc.write(j + 1, 2, m_facultyCells[i].pool()[j].second.FIO());
+                newDoc.write(j + 1, 3, m_facultyCells[i].pool()[j].first.egeScore());
+                newDoc.write(j + 1, 4, m_facultyCells[i].pool()[j].first.egeAdditionalScore());
+                newDoc.write(j + 1, 5, m_facultyCells[i].pool()[j].first.name());
             }
         }
     }
@@ -376,18 +379,18 @@ void MagicHat::printToExcel() {
 
 
     newDoc.selectSheet("КБ");
-    for(int i = 0; i < m_faculties.size(); ++i) {
-        if(m_faculties[i].name() == "Математические методы защиты информации" and m_faculties[i].type() == "Бюджет") {
+    for(int i = 0; i < m_facultyCells.size(); ++i) {
+        if(m_facultyCells[i].name() == "Математические методы защиты информации" and m_facultyCells[i].type() == "Бюджет") {
 
-            globalCounter += m_faculties[i].pool().size();
-            int counter = m_faculties[i].pool().size();
-            for(int j = 0; j < m_faculties[i].pool().size() ; ++j){
+            globalCounter += m_facultyCells[i].pool().size();
+            int counter = m_facultyCells[i].pool().size();
+            for(int j = 0; j < m_facultyCells[i].pool().size() ; ++j){
 
-                newDoc.write(j + 1, 1, m_faculties[i].pool()[j].second.id());
-                newDoc.write(j + 1, 2, m_faculties[i].pool()[j].second.FIO());
-                newDoc.write(j + 1, 3, m_faculties[i].pool()[j].first.egeScore());
-                newDoc.write(j + 1, 4, m_faculties[i].pool()[j].first.egeAdditionalScore());
-                newDoc.write(j + 1, 5, m_faculties[i].pool()[j].first.name());
+                newDoc.write(j + 1, 1, m_facultyCells[i].pool()[j].second.id());
+                newDoc.write(j + 1, 2, m_facultyCells[i].pool()[j].second.FIO());
+                newDoc.write(j + 1, 3, m_facultyCells[i].pool()[j].first.egeScore());
+                newDoc.write(j + 1, 4, m_facultyCells[i].pool()[j].first.egeAdditionalScore());
+                newDoc.write(j + 1, 5, m_facultyCells[i].pool()[j].first.name());
             }
         }
     }
@@ -431,12 +434,12 @@ void MagicHat::setKCP(const QString &path) {
             QString type = arr[3];
             QString kcp = arr[4];
             
-            m_faculties.append(FacultyCell());
-            m_faculties.last().setName(name);
-            m_faculties.last().setCode(code);
-            m_faculties.last().setStudyForm(studyForm);
-            m_faculties.last().setType(type);
-            m_faculties.last().setCapacity(kcp.toInt());
+            m_facultyCells.append(FacultyCell());
+            m_facultyCells.last().setName(name);
+            m_facultyCells.last().setCode(code);
+            m_facultyCells.last().setStudyForm(studyForm);
+            m_facultyCells.last().setType(type);
+            m_facultyCells.last().setCapacity(kcp.toInt());
             
         }
         
@@ -448,15 +451,15 @@ void MagicHat::setKCP(const QString &path) {
 
 QList<FacultyCell> MagicHat::faculties() const
 {
-    return m_faculties;
+    return m_facultyCells;
 }
 
 void MagicHat::printFaculties() {
 
     qDebug() << "\n";
 
-    QString tempCode = m_faculties[0].code();
-    for(const auto& elem : m_faculties) {
+    QString tempCode = m_facultyCells[0].code();
+    for(const auto& elem : m_facultyCells) {
 
         if(tempCode != elem.code()) {
             qDebug() << "\n";
