@@ -68,9 +68,9 @@ void TableParserBachelor::parseTable() {
         info.setEgeScore(m_doc->read(i, m_columnsNames["Сумма баллов"]).toInt());
         info.setEgeAdditionalScore(m_doc->read(i, m_columnsNames["Сумма баллов за инд.дост.(конкурсные)"]).toInt());
         info.setPriorityNumber(m_doc->read(i, m_columnsNames["Приоритет"]).toInt());
-        info.addSubject(m_doc->read(i, m_columnsNames["Предмет1"]).toInt());
-        info.addSubject(m_doc->read(i, m_columnsNames["Предмет2"]).toInt());
-        info.addSubject(m_doc->read(i, m_columnsNames["Предмет3"]).toInt());
+        info.addSubject(m_doc->read(i, m_columnsNames["Предмет 1"]).toInt());
+        info.addSubject(m_doc->read(i, m_columnsNames["Предмет 2"]).toInt());
+        info.addSubject(m_doc->read(i, m_columnsNames["Предмет 3"]).toInt());
         info.setCode(extractCode(priorityFullName));
         info.setName(extractName(priorityFullName));
         info.setStudyForm(extractStudyForm(priorityFullName));
@@ -92,12 +92,16 @@ void TableParserBachelor::parseTable() {
     
 }
 
-QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag) {
+QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, PrioritiesFlags priorityToDelete) {
     
     QList<Applicant> newList;
     
     if(flag == ApplicantsFilterFlags::All) {
         newList = *m_applicants;
+
+        for(int i = 0; i < newList.size(); ++i)
+            newList[i].deletePriority(priorityToDelete);
+
         return newList;
     }
     if(flag == ApplicantsFilterFlags::AdmissionsTrue) {
@@ -106,16 +110,17 @@ QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag) 
             Applicant applicant = elem;
             applicant.priorities().clear();
             
-            for(const auto& priority : elem.priorities()){
-                if(priority.admissionFlag()){
+            for(const auto& priority : elem.priorities())
+                if(priority.admissionFlag())
                     applicant.addPriority(priority);
-                }
-            }
-            
+
             if(applicant.priorities().size() != 0)
                 newList.append(applicant);
-            
         }
+
+        for(int i = 0; i < newList.size(); ++i)
+            newList[i].deletePriority(priorityToDelete);
+
         return newList;
     }
     if(flag == ApplicantsFilterFlags::AdmissionsFalse) {
@@ -124,16 +129,18 @@ QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag) 
             Applicant applicant = elem;
             applicant.priorities().clear();
             
-            for(const auto& priority : elem.priorities()){
-                if(!priority.admissionFlag()){
+            for(const auto& priority : elem.priorities())
+                if(!priority.admissionFlag())
                     applicant.addPriority(priority);
-                }
-            }
             
             if(applicant.priorities().size() != 0)
                 newList.append(applicant);
             
         }
+
+        for(int i = 0; i < newList.size(); ++i)
+            newList[i].deletePriority(priorityToDelete);
+
         return newList;
     }
     
@@ -153,11 +160,14 @@ bool TableParserBachelor::setColumnsNames() {
     qDebug() << "\n Ошибка: " << file.errorString();
     
     QTextStream stream(&file);
-    QString name;
+    QString line;
     
     while(!stream.atEnd()) {
         
-        name = stream.readLine();
+        line = stream.readLine();
+
+        if(line[0] == '#')
+            continue;
         
         for(int i = 1; m_doc->read(1, i).isValid(); ++i){
             

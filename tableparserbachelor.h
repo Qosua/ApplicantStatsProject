@@ -25,7 +25,7 @@ public:
     ~TableParserBachelor();
     
     void parseTable();
-    QList<Applicant> getApplicants(ApplicantsFilterFlags flag);
+    QList<Applicant> getApplicants(ApplicantsFilterFlags flag, PrioritiesFlags infoFlag);
     
 private:
     
