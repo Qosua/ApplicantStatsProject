@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <QFile>
+#include <QStyleFactory>
 
 #include "tableparsermaster.h"
 #include "magichat.h"
@@ -13,15 +14,15 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    app.setStyle(QStyleFactory::create("windows11"));
     
-    TableParserBachelor parserBachelor("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 05.08 1230.xlsx",
+    TableParserBachelor parserBachelor("C:/Repos/Qt/ApplicantStatsProject/Выгрузка все 01.08 обед.xlsx",
                                         ":/programInfo/columnsNames.txt");
     parserBachelor.parseTable();
     QList<Applicant> list1 = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue);
     
     for(int i = 0; i < list1.size(); ++i)
         list1[i].deletePriority(PrioritiesFlags::NonBudget);
-    
     
     MagicHat magicHatBachelor;
     magicHatBachelor.setKCP(":/programInfo/kcpBachelors.txt");

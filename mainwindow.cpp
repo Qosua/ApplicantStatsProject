@@ -6,12 +6,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    QFile file(":/styles/white_style.qss");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Не удалось открыть файл: :/styles/white_style.qss \n Ошибка: " << file.errorString();
-    }
+    // QFile file(":/styles/white_style.qss");
+    // if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    //     qDebug() << "Не удалось открыть файл: :/styles/white_style.qss \n Ошибка: " << file.errorString();
+    // }
 
-    this->setStyleSheet(file.readAll());
+    // this->setStyleSheet(file.readAll());
 
 }
 
