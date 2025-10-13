@@ -404,49 +404,36 @@ void MagicHat::printToExcel() {
 
 }
 
-void MagicHat::setKCP(const QString &path) {
+void MagicHat::setKCP(const QString &path, const QString& sheet) {
     
     QFile input(path);
     
-    if(!input.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Не удалось открыть файл " << path << "\n Ошибка: " << input.errorString();
+    if(!input.exists()) {
+        qDebug() << "Не удалось найти файл " << path << "\n\t Ошибка: " << input.errorString();
     }
     
-    QTextStream stream(&input);
-    QString line = stream.readLine();//read title line
-    line = stream.readLine();//read first line
+    QXlsx::Document doc(path);
+    doc.selectSheet(sheet);
     
-    while(line.isEmpty() or line[0] != "/") {
+    //skipping title
+    for(int i = 2; doc.read(i,1).isValid(); ++i) {
+            
+        QString code = doc.read(i,1).toString();
+        if(code.contains("/"))
+            continue;
         
-        if(!line.isEmpty()) {
-            
-            QList<QString> arr = line.split("\"");
-            
-            for(int i = 0; i < arr.size(); ++i)
-                if(arr[i].isEmpty() or arr[i] == " ") {
-                    arr.removeAt(i);
-                    --i;
-                }
-            
-            QString code = arr[0];
-            QString name = arr[1];
-            QString studyForm = arr[2];
-            QString type = arr[3];
-            QString kcp = arr[4];
-            
-            m_facultyCells.append(FacultyCell());
-            m_facultyCells.last().setName(name);
-            m_facultyCells.last().setCode(code);
-            m_facultyCells.last().setStudyForm(studyForm);
-            m_facultyCells.last().setType(type);
-            m_facultyCells.last().setCapacity(kcp.toInt());
-            
-        }
+        QString name = doc.read(i,2).toString();
+        QString studyForm = doc.read(i,3).toString();
+        QString type = doc.read(i,4).toString();
+        QString kcp = doc.read(i,5).toString();
         
-        line = stream.readLine();
-        
+        m_facultyCells.append(FacultyCell());
+        m_facultyCells.last().setName(name);
+        m_facultyCells.last().setCode(code);
+        m_facultyCells.last().setStudyForm(studyForm);
+        m_facultyCells.last().setType(type);
+        m_facultyCells.last().setCapacity(kcp.toInt());
     }
-    
 }
 
 QList<FacultyCell> MagicHat::faculties() const

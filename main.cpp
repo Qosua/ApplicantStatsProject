@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
                                                           PriorityType::NonBudget);
     
     MagicHat magicHatBachelor;
-    magicHatBachelor.setKCP(":/programInfo/kcpBachelors.txt");
+    magicHatBachelor.setKCP(":/programInfo/KCP.xlsx", "Бакалавры");
     magicHatBachelor.setApplicantsList(list1);
     
     magicHatBachelor.startPriorityRoundSimulation();

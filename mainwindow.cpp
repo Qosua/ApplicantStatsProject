@@ -42,7 +42,7 @@ void MainWindow::setMathStatistics(const QList<Applicant> &unCountedApplicants, 
     }
     
     QString line = stream.readLine();//read title line
-    line = stream.readLine();//read first line
+    line = stream.readLine();        //read first line
     
     while(line.isEmpty() or line[0] != "/") {
         

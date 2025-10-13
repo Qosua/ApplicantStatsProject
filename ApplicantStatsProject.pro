@@ -13,6 +13,7 @@ resources.files = styles/white_style.qss
 resources.files += programInfo/kcpBachelors.txt
 resources.files += programInfo/kcpMasters.txt
 resources.files += programInfo/columnsNames.txt
+resources.files += programInfo/KCP.xlsx
 resources.prefix = /
 RESOURCES += resources
 
