@@ -3,3 +3,4 @@
 *.xlsx
 *.xls
 !/programInfo/KCP.xlsx
+!/programInfo/columnsNames.xlsx
