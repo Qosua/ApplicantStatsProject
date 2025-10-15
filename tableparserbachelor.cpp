@@ -159,37 +159,15 @@ bool TableParserBachelor::setColumnsNames() {
         return false;
     }
     
-    QTextStream stream(&file);
-    QString line;
-    
-    while(!stream.atEnd()) {
-        
-        line = stream.readLine();
+    QXlsx::Document doc(m_columnsNamesFilePath);
 
-        if(line.isEmpty() or line[0] == '#')
-            continue;
-        
-        QStringList list = line.split('=');
-        
-        while(list[0].last(1) == ' ')
-            list[0].removeLast();
-        
-        while(list[0].first(1) == ' ')
-            list[0].removeFirst();
-        
-        while(list[1].last(1) == ' ')
-            list[1].removeLast();
-        
-        while(list[1].first(1) == ' ')
-            list[1].removeFirst();
-        
-        list[1] = list[1].mid(1,list[1].size() - 2);
+    for(int j = 2; doc.read(j, 2).isValid(); ++j) {
         
         for(int i = 1; m_doc->read(1, i).isValid(); ++i){
             
-            if(m_doc->read(1, i).toString() == list[1]){
+            if(m_doc->read(1, i).toString() == doc.read(j, 2).toString()){
                 
-                m_columnsNames[list[0]] = i;
+                m_columnsNames[doc.read(j, 2).toString()] = i;
                 break;
             }
         }

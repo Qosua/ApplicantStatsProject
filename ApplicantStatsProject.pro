@@ -14,6 +14,7 @@ resources.files += programInfo/kcpBachelors.txt
 resources.files += programInfo/kcpMasters.txt
 resources.files += programInfo/columnsNames.txt
 resources.files += programInfo/KCP.xlsx
+resources.files += programInfo/columnsNames.xlsx
 resources.prefix = /
 RESOURCES += resources
 

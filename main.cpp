@@ -11,13 +11,13 @@
 #include "facultycell.h"
 #include "mainwindow.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+
     QApplication app(argc, argv);
     app.setStyle(QStyleFactory::create("windows11"));
     
-    TableParserBachelor parserBachelor("C:/Repos/Qt/ApplicantStatsProject/data/Выгрузка все 05.08 1230.xlsx",
-                                        ":/programInfo/columnsNames.txt");
+    TableParserBachelor parserBachelor("C:/Repos/Qt/ApplicantStatsProject/data/Выгрузка все 01.08 обед.xlsx",
+                                        ":/programInfo/columnsNames.xlsx");
     parserBachelor.parseTable();
     QList<Applicant> list1 = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue,
                                                           PriorityType::NonBudget);
