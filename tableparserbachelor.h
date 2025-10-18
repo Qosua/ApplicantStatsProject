@@ -12,9 +12,9 @@
 #include "applicant.h"
 
 enum ApplicantsFilterFlags {
-    All              = 1 << 0,
-    AdmissionsTrue   = 1 << 1,
-    AdmissionsFalse  = 1 << 2,
+    All              = 1 << 0, //Take all admissions from applicants
+    AdmissionsTrue   = 1 << 1, //Take applicants only with positive admissions
+    AdmissionsFalse  = 1 << 2, //Take applicants only with negative admissions
 };
 
 class TableParserBachelor {
@@ -31,10 +31,12 @@ private:
     bool setColumnsNames();
     void printStatsToConsole() const;
     
+    //check in the future
     QString extractCode(const QString& str);
     QString extractName(const QString& str);
     QString extractStudyForm(const QString& str);
     QString extractType(const QString& str);
+    //
     
     QMap<QString, int> m_columnsNames;
     QString m_tablePath;

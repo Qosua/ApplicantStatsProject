@@ -165,7 +165,7 @@ bool TableParserBachelor::setColumnsNames() {
         
         for(int i = 1; m_doc->read(1, i).isValid(); ++i){
             
-            if(m_doc->read(1, i).toString() == doc.read(j, 2).toString()){
+            if(m_doc->read(1, i).toString() == doc.read(j, 2).toString()) {
                 
                 m_columnsNames[doc.read(j, 1).toString()] = i;
                 break;
