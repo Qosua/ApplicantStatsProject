@@ -244,7 +244,7 @@ void MagicHat::printStatsToConsole() {
             << m_facultyCells[i].studyForm() << "----<";
 
         if(m_facultyCells[i].pool().size() == 0) {
-            qDebug() << "НЕТ СТУДЕНТОВ\n";
+            qDebug() << "НЕТ АБИТУРИЕНТОВ\n";
             continue;
         }
         
@@ -422,13 +422,15 @@ void MagicHat::setKCP(const QString &path, const QString& sheet) {
         if(code.contains("/"))
             continue;
         
-        QString name = doc.read(i,2).toString();
-        QString studyForm = doc.read(i,3).toString();
-        QString type = doc.read(i,4).toString();
-        QString kcp = doc.read(i,5).toString();
+        QString division = doc.read(i, 2).toString();
+        QString name = doc.read(i,3).toString();
+        QString studyForm = doc.read(i,4).toString();
+        QString type = doc.read(i,5).toString();
+        QString kcp = doc.read(i,6).toString();
         
         m_facultyCells.append(FacultyCell());
         m_facultyCells.last().setName(name);
+        m_facultyCells.last().setDivision(division);
         m_facultyCells.last().setCode(code);
         m_facultyCells.last().setStudyForm(studyForm);
         m_facultyCells.last().setType(type);

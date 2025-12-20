@@ -8,7 +8,7 @@
 
 #include "tableparsermaster.h"
 #include "magichat.h"
-#include "facultycell.h"
+#include "applicantandfaculthy/facultycell.h"
 #include "mainwindow.h"
 
 int main(int argc, char *argv[]) {

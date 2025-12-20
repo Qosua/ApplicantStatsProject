@@ -7,8 +7,8 @@
 #include <QFile>
 #include <QTextStream>
 
-#include "applicant.h"
-#include "facultycell.h"
+#include "applicantandfaculthy/applicant.h"
+#include "applicantandfaculthy/facultycell.h"
 #include "xlsx.h"
 
 class MagicHat : public QObject {

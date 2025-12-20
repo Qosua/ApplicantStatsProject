@@ -1,8 +1,8 @@
 QT += quick core gui widgets charts
 
 SOURCES += \
-        applicant.cpp \
-        facultycell.cpp \
+        applicantandfaculthy/applicant.cpp \
+        applicantandfaculthy/facultycell.cpp \
         magichat.cpp \
         main.cpp \
         mainwindow.cpp \
@@ -33,8 +33,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    applicant.h \
-    facultycell.h \
+    applicantandfaculthy/applicant.h \
+    applicantandfaculthy/facultycell.h \
     magichat.h \
     mainwindow.h \
     tableparserbachelor.h \

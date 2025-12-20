@@ -11,8 +11,8 @@
 #include <QValueAxis>
 #include <QFile>
 
-#include "applicant.h"
-#include "facultycell.h"
+#include "applicantandfaculthy/applicant.h"
+#include "applicantandfaculthy/facultycell.h"
 
 namespace Ui {
 class MainWindow;

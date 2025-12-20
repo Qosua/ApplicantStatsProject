@@ -19,6 +19,9 @@ public:
 
     QString name() const;
     void setName(const QString &newName);
+    
+    QString division() const;
+    void setDivision(const QString &newName);
 
     int capacity() const;
     void setCapacity(int newCapacity);
@@ -43,6 +46,7 @@ public:
     int getPoolSize();
 
 signals:
+    void divisionChanged();
     void nameChanged();
     void capacityChanged();
     void codeChanged();
@@ -52,6 +56,7 @@ signals:
 
 private:
     int m_capacity;
+    QString m_division;
     QString m_name;
     QString m_code;
     QString m_studyForm; //Personal, Personal-NotPersonal,...

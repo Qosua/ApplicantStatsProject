@@ -30,6 +30,14 @@ void FacultyCell::setName(const QString &newName) {
     emit nameChanged();
 }
 
+QString FacultyCell::division() const {
+    return m_division;  
+}
+
+void FacultyCell::setDivision(const QString &newName) {
+    m_division = newName;
+}
+
 int FacultyCell::capacity() const {
     return m_capacity;
 }

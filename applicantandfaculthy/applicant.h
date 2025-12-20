@@ -143,7 +143,6 @@ public:
 private:
     int m_id;
     QList<PriorityInfo> m_priorities;
-
     QString m_phoneNumber;
     QString m_email;
     QString m_FIO;

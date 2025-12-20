@@ -9,7 +9,7 @@
 #include <QHash>
 
 #include "xlsx.h"
-#include "applicant.h"
+#include "applicantandfaculthy/applicant.h"
 
 enum ApplicantsFilterFlags {
     All              = 1 << 0, //Take all admissions from applicants
@@ -30,13 +30,11 @@ public:
 private:
     bool setColumnsNames();
     void printStatsToConsole() const;
-    
-    //check in the future
+
     QString extractCode(const QString& str);
     QString extractName(const QString& str);
     QString extractStudyForm(const QString& str);
     QString extractType(const QString& str);
-    //
     
     QMap<QString, int> m_columnsNames;
     QString m_tablePath;

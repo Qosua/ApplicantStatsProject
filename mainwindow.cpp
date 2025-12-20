@@ -21,7 +21,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::setMathStatistics(const QList<Applicant> &unCountedApplicants, const QList<FacultyCell> &faculties) {
-    
+
     int pmiKcp = 0;
     int pmiPlaces = 0;
     
@@ -41,8 +41,8 @@ void MainWindow::setMathStatistics(const QList<Applicant> &unCountedApplicants, 
         qDebug() << "Не удалось открыть файл " << ":/programInfo/kcpBachelors.txt" << "\n Ошибка: " << input.errorString();
     }
     
-    QString line = stream.readLine();//read title line
-    line = stream.readLine();        //read first line
+    QString line = stream.readLine(); //read title line
+    line = stream.readLine();         //read first line
     
     while(line.isEmpty() or line[0] != "/") {
         

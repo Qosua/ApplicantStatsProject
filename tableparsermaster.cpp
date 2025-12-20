@@ -81,7 +81,7 @@ void TableParserMaster::parseTable() {
         
         info.setId(applicantId);
         info.setAdmissionFlag((m_doc->read(i, m_columnsNames["Согласие на зачисление"]).toString() == "Да" ? true : false));
-        info.setDivision(m_doc->read(i, m_columnsNames["Подразделение"]).toString());
+        info.setDivision(m_doc->read(i, m_columnsNames["Имя факультета"]).toString());
 
         tempHash[applicantId].addPriority(info);
 

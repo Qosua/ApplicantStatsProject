@@ -80,7 +80,7 @@ void TableParserBachelor::parseTable() {
         info.setId(applicantId);
         info.setAdmissionFlag((m_doc->read(i, m_columnsNames["Согласие на зачисление"]).toString().toLower() == "да" ? true : false));
         info.setIsBVI(((m_doc->read(i, m_columnsNames["Без вступительных испытаний"]).toString().toLower() == "да") ? true : false));
-        info.setDivision(m_doc->read(i, m_columnsNames["Подразделение"]).toString());
+        info.setDivision(m_doc->read(i, m_columnsNames["Имя факультета"]).toString());
 
         tempHash[applicantId].addPriority(info);
     }
@@ -88,9 +88,8 @@ void TableParserBachelor::parseTable() {
     *m_applicants = tempHash.values();
     
     qDebug() << "Парсинг завершён успешно";
-    
-    //Just for debug
-    printStatsToConsole();
+
+    printStatsToConsole(); 
     
 }
 

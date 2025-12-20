@@ -9,7 +9,7 @@
 #include <QHash>
 
 #include "xlsx.h"
-#include "applicant.h"
+#include "applicantandfaculthy/applicant.h"
 #include "tableparserbachelor.h"
 
 class TableParserMaster {
