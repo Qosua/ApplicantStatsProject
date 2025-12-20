@@ -238,7 +238,7 @@ void MagicHat::printStatsToConsole() {
 
     for(int i = 0; i < m_facultyCells.size(); ++i) {
         
-        qDebug() << "\n>----" << m_facultyCells[i].code() << "|" <<  m_facultyCells[i].name() << "|" <<
+        qDebug() << "\n>----" << m_facultyCells[i].division() << "|" << m_facultyCells[i].code() << "|" <<  m_facultyCells[i].name() << "|" <<
             QString::number(m_facultyCells[i].pool().size()) + "/" + QString::number(m_facultyCells[i].capacity()) << "|"
             << m_facultyCells[i].type() << "|"
             << m_facultyCells[i].studyForm() << "----<";
@@ -422,11 +422,11 @@ void MagicHat::setKCP(const QString &path, const QString& sheet) {
         if(code.contains("/"))
             continue;
         
-        QString division = doc.read(i, 2).toString();
-        QString name = doc.read(i,3).toString();
-        QString studyForm = doc.read(i,4).toString();
-        QString type = doc.read(i,5).toString();
-        QString kcp = doc.read(i,6).toString();
+        QString division  = doc.read(i, 2).toString();
+        QString name      = doc.read(i, 3).toString();
+        QString studyForm = doc.read(i, 4).toString();
+        QString type      = doc.read(i, 5).toString();
+        QString kcp       = doc.read(i, 6).toString();
         
         m_facultyCells.append(FacultyCell());
         m_facultyCells.last().setName(name);

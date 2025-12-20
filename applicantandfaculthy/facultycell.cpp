@@ -16,6 +16,7 @@ void FacultyCell::operator=(const FacultyCell &copy) {
     m_studyForm = copy.m_studyForm;
     m_type = copy.m_type;
     m_pool = copy.m_pool;
+    m_division = copy.m_division;
 
 }
 
