@@ -14,7 +14,6 @@ class FacultyCell : public QObject {
     Q_OBJECT
 
 public:
-
     FacultyCell();
     FacultyCell(const FacultyCell& copy);
     void operator=(const FacultyCell& copy);

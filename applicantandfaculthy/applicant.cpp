@@ -183,10 +183,10 @@ void Applicant::operator=(const Applicant &copy) {
 bool Applicant::operator==(const Applicant &copy) const {
     
     if((m_id == copy.m_id) and
-        (m_priorities == copy.m_priorities) and
-        (m_FIO == copy.m_FIO) and
-        (m_email == copy.m_email) and
-        (m_phoneNumber == copy.m_phoneNumber))
+       (m_priorities == copy.m_priorities) and
+       (m_FIO == copy.m_FIO) and
+       (m_email == copy.m_email) and
+       (m_phoneNumber == copy.m_phoneNumber))
         return true;
     else
         return false;
