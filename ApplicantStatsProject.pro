@@ -9,9 +9,10 @@ SOURCES += \
         tableparserbachelor.cpp \
         tableparsermaster.cpp
 
-resources.files = styles/white_style.qss
+resources.files =  styles/white_style.qss
 resources.files += programInfo/KCP.xlsx
 resources.files += programInfo/columnsNames.xlsx
+resources.files += data/maintable.xlsx
 resources.prefix = /
 RESOURCES += resources
 
@@ -28,6 +29,7 @@ HEADERS += \
     applicantandfaculthy/facultycell.h \
     magichat.h \
     mainwindow.h \
+    namespaces.h \
     tableparserbachelor.h \
     tableparsermaster.h \
     xlsx.h

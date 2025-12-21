@@ -10,12 +10,7 @@
 
 #include "xlsx.h"
 #include "applicantandfaculthy/applicant.h"
-
-enum ApplicantsFilterFlags {
-    All              = 1 << 0, //Take all admissions from applicants
-    AdmissionsTrue   = 1 << 1, //Take applicants only with positive admissions
-    AdmissionsFalse  = 1 << 2, //Take applicants only with negative admissions
-};
+#include "namespaces.h"
 
 class TableParserBachelor {
     
@@ -36,11 +31,12 @@ private:
     QString extractStudyForm(const QString& str);
     QString extractType(const QString& str);
     
-    QMap<QString, int> m_columnsNames;
     QString m_tablePath;
     QString m_columnsNamesFilePath;
-    QXlsx::Document* m_doc = nullptr;
-    QList<Applicant>* m_applicants = nullptr;
+    
+    QMap<QString, int> m_columnsNames;
+    QXlsx::Document*   m_applicantsTable = nullptr;
+    QList<Applicant>*  m_applicantsList = nullptr;
     
 };
 

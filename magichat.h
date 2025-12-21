@@ -10,7 +10,7 @@
 #include "applicantandfaculthy/applicant.h"
 #include "applicantandfaculthy/facultycell.h"
 #include "xlsx.h"
-#include <QXlsx/header/xlsxdocument.h>
+#include "namespaces.h"
 
 class MagicHat : public QObject {
 

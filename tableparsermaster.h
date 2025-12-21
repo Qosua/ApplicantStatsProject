@@ -11,6 +11,7 @@
 #include "xlsx.h"
 #include "applicantandfaculthy/applicant.h"
 #include "tableparserbachelor.h"
+#include "namespaces.h"
 
 class TableParserMaster {
     

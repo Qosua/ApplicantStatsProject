@@ -4,15 +4,8 @@
 #include <QObject>
 #include <QString>
 #include <QList>
-#include <algorithm>
 
-enum PriorityType {
-    NonBudget      = 1 << 3,
-    Budget         = 1 << 4,
-    SpecialRight   = 1 << 5,
-    Kvot           = 1 << 6,
-    CompanySponsor = 1 << 7,
-};
+#include "namespaces.h"
 
 class PriorityInfo : public QObject {
     

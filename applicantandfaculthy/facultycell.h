@@ -5,7 +5,9 @@
 #include <algorithm>
 #include <QPair>
 #include <QDebug>
+
 #include "applicant.h"
+#include "namespaces.h"
 
 class FacultyCell : public QObject {
 

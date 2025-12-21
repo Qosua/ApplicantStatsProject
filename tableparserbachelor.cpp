@@ -18,26 +18,30 @@ TableParserBachelor::TableParserBachelor(const QString& tablePath, const QString
 }
 
 TableParserBachelor::~TableParserBachelor() {
-    delete m_doc;
-    m_doc = nullptr;
     
-    delete m_applicants;
-    m_applicants = nullptr;
+    if(m_applicantsTable) {
+        delete m_applicantsTable;
+        m_applicantsTable = nullptr;
+    }
+    if(m_applicantsList) {
+        delete m_applicantsList;
+        m_applicantsList = nullptr;
+    }
 }
 
 void TableParserBachelor::parseTable() {
     
-    if(m_doc) {
-        delete m_doc;
-        m_doc = nullptr;
+    if(m_applicantsTable) {
+        delete m_applicantsTable;
+        m_applicantsTable = nullptr;
     }
-    if(m_applicants) {
-        delete m_applicants;
-        m_applicants = nullptr;
+    if(m_applicantsList) {
+        delete m_applicantsList;
+        m_applicantsList = nullptr;
     }
     
-    m_doc = new QXlsx::Document(m_tablePath);
-    m_applicants = new QList<Applicant>;
+    m_applicantsTable = new QXlsx::Document(m_tablePath);
+    m_applicantsList = new QList<Applicant>;
     
     setColumnsNames();
     
@@ -45,49 +49,45 @@ void TableParserBachelor::parseTable() {
     int applicantId = 0;
     
     //The first line is column's names so we start from the second
-    for(int i = 2; m_doc->read(i, 1).isValid(); ++i){
+    for(int i = 2; m_applicantsTable->read(i, 1).isValid(); ++i){
         
-        applicantId = m_doc->read(i, m_columnsNames["Уникальный код"]).toInt();
+        applicantId = m_applicantsTable->read(i, m_columnsNames["Уникальный код"]).toInt();
         
-        //Adding new applicant if not exits
         if(!tempHash.contains(applicantId)) {
 
             Applicant applicant;
-
             applicant.setId(applicantId);
-            applicant.setFIO(m_doc->read(i, m_columnsNames["ФИО"]).toString());
-            applicant.setEmail(m_doc->read(i, m_columnsNames["E-mail"]).toString());
-            applicant.setPhoneNumber(m_doc->read(i, m_columnsNames["Телефон"]).toString());
+            applicant.setFIO(         m_applicantsTable->read(i, m_columnsNames["ФИО"]).toString());
+            applicant.setEmail(       m_applicantsTable->read(i, m_columnsNames["E-mail"]).toString());
+            applicant.setPhoneNumber( m_applicantsTable->read(i, m_columnsNames["Телефон"]).toString());
 
             tempHash[applicantId] = applicant;
         }
 
         PriorityInfo info;
-        QString priorityFullName = m_doc->read(i, m_columnsNames["Конкурсная группа"]).toString();
+        QString priorityFullName = m_applicantsTable->read(i, m_columnsNames["Конкурсная группа"]).toString();
 
-        info.setEgeScore(m_doc->read(i, m_columnsNames["Сумма баллов"]).toInt());
-        info.setEgeAdditionalScore(m_doc->read(i, m_columnsNames["Сумма баллов за инд.дост.(конкурсные)"]).toInt());
-        info.setPriorityNumber(m_doc->read(i, m_columnsNames["Приоритет"]).toInt());
-        info.addSubject(m_doc->read(i, m_columnsNames["Предмет 1"]).toInt());
-        info.addSubject(m_doc->read(i, m_columnsNames["Предмет 2"]).toInt());
-        info.addSubject(m_doc->read(i, m_columnsNames["Предмет 3"]).toInt());
+        info.setEgeScore(           m_applicantsTable->read(i, m_columnsNames["Сумма баллов"]).toInt());
+        info.setEgeAdditionalScore( m_applicantsTable->read(i, m_columnsNames["Сумма баллов за инд.дост.(конкурсные)"]).toInt());
+        info.setPriorityNumber(     m_applicantsTable->read(i, m_columnsNames["Приоритет"]).toInt());
+        info.addSubject(            m_applicantsTable->read(i, m_columnsNames["Предмет 1"]).toInt());
+        info.addSubject(            m_applicantsTable->read(i, m_columnsNames["Предмет 2"]).toInt());
+        info.addSubject(            m_applicantsTable->read(i, m_columnsNames["Предмет 3"]).toInt());
         
-        info.setCode(extractCode(priorityFullName));
-        info.setName(extractName(priorityFullName));
-        info.setStudyForm(extractStudyForm(priorityFullName));
-        info.setType(extractType(priorityFullName));
+        info.setCode(      extractCode(priorityFullName));
+        info.setName(      extractName(priorityFullName));
+        info.setStudyForm( extractStudyForm(priorityFullName));
+        info.setType(      extractType(priorityFullName));
         
         info.setId(applicantId);
-        info.setAdmissionFlag((m_doc->read(i, m_columnsNames["Согласие на зачисление"]).toString().toLower() == "да" ? true : false));
-        info.setIsBVI(((m_doc->read(i, m_columnsNames["Без вступительных испытаний"]).toString().toLower() == "да") ? true : false));
-        info.setDivision(m_doc->read(i, m_columnsNames["Имя факультета"]).toString());
+        info.setAdmissionFlag( (m_applicantsTable->read(i, m_columnsNames["Согласие на зачисление"]).toString().toLower() == "да" ? true : false));
+        info.setIsBVI(         (m_applicantsTable->read(i, m_columnsNames["Без вступительных испытаний"]).toString().toLower() == "да" ? true : false));
+        info.setDivision(       m_applicantsTable->read(i, m_columnsNames["Имя факультета"]).toString());
 
         tempHash[applicantId].addPriority(info);
     }
     
-    *m_applicants = tempHash.values();
-    
-    qDebug() << "Парсинг завершён успешно";
+    *m_applicantsList = tempHash.values();
 
     printStatsToConsole(); 
     
@@ -98,7 +98,7 @@ QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, 
     QList<Applicant> newList;
     
     if(flag == ApplicantsFilterFlags::All) {
-        newList = *m_applicants;
+        newList = *m_applicantsList;
 
         for(int i = 0; i < newList.size(); ++i)
             newList[i].deletePriority(priorityToDelete);
@@ -106,7 +106,7 @@ QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, 
         return newList;
     }
     if(flag == ApplicantsFilterFlags::AdmissionsTrue) {
-        for(auto& elem : *m_applicants) {
+        for(auto& elem : *m_applicantsList) {
             
             Applicant applicant = elem;
             applicant.priorities().clear();
@@ -125,7 +125,7 @@ QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, 
         return newList;
     }
     if(flag == ApplicantsFilterFlags::AdmissionsFalse) {
-        for(auto& elem : *m_applicants) {
+        for(auto& elem : *m_applicantsList) {
             
             Applicant applicant = elem;
             applicant.priorities().clear();
@@ -158,15 +158,19 @@ bool TableParserBachelor::setColumnsNames() {
         return false;
     }
     
-    QXlsx::Document doc(m_columnsNamesFilePath);
+    QXlsx::Document columnsNamesTable(m_columnsNamesFilePath);
 
-    for(int j = 2; doc.read(j, 2).isValid(); ++j) {
+    for(int j = 2; columnsNamesTable.read(j, 2).isValid(); ++j) {
         
-        for(int i = 1; m_doc->read(1, i).isValid(); ++i){
+        for(int i = 1; m_applicantsTable->read(1, i).isValid(); ++i){
             
-            if(m_doc->read(1, i).toString() == doc.read(j, 2).toString()) {
+            QString columnNameInProgram         = columnsNamesTable.read(j, 1).toString();
+            QString columnNameInTable           = columnsNamesTable.read(j, 2).toString();
+            QString columnNameInApplicantsTable = m_applicantsTable->read(1, i).toString();
+            
+            if(columnNameInApplicantsTable == columnNameInTable) {
                 
-                m_columnsNames[doc.read(j, 1).toString()] = i;
+                m_columnsNames[columnNameInProgram] = i;
                 break;
             }
         }
@@ -181,7 +185,7 @@ void TableParserBachelor::printStatsToConsole() const {
     qDebug() << ">>=====================================================================<<";
         
     int counter = 0;
-    for(auto& elem : *m_applicants)
+    for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
             if(priority.type().contains("Внебюджет")) {
                 counter += 1;
@@ -191,7 +195,7 @@ void TableParserBachelor::printStatsToConsole() const {
     
     
     counter = 0;
-    for(auto& elem : *m_applicants)
+    for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
             if(priority.type().contains("Бюджет")) {
                 counter += 1;
@@ -201,7 +205,7 @@ void TableParserBachelor::printStatsToConsole() const {
     
     
     counter = 0;
-    for(auto& elem : *m_applicants)
+    for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
             if(priority.type().contains("Целевое")) {
                 counter += 1;
@@ -211,7 +215,7 @@ void TableParserBachelor::printStatsToConsole() const {
     
     
     counter = 0;
-    for(auto& elem : *m_applicants)
+    for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
             if(priority.type().contains("Отдельная квота")) {
                 counter += 1;
@@ -221,7 +225,7 @@ void TableParserBachelor::printStatsToConsole() const {
     
     
     counter = 0;
-    for(auto& elem : *m_applicants)
+    for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
             if(priority.type().contains("Особое право")) {
                 counter += 1;
@@ -232,7 +236,7 @@ void TableParserBachelor::printStatsToConsole() const {
     
     ////////////////////////////////////////////////////////////////////////////////////////
     counter = 0;
-    for(auto& elem : *m_applicants)
+    for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
             if(priority.type().contains("Внебюджет")) {
                 counter += 1;
@@ -241,7 +245,7 @@ void TableParserBachelor::printStatsToConsole() const {
     
     
     counter = 0;
-    for(auto& elem : *m_applicants)
+    for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
             if(priority.type().contains("Бюджет")) {
                 counter += 1;
@@ -250,7 +254,7 @@ void TableParserBachelor::printStatsToConsole() const {
     
     
     counter = 0;
-    for(auto& elem : *m_applicants)
+    for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
             if(priority.type().contains("Целевое")) {
                 counter += 1;
@@ -259,7 +263,7 @@ void TableParserBachelor::printStatsToConsole() const {
     
     
     counter = 0;
-    for(auto& elem : *m_applicants)
+    for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
             if(priority.type().contains("Отдельная квота")) {
                 counter += 1;
@@ -268,7 +272,7 @@ void TableParserBachelor::printStatsToConsole() const {
     
     
     counter = 0;
-    for(auto& elem : *m_applicants)
+    for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
             if(priority.type().contains("Особое право")) {
                 counter += 1;
