@@ -307,15 +307,13 @@ QString TableParserBachelor::extractName(const QString& str) {
 
 StudyForm TableParserBachelor::extractStudyForm(const QString& str) {
     
-    QString form = str.toLower();
-    
-    if(form.contains("очное") or form.contains("очная")){
+    if(str.contains("Очное") or str.contains("Очная")){
         return StudyForm::Personal;
     }
-    if(form.contains("заочная") or form.contains("заочное")){
+    if(str.contains("Заочная") or str.contains("Заочное")){
         return StudyForm::NotPersonal;
     }
-    if(form.contains("очно-заочная") or form.contains("очно-заочное")){
+    if(str.contains("Очно-заочная") or str.contains("Очно-заочное")){
         return StudyForm::PersonalNotPersonal;
     }
     return StudyForm::Error;
@@ -323,21 +321,19 @@ StudyForm TableParserBachelor::extractStudyForm(const QString& str) {
 
 StudyType TableParserBachelor::extractType(const QString& str) {
     
-    QString type = str.toLower();
-    
-    if(type.contains("бюджет")) {
+    if(str.contains("Бюджет")) {
         return StudyType::Budget;
     }
-    if(type.contains("отдельная квота") or type.contains("отдельное квота")) {
+    if(str.contains("Отдельная квота") or str.contains("Отдельное квота")) {
         return StudyType::Kvot;
     }
-    if(type.contains("особое право") or type.contains("особая право")) {
+    if(str.contains("Особое право") or str.contains("Особая право")) {
         return StudyType::SpecialRight;
     }
-    if(type.contains("внебюджет")) {
+    if(str.contains("Внебюджет")) {
         return StudyType::NonBudget;
     }
-    if(type.contains("целевое") or type.contains("целевая")) {
+    if(str.contains("Целевое") or str.contains("Целевая")) {
         return StudyType::CompanySponsor;
     }
     return StudyType::Error;
