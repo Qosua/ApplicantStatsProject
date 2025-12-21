@@ -77,7 +77,7 @@ void TableParserBachelor::parseTable() {
         info.setCode(      extractCode(priorityFullName));
         info.setName(      extractName(priorityFullName));
         info.setStudyForm( extractStudyForm(priorityFullName));
-        info.setType(      extractType(priorityFullName));
+        info.setStudyType( extractType(priorityFullName));
         
         info.setId(applicantId);
         info.setAdmissionFlag( (m_applicantsTable->read(i, m_columnsNames["Согласие на зачисление"]).toString().toLower() == "да" ? true : false));
@@ -93,7 +93,7 @@ void TableParserBachelor::parseTable() {
     
 }
 
-QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, PriorityType priorityToDelete) {
+QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, StudyType priorityToDelete) {
     
     QList<Applicant> newList;
     
@@ -146,7 +146,6 @@ QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, 
     }
     
     return QList<Applicant>();
-    
 }
 
 bool TableParserBachelor::setColumnsNames() {
@@ -187,7 +186,7 @@ void TableParserBachelor::printStatsToConsole() const {
     int counter = 0;
     for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains("Внебюджет")) {
+            if(priority.studyType() == StudyType::NonBudget) {
                 counter += 1;
                 break;
             }
@@ -197,7 +196,7 @@ void TableParserBachelor::printStatsToConsole() const {
     counter = 0;
     for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains("Бюджет")) {
+            if(priority.studyType() == StudyType::Budget) {
                 counter += 1;
                 break;
             }
@@ -207,7 +206,7 @@ void TableParserBachelor::printStatsToConsole() const {
     counter = 0;
     for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains("Целевое")) {
+            if(priority.studyType() == StudyType::CompanySponsor) {
                 counter += 1;
                 break;
             }
@@ -217,7 +216,7 @@ void TableParserBachelor::printStatsToConsole() const {
     counter = 0;
     for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains("Отдельная квота")) {
+            if(priority.studyType() == StudyType::Kvot) {
                 counter += 1;
                 break;
             }
@@ -227,7 +226,7 @@ void TableParserBachelor::printStatsToConsole() const {
     counter = 0;
     for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains("Особое право")) {
+            if(priority.studyType() == StudyType::SpecialRight) {
                 counter += 1;
                 break;
             }
@@ -238,7 +237,7 @@ void TableParserBachelor::printStatsToConsole() const {
     counter = 0;
     for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains("Внебюджет")) {
+            if(priority.studyType() == StudyType::NonBudget) {
                 counter += 1;
             }
     qDebug() << " nonbudget priority count -" << counter;
@@ -247,7 +246,7 @@ void TableParserBachelor::printStatsToConsole() const {
     counter = 0;
     for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains("Бюджет")) {
+            if(priority.studyType() == StudyType::Budget) {
                 counter += 1;
             }
     qDebug() << " bidget priority count -" << counter;
@@ -256,7 +255,7 @@ void TableParserBachelor::printStatsToConsole() const {
     counter = 0;
     for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains("Целевое")) {
+            if(priority.studyType() == StudyType::CompanySponsor) {
                 counter += 1;
             }
     qDebug() << " goal priority count -" << counter;
@@ -265,7 +264,7 @@ void TableParserBachelor::printStatsToConsole() const {
     counter = 0;
     for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains("Отдельная квота")) {
+            if(priority.studyType() == StudyType::Kvot) {
                 counter += 1;
             }
     qDebug() << " kvot priority count -" << counter;
@@ -274,7 +273,7 @@ void TableParserBachelor::printStatsToConsole() const {
     counter = 0;
     for(auto& elem : *m_applicantsList)
         for(const auto& priority : elem.priorities())
-            if(priority.type().contains("Особое право")) {
+            if(priority.studyType() == StudyType::SpecialRight) {
                 counter += 1;
             }
     qDebug() << " special right priority count -" << counter;
@@ -291,7 +290,9 @@ QString TableParserBachelor::extractName(const QString& str) {
     
     QString ans;
     
-    for(int i = 9; (str.mid(i+2,4) != "Заоч" and str.mid(i+2,4) != "Очно" and str.mid(i+2,4) != "Очна");++i) {
+    for(int i = 9; (str.mid(i+2,4).toLower() != "заоч" and
+                    str.mid(i+2,4).toLower() != "очно" and
+                    str.mid(i+2,4).toLower() != "очна");++i) {
         
         if(str[i - 1] == str[i] and str[i] == " ")
             continue;
@@ -304,37 +305,37 @@ QString TableParserBachelor::extractName(const QString& str) {
     
 }
 
-QString TableParserBachelor::extractStudyForm(const QString& str) {
+StudyForm TableParserBachelor::extractStudyForm(const QString& str) {
     
-    if(str.contains("Очное") or str.contains("Очная")){
-        return "Очное";
+    if(str.toLower().contains("очное") or str.toLower().contains("очная")){
+        return StudyForm::Personal;
     }
-    if(str.contains("Заочная") or str.contains("Заочное")){
-        return "Заочная";
+    if(str.toLower().contains("заочная") or str.toLower().contains("заочное")){
+        return StudyForm::NotPersonal;
     }
-    if(str.contains("Очно-заочная") or str.contains("Очно-заочное")){
-        return "Очно-заочная";
+    if(str.toLower().contains("очно-заочная") or str.toLower().contains("очно-заочное")){
+        return StudyForm::PersonalNotPersonal;
     }
-    return "ОШИБКА ФОРМЫ ОБУЧЕНИЯ";
+    return StudyForm::StudyFormError;
 }
 
-QString TableParserBachelor::extractType(const QString& str) {
-    if(str.contains("Бюджет")){
-        return "Бюджет";
+StudyType TableParserBachelor::extractType(const QString& str) {
+    if(str.toLower().contains("бюджет")) {
+        return StudyType::Budget;
     }
-    if(str.contains("Отдельная квота")){
-        return "Отдельная квота";
+    if(str.toLower().contains("отдельная квота")) {
+        return StudyType::Kvot;
     }
-    if(str.contains("Особое право")){
-        return "Особое право";
+    if(str.toLower().contains("особое право")) {
+        return StudyType::SpecialRight;
     }
-    if(str.contains("Внебюджет")){
-        return "Внебюджет";
+    if(str.toLower().contains("внебюджет")) {
+        return StudyType::NonBudget;
     }
-    if(str.contains("Целевое")){
-        return "Целевое";
+    if(str.toLower().contains("целевое") or str.toLower().contains("целевая")) {
+        return StudyType::CompanySponsor;
     }
-    return "ОШИБКА ТИПА";
+    return StudyType::StudyTypeError;
 }
 
 

@@ -1,9 +1,7 @@
 #include "applicant.h"
 #include "qdebug.h"
 
-Applicant::Applicant() {
-    
-}
+Applicant::Applicant() {}
 
 Applicant::Applicant(const Applicant &copy) {
     *this = copy;
@@ -64,16 +62,16 @@ void Applicant::addPriority(const PriorityInfo &info) {
         return false;
         */
         
-        if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
-            info2.type() != "Бюджет" and info2.type() != "Внебюджет")
+        if((info1.studyType() == StudyType::Budget or info1.studyType() == StudyType::NonBudget) and
+            info2.studyType() != StudyType::Budget and info2.studyType() != StudyType::NonBudget)
             return !(true);
         else
-            if((info1.type() == "Бюджет" or info1.type() == "Внебюджет") and
-                (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
+            if((info1.studyType() == StudyType::Budget or info1.studyType() == StudyType::NonBudget) and
+                (info2.studyType() == StudyType::Budget or info2.studyType() == StudyType::NonBudget))
                 return (info1.priorityNumber() < info2.priorityNumber());
             else
-                if((info1.type() != "Бюджет" and info1.type() != "Внебюджет") and
-                    (info2.type() == "Бюджет" or info2.type() == "Внебюджет"))
+                if((info1.studyType() != StudyType::Budget and info1.studyType() != StudyType::NonBudget) and
+                    (info2.studyType() == StudyType::Budget or info2.studyType() == StudyType::NonBudget))
                     return !(false);
                 else
                     return (info1.priorityNumber() < info2.priorityNumber());
@@ -84,84 +82,90 @@ void Applicant::addPriority(const PriorityInfo &info) {
     
 }
 
-void Applicant::deletePriority(PriorityType flag) {
+void Applicant::deletePriority(StudyType flag) {
     
+    for(int i = 0; i < m_priorities.size(); ++i) {
+        
+        if(m_priorities[i].studyType() == flag) {
+            m_priorities.removeOne(m_priorities[i]);
+            --i;
+        }
+    }
+    
+    // old system
+
+    /*
     switch(flag){
-        case PriorityType::Budget: {
+        case StudyType::Budget: {
             for(int i = 0; i < m_priorities.size(); ++i)
-                if(m_priorities[i].type() == "Бюджет") {
+                if(m_priorities[i].studyType() == "Бюджет") {
                     m_priorities.removeOne(m_priorities[i]);
                     --i;
                 }
         }break;
             
-        case PriorityType::NonBudget: {
+        case StudyType::NonBudget: {
             for(int i = 0; i < m_priorities.size(); ++i)
-                if(m_priorities[i].type() == "Внебюджет") {
+                if(m_priorities[i].studyType() == "Внебюджет") {
                     m_priorities.removeOne(m_priorities[i]);
                     --i;
                 }
         }break;
             
-        case PriorityType::SpecialRight: {
+        case StudyType::SpecialRight: {
             for(int i = 0; i < m_priorities.size(); ++i)
-                if(m_priorities[i].type() == "Особое право") {
+                if(m_priorities[i].studyType() == "Особое право") {
                     m_priorities.removeOne(m_priorities[i]);
                     --i;
                 }
         }break;
             
-        case PriorityType::Kvot: {
+        case StudyType::Kvot: {
             for(int i = 0; i < m_priorities.size(); ++i)
-                if(m_priorities[i].type() == "Отдельная квота") {
+                if(m_priorities[i].studyType() == "Отдельная квота") {
                     m_priorities.removeOne(m_priorities[i]);
                     --i;
                 }
         }break;
             
-        case PriorityType::CompanySponsor: {
+        case StudyType::CompanySponsor: {
             for(int i = 0; i < m_priorities.size(); ++i)
-                if(m_priorities[i].type() == "Целевое") {
+                if(m_priorities[i].studyType() == "Целевое") {
                     m_priorities.removeOne(m_priorities[i]);
                     --i;
                 }
         }break;
     }
+    */
 }
 
-QString Applicant::phoneNumber() const
-{
+QString Applicant::phoneNumber() const {
     return m_phoneNumber;
 }
 
-void Applicant::setPhoneNumber(const QString &newPhoneNumber)
-{
+void Applicant::setPhoneNumber(const QString &newPhoneNumber) {
     if (m_phoneNumber == newPhoneNumber)
         return;
     m_phoneNumber = newPhoneNumber;
     emit phoneNumberChanged();
 }
 
-QString Applicant::email() const
-{
+QString Applicant::email() const {
     return m_email;
 }
 
-void Applicant::setEmail(const QString &newEmail)
-{
+void Applicant::setEmail(const QString &newEmail) {
     if (m_email == newEmail)
         return;
     m_email = newEmail;
     emit emailChanged();
 }
 
-QString Applicant::FIO() const
-{
+QString Applicant::FIO() const {
     return m_FIO;
 }
 
-void Applicant::setFIO(const QString &newFIO)
-{
+void Applicant::setFIO(const QString &newFIO) {
     if (m_FIO == newFIO)
         return;
     m_FIO = newFIO;
@@ -186,7 +190,6 @@ bool Applicant::operator==(const Applicant &copy) const {
         return true;
     else
         return false;
-    
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -213,55 +216,47 @@ void PriorityInfo::setPriorityNumber(int newPriorityNumber) {
     emit priorityNumberChanged();
 }
 
-QString PriorityInfo::code() const
-{
+QString PriorityInfo::code() const {
     return m_code;
 }
 
-void PriorityInfo::setCode(const QString &newCode)
-{
+void PriorityInfo::setCode(const QString &newCode) {
     if (m_code == newCode)
         return;
     m_code = newCode;
     emit codeChanged();
 }
 
-QString PriorityInfo::name() const
-{
+QString PriorityInfo::name() const {
     return m_name;
 }
 
-void PriorityInfo::setName(const QString &newName)
-{
+void PriorityInfo::setName(const QString &newName) {
     if (m_name == newName)
         return;
     m_name = newName;
     emit nameChanged();
 }
 
-QString PriorityInfo::studyForm() const
-{
+StudyForm PriorityInfo::studyForm() const {
     return m_studyForm;
 }
 
-void PriorityInfo::setStudyForm(const QString &newStudyForm)
-{
+void PriorityInfo::setStudyForm(const StudyForm &newStudyForm) {
     if (m_studyForm == newStudyForm)
         return;
     m_studyForm = newStudyForm;
     emit studyFormChanged();
 }
 
-QString PriorityInfo::type() const
-{
-    return m_type;
+StudyType PriorityInfo::studyType() const {
+    return m_studyType;
 }
 
-void PriorityInfo::setType(const QString &newType)
-{
-    if (m_type == newType)
+void PriorityInfo::setStudyType(const StudyType &newType) {
+    if (m_studyType == newType)
         return;
-    m_type = newType;
+    m_studyType = newType;
     emit typeChanged();
 }
 
@@ -282,61 +277,51 @@ void PriorityInfo::addSubject(int score) {
         qDebug() << "WARNING SUBJECTS COUNT MOEW THAN 3" << __FILE__ << ":" << __LINE__;
 }
 
-int PriorityInfo::id() const
-{
+int PriorityInfo::id() const {
     return m_id;
 }
 
-void PriorityInfo::setId(int newId)
-{
+void PriorityInfo::setId(int newId) {
     if (m_id == newId)
         return;
     m_id = newId;
     emit idChanged();
 }
 
-bool PriorityInfo::admissionFlag() const
-{
+bool PriorityInfo::admissionFlag() const {
     return m_admissionFlag;
 }
 
-void PriorityInfo::setAdmissionFlag(bool newAdmissionsFlag)
-{
+void PriorityInfo::setAdmissionFlag(bool newAdmissionsFlag) {
     if (m_admissionFlag == newAdmissionsFlag)
         return;
     m_admissionFlag = newAdmissionsFlag;
     emit admissionFlagChanged();
 }
 
-bool PriorityInfo::isBVI() const
-{
+bool PriorityInfo::isBVI() const {
     return m_isBVI;
 }
 
-void PriorityInfo::setIsBVI(bool newIsBVI)
-{
+void PriorityInfo::setIsBVI(bool newIsBVI) {
     if (m_isBVI == newIsBVI)
         return;
     m_isBVI = newIsBVI;
     emit isBVIChanged();
 }
 
-QString PriorityInfo::division() const
-{
+QString PriorityInfo::division() const {
     return m_division;
 }
 
-void PriorityInfo::setDivision(const QString &newDivision)
-{
+void PriorityInfo::setDivision(const QString &newDivision) {
     if (m_division == newDivision)
         return;
     m_division = newDivision;
     emit divisionChanged();
 }
 
-PriorityInfo::PriorityInfo() {
-    
-}
+PriorityInfo::PriorityInfo() {}
 
 PriorityInfo::PriorityInfo(const PriorityInfo &copy) {
     *this = copy;
@@ -349,7 +334,7 @@ void PriorityInfo::operator=(const PriorityInfo &copy) {
     m_code = copy.m_code;
     m_name = copy.m_name;
     m_studyForm = copy.m_studyForm;
-    m_type = copy.m_type;
+    m_studyType = copy.m_studyType;
     m_subjectScores = copy.m_subjectScores;
     m_id = copy.m_id;
     m_admissionFlag = copy.m_admissionFlag;
@@ -364,7 +349,7 @@ bool PriorityInfo::operator==(const PriorityInfo &copy) const {
             (m_code == copy.m_code) and
             (m_name == copy.m_name) and
             (m_studyForm == copy.m_studyForm) and
-            (m_type == copy.m_type) and
+            (m_studyType == copy.m_studyType) and
             (m_subjectScores == copy.m_subjectScores) and
             (m_id == copy.m_id) and
             (m_admissionFlag == copy.m_admissionFlag) and
@@ -404,7 +389,6 @@ bool PriorityInfo::operator <(const PriorityInfo &copy) const {
                                         
                                             //qDebug() << "Why???" << __FILE__ << ":" << __LINE__;
                                             return m_id >= copy.m_id;
-                                            
                                         }
                                         else return false;
                                 }
@@ -415,7 +399,6 @@ bool PriorityInfo::operator <(const PriorityInfo &copy) const {
                 else return false;
         }
         else return false;
-    
 }
 
 bool PriorityInfo::operator >(const PriorityInfo &copy) const {

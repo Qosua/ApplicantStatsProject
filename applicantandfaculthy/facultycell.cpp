@@ -5,7 +5,6 @@ FacultyCell::FacultyCell() {}
 FacultyCell::FacultyCell(const FacultyCell &copy) {
 
     *this = copy;
-
 }
 
 void FacultyCell::operator=(const FacultyCell &copy) {
@@ -14,10 +13,9 @@ void FacultyCell::operator=(const FacultyCell &copy) {
     m_name = copy.m_name;
     m_code = copy.m_code;
     m_studyForm = copy.m_studyForm;
-    m_type = copy.m_type;
+    m_studyType = copy.m_studyType;
     m_pool = copy.m_pool;
     m_division = copy.m_division;
-
 }
 
 QString FacultyCell::name() const {
@@ -61,25 +59,25 @@ void FacultyCell::setCode(const QString &newCode) {
     emit codeChanged();
 }
 
-QString FacultyCell::studyForm() const {
+StudyForm FacultyCell::studyForm() const {
     return m_studyForm;
 }
 
-void FacultyCell::setStudyForm(const QString &newStudyForm) {
+void FacultyCell::setStudyForm(const StudyForm &newStudyForm) {
     if (m_studyForm == newStudyForm)
         return;
     m_studyForm = newStudyForm;
     emit studyFormChanged();
 }
 
-QString FacultyCell::type() const {
-    return m_type;
+StudyType FacultyCell::studyType() const {
+    return m_studyType;
 }
 
-void FacultyCell::setType(const QString &newType) {
-    if (m_type == newType)
+void FacultyCell::setStudyType(const StudyType &newType) {
+    if (m_studyType == newType)
         return;
-    m_type = newType;
+    m_studyType = newType;
     emit typeChanged();
 }
 
@@ -110,9 +108,9 @@ bool FacultyCell::isAbleToAdd(PriorityInfo priority) {
         return false;
     
     if(m_name != priority.name() or
-        m_code != priority.code() or
-        m_studyForm != priority.studyForm() or
-        m_type != priority.type()) {
+       m_code != priority.code() or
+       m_studyForm != priority.studyForm() or
+       m_studyType != priority.studyType()) {
         //qDebug() << "PRIORITY IN WRONG GROUP" << __FILE__ << ":" << __LINE__;
         return false;
     }
@@ -136,10 +134,11 @@ QPair<PriorityInfo, Applicant*> FacultyCell::getUnsuitableApplicant() {
         
         Applicant* applicant = new Applicant;
         *applicant = m_pool.first().second;
+        
         PriorityInfo temp =  m_pool.first().first;
         m_pool.removeFirst();
-        return {temp, applicant};
         
+        return {temp, applicant};
     }
     
     return {PriorityInfo(), nullptr};
@@ -148,7 +147,6 @@ QPair<PriorityInfo, Applicant*> FacultyCell::getUnsuitableApplicant() {
 int FacultyCell::getPoolSize() {
 
     return m_pool.size();
-
 }
 
 

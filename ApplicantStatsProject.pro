@@ -7,7 +7,7 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         tableparserbachelor.cpp \
-        tableparsermaster.cpp
+#        tableparsermaster.cpp
 
 resources.files =  styles/white_style.qss
 resources.files += programInfo/KCP.xlsx
@@ -31,7 +31,7 @@ HEADERS += \
     mainwindow.h \
     namespaces.h \
     tableparserbachelor.h \
-    tableparsermaster.h \
+#    tableparsermaster.h \
     xlsx.h
 
 FORMS += \

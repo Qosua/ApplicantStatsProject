@@ -21,7 +21,7 @@ public:
     ~TableParserMaster();
     
     void parseTable();
-    QList<Applicant> getApplicants(ApplicantsFilterFlags flag, PriorityType priorityToDelete);
+    QList<Applicant> getApplicants(ApplicantsFilterFlags flag, StudyType priorityToDelete);
     
 private:
     bool setColumnsNames();

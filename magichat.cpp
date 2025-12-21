@@ -11,6 +11,7 @@ void MagicHat::setApplicantsList(const QList<Applicant> &newApplicantsList)
 {
     if (m_applicantsList == newApplicantsList)
         return;
+    
     m_applicantsList = newApplicantsList;
     m_applicantsListCopy = newApplicantsList;
     emit applicantsListChanged();
@@ -27,16 +28,13 @@ void MagicHat::startPriorityRoundSimulation() {
         
         for(const auto& elem1 : elem.priorities()){
             
-            if(elem1.type() != "Бюджет" or elem1.isBVI()) {
+            if(elem1.studyType() != StudyType::Budget or elem1.isBVI()) {
                 
                 tempApplicant.addPriority(elem1);
             }
-            
-            
         }
         
         applicantsList.append(tempApplicant);
-        
     }
     
     for(int i = -1; applicantsList.size() > 0;) {
@@ -57,7 +55,7 @@ void MagicHat::startPriorityRoundSimulation() {
         }
         
         bool deletePriority = true;
-        for(int j = 0; j < m_facultyCells.size(); ++j){
+        for(int j = 0; j < m_facultyCells.size(); ++j) {
             
             FacultyCell* facultyCell = &m_facultyCells[j];
             
@@ -117,7 +115,7 @@ void MagicHat::startGeneralRoundSimulation() {
         
         for(const auto& priority : applicant.priorities()){
             
-            if(priority.type() == "Бюджет"){
+            if(priority.studyType() == StudyType::Budget){
                 
                 tempApplicant.addPriority(priority);
             }
@@ -186,8 +184,9 @@ void MagicHat::rebalanceBudgetaryPlaces() {
     
     for(auto& elem : m_facultyCells) {
 
-        if(elem.type() != "Бюджет")
+        if(elem.studyType() != StudyType::Budget)
             continue;
+        
         //Skip Physics faculty for now
         if(elem.code().mid(0,2) == "03" or elem.code().mid(0,2) == "11")
             continue;
@@ -196,12 +195,12 @@ void MagicHat::rebalanceBudgetaryPlaces() {
             
             if(elem.name() != elem1.name())
                 continue;
-            if(elem.type() == elem1.type())
+            if(elem.studyType() == elem1.studyType())
                 continue;
             
             if(elem.studyForm() == elem1.studyForm() and
                 elem.code() == elem1.code() and
-                elem1.type() != "Бюджет") {
+                elem1.studyType() != StudyType::Budget) {
 
                 elem.setCapacity(elem.capacity() + (elem1.capacity() - elem1.getPoolSize()));
             }
@@ -213,14 +212,14 @@ void MagicHat::rebalanceBudgetaryPlaces() {
     //Fix Physics rebalance
     for(auto& elem : m_facultyCells) {
         
-        if(elem.type() != "Бюджет")
+        if(elem.studyType() != StudyType::Budget)
             continue;
         if(elem.code().mid(0,2) != "03" and elem.code().mid(0,2) != "11")
             continue;
             
         for(auto& elem1 : m_facultyCells) {
             
-            if(elem.type() == elem1.type())
+            if(elem.studyType() == elem1.studyType())
                 continue;
             if(elem1.code().mid(0,2) != elem.code().mid(0,2))
                 continue;
@@ -235,13 +234,51 @@ void MagicHat::rebalanceBudgetaryPlaces() {
 void MagicHat::printStatsToConsole() {
     
     int globalCounter = 0;
+    
+    QString type;
+    QString form;
 
     for(int i = 0; i < m_facultyCells.size(); ++i) {
         
-        qDebug() << "\n>----" << m_facultyCells[i].division() << "|" << m_facultyCells[i].code() << "|" <<  m_facultyCells[i].name() << "|" <<
-            QString::number(m_facultyCells[i].pool().size()) + "/" + QString::number(m_facultyCells[i].capacity()) << "|"
-            << m_facultyCells[i].type() << "|"
-            << m_facultyCells[i].studyForm() << "----<";
+        switch(m_facultyCells[i].studyType()){
+        case StudyType::Budget:
+            type = "Бюджет";
+            break;
+        case StudyType::NonBudget:
+            type = "Внебюджет";
+            break;
+        case StudyType::Kvot:
+            type = "Отдельная квота";
+            break;
+        case StudyType::CompanySponsor:
+            type = "Целевое";
+            break;
+        case StudyType::SpecialRight:
+            type = "Особое право";
+            break;
+        }
+        
+        switch(m_facultyCells[i].studyForm()){
+        case StudyForm::Personal:
+            form = "Очная";
+            break;
+        case StudyForm::NotPersonal:
+            form = "Заочная";
+            break;
+        case StudyForm::PersonalNotPersonal:
+            form = "Очно-заочная";
+            break;
+        }
+        
+        qDebug() << "\n>----"
+                 << m_facultyCells[i].division() << "|"
+                 << m_facultyCells[i].code() << "|"
+                 <<  m_facultyCells[i].name() << "|"
+                 << QString::number(m_facultyCells[i].pool().size()) + "/"
+                        + QString::number(m_facultyCells[i].capacity()) << "|"
+                 << type << "|"
+                 << form
+                 << "----<";
 
         if(m_facultyCells[i].pool().size() == 0) {
             qDebug() << "НЕТ АБИТУРИЕНТОВ\n";
@@ -255,6 +292,8 @@ void MagicHat::printStatsToConsole() {
             qDebug() << "" << counter <<  "-" <<  elem.second.id() << "-" << elem.second.FIO() << "-" << elem.first.egeScore() << elem.first.egeAdditionalScore() << (elem.first.isBVI() ? "БВИ" : "") << "Проритет -" << elem.first.priorityNumber();
             counter -= 1;
         }
+        
+        type.clear();
 
     }
     
@@ -298,11 +337,11 @@ void MagicHat::printUncountedApplicants() {
     
     for(auto& elem : m_uncountedApplicants) {
                 
-            QString temp;
-            for(const auto& scores : elem.priorities())
-                temp += QString::number(scores.egeScore()) + " ";
-            
-            qDebug () << elem.id() << elem.FIO() << "{" << temp << "}" << elem.priorities()[0].name();
+        QString temp;
+        for(const auto& scores : elem.priorities())
+            temp += QString::number(scores.egeScore()) + " ";
+        
+        qDebug () << elem.id() << elem.FIO() << "{" << temp << "}" << elem.priorities()[0].name();
         
     }
     
@@ -323,7 +362,7 @@ void MagicHat::printToExcel() {
     newDoc.selectSheet("ПМИ");
     for(int i = 0; i < m_facultyCells.size(); ++i) {
 
-        if(m_facultyCells[i].name() == "Прикладное программирование и информационные технологии" and m_facultyCells[i].type() == "Бюджет") {
+        if(m_facultyCells[i].name() == "Прикладное программирование и информационные технологии" and m_facultyCells[i].studyType() == StudyType::Budget) {
 
             globalCounter += m_facultyCells[i].pool().size();
             int counter = m_facultyCells[i].pool().size();
@@ -342,7 +381,7 @@ void MagicHat::printToExcel() {
     newDoc.selectSheet("МКН");
     for(int i = 0; i < m_facultyCells.size(); ++i) {
 
-        if(m_facultyCells[i].name() == "Программирование, алгоритмы и анализ данных" and m_facultyCells[i].type() == "Бюджет") {
+        if(m_facultyCells[i].name() == "Программирование, алгоритмы и анализ данных" and m_facultyCells[i].studyType() == StudyType::Budget) {
 
             globalCounter += m_facultyCells[i].pool().size();
             int counter = m_facultyCells[i].pool().size();
@@ -361,7 +400,7 @@ void MagicHat::printToExcel() {
     newDoc.selectSheet("ИБ");
     for(int i = 0; i < m_facultyCells.size(); ++i) {
 
-        if(m_facultyCells[i].name() == "Безопасность компьютерных систем" and m_facultyCells[i].type() == "Бюджет") {
+        if(m_facultyCells[i].name() == "Безопасность компьютерных систем" and m_facultyCells[i].studyType() == StudyType::Budget) {
 
             globalCounter += m_facultyCells[i].pool().size();
             int counter = m_facultyCells[i].pool().size();
@@ -377,10 +416,10 @@ void MagicHat::printToExcel() {
     }
 
 
-
     newDoc.selectSheet("КБ");
     for(int i = 0; i < m_facultyCells.size(); ++i) {
-        if(m_facultyCells[i].name() == "Математические методы защиты информации" and m_facultyCells[i].type() == "Бюджет") {
+        
+        if(m_facultyCells[i].name() == "Математические методы защиты информации" and m_facultyCells[i].studyType() == StudyType::Budget) {
 
             globalCounter += m_facultyCells[i].pool().size();
             int counter = m_facultyCells[i].pool().size();
@@ -432,21 +471,46 @@ void MagicHat::setKCP(const QString &path, const QString& sheet) {
         m_facultyCells.last().setName(name);
         m_facultyCells.last().setDivision(division);
         m_facultyCells.last().setCode(code);
-        m_facultyCells.last().setStudyForm(studyForm);
-        m_facultyCells.last().setType(type);
         m_facultyCells.last().setCapacity(kcp.toInt());
+        
+        if(studyForm.toLower() == "очная" or studyForm.toLower() == "очное")
+            m_facultyCells.last().setStudyForm(StudyForm::Personal);
+        
+        if(studyForm.toLower() == "заочная" or studyForm.toLower() == "заочное")
+            m_facultyCells.last().setStudyForm(StudyForm::NotPersonal);
+        
+        if(studyForm.toLower() == "очно-заочная" or studyForm.toLower() == "очно-заочное")
+            m_facultyCells.last().setStudyForm(StudyForm::PersonalNotPersonal);
+        
+        
+        if(type.toLower() == "бюджет")
+            m_facultyCells.last().setStudyType(StudyType::Budget);
+        
+        if(type.toLower() == "внебюджет")
+            m_facultyCells.last().setStudyType(StudyType::NonBudget);
+        
+        if(type.toLower() == "отдельная квота")
+            m_facultyCells.last().setStudyType(StudyType::Kvot);
+        
+        if(type.toLower() == "особое право")
+            m_facultyCells.last().setStudyType(StudyType::SpecialRight);
+        
+        if(type.toLower() == "целевое" or type.toLower() == "целевая")
+            m_facultyCells.last().setStudyType(StudyType::CompanySponsor);
     }
 }
 
-QList<FacultyCell> MagicHat::faculties() const
-{
+QList<FacultyCell> MagicHat::faculties() const {
     return m_facultyCells;
 }
 
 void MagicHat::printFaculties() {
 
     qDebug() << "\n";
-
+    
+    QString type;
+    QString form;
+    
     QString tempCode = m_facultyCells[0].code();
     for(const auto& elem : m_facultyCells) {
 
@@ -454,11 +518,43 @@ void MagicHat::printFaculties() {
             qDebug() << "\n";
             tempCode = elem.code();
         }
+        
+        switch(elem.studyType()){
+        case StudyType::Budget:
+            type = "Бюджет";
+            break;
+        case StudyType::NonBudget:
+            type = "Внебюджет";
+            break;
+        case StudyType::Kvot:
+            type = "Отдельная квота";
+            break;
+        case StudyType::CompanySponsor:
+            type = "Целевое";
+            break;
+        case StudyType::SpecialRight:
+            type = "Особое право";
+            break;
+        }
+        
+        switch(elem.studyForm()){
+        case StudyForm::Personal:
+            form = "Очная";
+            break;
+        case StudyForm::NotPersonal:
+            form = "Заочная";
+            break;
+        case StudyForm::PersonalNotPersonal:
+            form = "Очно-заочная";
+            break;
+        }
 
-        qDebug() << elem.code() + " " + elem.name() + "-" + elem.studyForm() + "-" +
-                        elem.type() + "-" + QString::number(elem.capacity()) + "-" +  QString::number(elem.pool().size()) + "-" +
-                        QString::number((elem.pool().size() != 0 ? elem.pool()[0].first.egeScore() : 0));
-
+        qDebug() << elem.code() + " " +
+                    elem.name() + "-" +
+                    form + "-" +
+                    type + "-" +
+                    QString::number(elem.capacity()) + "-" +  QString::number(elem.pool().size()) + "-" +
+                    QString::number((elem.pool().size() != 0 ? elem.pool()[0].first.egeScore() : 0));
     }
 
 }

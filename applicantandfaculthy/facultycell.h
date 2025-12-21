@@ -2,9 +2,9 @@
 #define FACULTYCELL_H
 
 #include <QObject>
-#include <algorithm>
 #include <QPair>
 #include <QDebug>
+#include <algorithm>
 
 #include "applicant.h"
 #include "namespaces.h"
@@ -31,11 +31,11 @@ public:
     QString code() const;
     void setCode(const QString &newCode);
 
-    QString studyForm() const;
-    void setStudyForm(const QString &newStudyForm);
+    StudyForm studyForm() const;
+    void setStudyForm(const StudyForm &newStudyForm);
 
-    QString type() const;
-    void setType(const QString &newType);
+    StudyType studyType() const;
+    void setStudyType(const StudyType &newType);
 
     QList<QPair<PriorityInfo, Applicant>> pool() const;
     void setPool(const QList<QPair<PriorityInfo, Applicant>> &newPool);
@@ -61,8 +61,8 @@ private:
     QString m_division;
     QString m_name;
     QString m_code;
-    QString m_studyForm; //Personal, Personal-NotPersonal,...
-    QString m_type; //Budget, CompanySponsor,...
+    StudyForm m_studyForm; //Personal, Personal-NotPersonal,...
+    StudyType m_studyType; //Budget, CompanySponsor,...
     QList<QPair<PriorityInfo, Applicant>> m_pool;
 
     // Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged FINAL)

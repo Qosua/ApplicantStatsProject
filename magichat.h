@@ -42,10 +42,10 @@ signals:
     void facultiesChanged();
     
 private:
-    QList<Applicant> m_applicantsListCopy;
-    QList<Applicant> m_applicantsList;
+    QList<Applicant>   m_applicantsListCopy;
+    QList<Applicant>   m_applicantsList;
+    QList<Applicant>   m_uncountedApplicants;
     QList<FacultyCell> m_facultyCells;
-    QList<Applicant> m_uncountedApplicants;
 
     // Q_PROPERTY(QList<Applicant> applicantsList READ applicantsList NOTIFY applicantsListChanged FINAL)
     // Q_PROPERTY(QList<Applicant> uncountedApplicants READ uncountedApplicants NOTIFY uncountedApplicantsChanged FINAL)

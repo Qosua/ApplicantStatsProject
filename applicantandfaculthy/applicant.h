@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QList>
+#include <algorithm>
 
 #include "namespaces.h"
 
@@ -38,12 +39,6 @@ public:
     QString name() const;
     void setName(const QString &newName);
     
-    QString studyForm() const;
-    void setStudyForm(const QString &newStudyForm);
-    
-    QString type() const;
-    void setType(const QString &newType);
-    
     QList<int> subjectScores() const;
     void setSubjectScores(const QList<int> &newSubjectScores);
     void addSubject(int score);
@@ -59,20 +54,26 @@ public:
     
     QString division() const;
     void setDivision(const QString &newDivision);
+    
+    StudyForm studyForm() const;
+    void setStudyForm(const StudyForm &newStudyForm);
+    
+    StudyType studyType() const;
+    void setStudyType(const StudyType &newType);
 
 private:
-    int m_id;
+    int m_id;   
     int m_egeScore;
     int m_egeAdditionalScore;
     int m_priorityNumber;
     QString m_code;
     QString m_name;
-    QString m_studyForm; //Personal, Personal-NotPersonal,...
-    QString m_type; //Budget, NonBudget,...
     QString m_division;
     QList<int> m_subjectScores;
     bool m_admissionFlag;
     bool m_isBVI;
+    StudyForm m_studyForm; //Personal, Personal-NotPersonal,...
+    StudyType m_studyType; //Budget, NonBudget,...
     
 signals:
     void egeScoreChanged();
@@ -122,7 +123,7 @@ public:
     QList<PriorityInfo>& priorities();
     void setPriorities(const QList<PriorityInfo> &newPriorities);
     void addPriority(const PriorityInfo& info);
-    void deletePriority(PriorityType flag);
+    void deletePriority(StudyType flag);
 
     QString phoneNumber() const;
     void setPhoneNumber(const QString &newPhoneNumber);

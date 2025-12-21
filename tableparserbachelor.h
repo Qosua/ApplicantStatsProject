@@ -20,7 +20,7 @@ public:
     ~TableParserBachelor();
     
     void parseTable();
-    QList<Applicant> getApplicants(ApplicantsFilterFlags flag, PriorityType infoFlag);
+    QList<Applicant> getApplicants(ApplicantsFilterFlags flag, StudyType infoFlag);
     
 private:
     bool setColumnsNames();
@@ -28,8 +28,8 @@ private:
 
     QString extractCode(const QString& str);
     QString extractName(const QString& str);
-    QString extractStudyForm(const QString& str);
-    QString extractType(const QString& str);
+    StudyForm extractStudyForm(const QString& str);
+    StudyType extractType(const QString& str);
     
     QString m_tablePath;
     QString m_columnsNamesFilePath;

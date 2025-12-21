@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
                                        ":/programInfo/columnsNames.xlsx");
     parserBachelor.parseTable();
     QList<Applicant> list1 = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue,
-                                                          PriorityType::NonBudget);
+                                                          StudyType::NonBudget);
     
     MagicHat magicHatBachelor;
     magicHatBachelor.setKCP(":/programInfo/KCP.xlsx", "Бакалавры");
