@@ -1,4 +1,4 @@
-#include "TableParserMaster.h"
+#include "tableparsermaster.h"
 
 TableParserMaster::TableParserMaster(const QString& tablePath, const QString& columnsNamesFilePath) {
     

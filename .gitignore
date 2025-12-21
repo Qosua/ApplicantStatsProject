@@ -4,3 +4,7 @@
 *.xls
 !/programInfo/KCP.xlsx
 !/programInfo/columnsNames.xlsx
+/.qtcreator
+*.user.*
+*.user
+/ApplicantStatsProject.pro.user

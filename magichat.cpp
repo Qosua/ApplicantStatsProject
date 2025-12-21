@@ -311,7 +311,7 @@ void MagicHat::printUncountedApplicants() {
 }
 
 void MagicHat::printToExcel() {
-
+    
     QXlsx::Document newDoc;
     newDoc.addSheet("ПМИ");
     newDoc.addSheet("МКН");
