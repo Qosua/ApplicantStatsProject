@@ -33,7 +33,9 @@ void Applicant::addPriority(const PriorityInfo &info) {
     
     std::sort(m_priorities.begin(), m_priorities.end(),
         [](const PriorityInfo &info1, const PriorityInfo &info2) {
-
+        
+        // old system
+        
         /*
         if(info1.type() == "Целевое" and info2.type() != "Целевое")
             return !(false);

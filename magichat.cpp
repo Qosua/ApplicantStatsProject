@@ -2,13 +2,11 @@
 
 MagicHat::MagicHat() {}
 
-QList<Applicant> MagicHat::applicantsList() const
-{
+QList<Applicant> MagicHat::applicantsList() const {
     return m_applicantsList;
 }
 
-void MagicHat::setApplicantsList(const QList<Applicant> &newApplicantsList)
-{
+void MagicHat::setApplicantsList(const QList<Applicant> &newApplicantsList) {
     if (m_applicantsList == newApplicantsList)
         return;
     
@@ -274,8 +272,9 @@ void MagicHat::printStatsToConsole() {
                  << m_facultyCells[i].division() << "|"
                  << m_facultyCells[i].code() << "|"
                  <<  m_facultyCells[i].name() << "|"
-                 << QString::number(m_facultyCells[i].pool().size()) + "/"
-                        + QString::number(m_facultyCells[i].capacity()) << "|"
+                 << QString::number(m_facultyCells[i].pool().size()) +
+                    "/" +
+                    QString::number(m_facultyCells[i].capacity()) << "|"
                  << type << "|"
                  << form
                  << "----<";
@@ -287,6 +286,7 @@ void MagicHat::printStatsToConsole() {
         
         globalCounter += m_facultyCells[i].pool().size();
         int counter = m_facultyCells[i].pool().size();
+        
         for(const auto& elem : m_facultyCells[i].pool()){
 
             qDebug() << "" << counter <<  "-" <<  elem.second.id() << "-" << elem.second.FIO() << "-" << elem.first.egeScore() << elem.first.egeAdditionalScore() << (elem.first.isBVI() ? "БВИ" : "") << "Проритет -" << elem.first.priorityNumber();

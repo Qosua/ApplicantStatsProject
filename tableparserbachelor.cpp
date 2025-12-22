@@ -288,7 +288,7 @@ QString TableParserBachelor::extractCode(const QString& str) {
 
 QString TableParserBachelor::extractName(const QString& str) {
     
-    QString ans;
+    QString name;
     
     for(int i = 9; (str.mid(i+2,4).toLower() != "заоч" and
                     str.mid(i+2,4).toLower() != "очно" and
@@ -297,11 +297,11 @@ QString TableParserBachelor::extractName(const QString& str) {
         if(str[i - 1] == str[i] and str[i] == " ")
             continue;
 
-        ans += str[i];
+        name += str[i];
         
     }
     
-    return ans;
+    return name;
     
 }
 

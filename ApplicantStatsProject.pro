@@ -1,5 +1,7 @@
 QT += quick core gui widgets charts
 
+CONFIG += c++17
+
 SOURCES += \
         applicantandfaculthy/applicant.cpp \
         applicantandfaculthy/facultycell.cpp \
