@@ -3,23 +3,23 @@ QT += quick core gui widgets charts
 CONFIG += c++17
 
 SOURCES += \
-        applicantandfaculthy/applicant.cpp \
-        applicantandfaculthy/facultycell.cpp \
-        magichat.cpp \
-        main.cpp \
-        mainwindow.cpp \
-        tableparserbachelor.cpp \
-#        tableparsermaster.cpp
+        src/applicant.cpp \
+        src/facultycell.cpp \
+        src/magichat.cpp \
+        src/main.cpp \
+        src/mainwindow.cpp \
+        src/tableparserbachelor.cpp \
+#        src/tableparsermaster.cpp
 
-resources.files =  styles/white_style.qss
+resources.files +=  styles/white_style.qss
 resources.files += programInfo/KCP.xlsx
 resources.files += programInfo/columnsNames.xlsx
 resources.files += data/maintable.xlsx
 resources.prefix = /
 RESOURCES += resources
 
-INCLUDEPATH += $$PWD/QXlsx/source
-LIBS += -L$$PWD/QXlsx/lib -lQXlsx
+INCLUDEPATH += $$PWD/src/QXlsx/source
+LIBS += -L$$PWD/src/QXlsx/lib -lQXlsx
 
 # Default rules for deployment.
 # qnx: target.path = /tmp/$${TARGET}/bin
@@ -27,14 +27,14 @@ LIBS += -L$$PWD/QXlsx/lib -lQXlsx
 # !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    applicantandfaculthy/applicant.h \
-    applicantandfaculthy/facultycell.h \
-    magichat.h \
-    mainwindow.h \
-    namespaces.h \
-    tableparserbachelor.h \
-#    tableparsermaster.h \
-    xlsx.h
+    src/applicant.h \
+    src/facultycell.h \
+    src/magichat.h \
+    src/mainwindow.h \
+    src/namespaces.h \
+    src/tableparserbachelor.h \
+#    src/tableparsermaster.h \
+    src/xlsx.h
 
 FORMS += \
-    mainwindow.ui
+    src/mainwindow.ui

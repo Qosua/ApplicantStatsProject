@@ -1,9 +1,10 @@
-#include "mainwindow.h"
+#include "src/mainwindow.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) {
+    
     ui->setupUi(this);
 
     // QFile file(":/styles/white_style.qss");
@@ -15,8 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 

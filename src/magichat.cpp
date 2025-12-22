@@ -1,4 +1,4 @@
-#include "magichat.h"
+#include "src/magichat.h"
 
 MagicHat::MagicHat() {}
 

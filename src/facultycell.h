@@ -6,8 +6,8 @@
 #include <QDebug>
 #include <algorithm>
 
-#include "applicant.h"
-#include "namespaces.h"
+#include "src/applicant.h"
+#include "src/namespaces.h"
 
 class FacultyCell : public QObject {
 

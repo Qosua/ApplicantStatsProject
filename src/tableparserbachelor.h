@@ -8,9 +8,9 @@
 #include <QDebug>
 #include <QHash>
 
-#include "xlsx.h"
-#include "applicantandfaculthy/applicant.h"
-#include "namespaces.h"
+#include "src/xlsx.h"
+#include "src/applicant.h"
+#include "src/namespaces.h"
 
 class TableParserBachelor {
     

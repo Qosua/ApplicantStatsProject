@@ -1,4 +1,4 @@
-#include "facultycell.h"
+#include "src/facultycell.h"
 
 FacultyCell::FacultyCell() {}
 

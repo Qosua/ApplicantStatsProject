@@ -1,4 +1,4 @@
-#include "applicant.h"
+#include "src/applicant.h"
 #include "qdebug.h"
 
 Applicant::Applicant() {}

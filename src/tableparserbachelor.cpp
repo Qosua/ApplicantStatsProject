@@ -1,4 +1,4 @@
-#include "tableparserbachelor.h"
+#include "src/tableparserbachelor.h"
 
 TableParserBachelor::TableParserBachelor(const QString& tablePath, const QString& columnsNamesFilePath) {
     

@@ -6,7 +6,7 @@
 #include <QList>
 #include <algorithm>
 
-#include "namespaces.h"
+#include "src/namespaces.h"
 
 class PriorityInfo : public QObject {
     

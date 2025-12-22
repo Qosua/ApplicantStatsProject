@@ -6,10 +6,10 @@
 #include <QFile>
 #include <QStyleFactory>
 
-#include "tableparsermaster.h"
-#include "magichat.h"
-#include "applicantandfaculthy/facultycell.h"
-#include "mainwindow.h"
+#include "src/magichat.h"
+#include "src/facultycell.h"
+#include "src/mainwindow.h"
+#include "src/tableparserbachelor.h"
 
 int main(int argc, char *argv[]) {
 

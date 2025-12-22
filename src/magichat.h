@@ -7,10 +7,10 @@
 #include <QFile>
 #include <QTextStream>
 
-#include "applicantandfaculthy/applicant.h"
-#include "applicantandfaculthy/facultycell.h"
-#include "xlsx.h"
-#include "namespaces.h"
+#include "src/applicant.h"
+#include "src/facultycell.h"
+#include "src/xlsx.h"
+#include "src/namespaces.h"
 
 class MagicHat : public QObject {
 
