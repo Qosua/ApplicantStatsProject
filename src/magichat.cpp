@@ -6,12 +6,13 @@ QList<Applicant> MagicHat::applicantsList() const {
     return m_applicantsList;
 }
 
-void MagicHat::setApplicantsList(const QList<Applicant> &newApplicantsList) {
-    if (m_applicantsList == newApplicantsList)
+void MagicHat::setApplicantsList(QList<Applicant>* newApplicantsList) {
+    
+    if (m_applicantsList == *newApplicantsList)
         return;
     
-    m_applicantsList = newApplicantsList;
-    m_applicantsListCopy = newApplicantsList;
+    m_applicantsList = *newApplicantsList;
+    m_applicantsListCopy = *newApplicantsList;
     emit applicantsListChanged();
 }
 

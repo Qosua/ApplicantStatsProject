@@ -20,7 +20,7 @@ public:
     MagicHat();
     
     QList<Applicant> applicantsList() const;
-    void setApplicantsList(const QList<Applicant> &newApplicantsList);
+    void setApplicantsList(QList<Applicant>* newApplicantsList);
     void printFaculties();
     
     void startPriorityRoundSimulation();

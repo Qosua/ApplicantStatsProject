@@ -14,17 +14,22 @@
 int main(int argc, char *argv[]) {
 
     QApplication app(argc, argv);
-    app.setStyle(QStyleFactory::create("windows11"));
+    //app.setStyle(QStyleFactory::create("windows11"));
     
-    TableParserBachelor parserBachelor(":/data/maintable.xlsx",
-                                       ":/programInfo/columnsNames.xlsx");
-    parserBachelor.parseTable();
-    QList<Applicant> list1 = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue,
-                                                          StudyType::NonBudget);
-    
+    TableParserBachelor parserBachelor;
     MagicHat magicHatBachelor;
+    MainWindow mainWindow;
+    QList<Applicant>* applicantsList;
+    
+    parserBachelor.setTablePath(":/data/maintable.xlsx");
+    parserBachelor.setColumnsNamesPath(":/programInfo/columnsNames.xlsx");
+    parserBachelor.parseTable();
+    
+    applicantsList = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue,
+                                                                   StudyType::NonBudget);
+    
     magicHatBachelor.setKCP(":/programInfo/KCP.xlsx", "Бакалавры");
-    magicHatBachelor.setApplicantsList(list1);
+    magicHatBachelor.setApplicantsList(applicantsList);
     
     magicHatBachelor.startPriorityRoundSimulation();
     magicHatBachelor.rebalanceBudgetaryPlaces();
@@ -32,6 +37,9 @@ int main(int argc, char *argv[]) {
 
     magicHatBachelor.printStatsToConsole();
     magicHatBachelor.printUncountedApplicants();
+    
+    QList<FacultyCell> faculties = magicHatBachelor.faculties();
+    QList<Applicant>   uncountedApplicants = magicHatBachelor.uncountedApplicants();
     
     /*
     TableParserMaster parserMaster("C:/Repos/Qt/ApplicantStatsProject/Выгрузка маги 09.08.xlsx",
@@ -55,8 +63,7 @@ int main(int argc, char *argv[]) {
     magicHatMaster.printUncountedApplicants();
     */
     
-    MainWindow mainWindow;
-    mainWindow.setMathStatistics(magicHatBachelor.uncountedApplicants(),magicHatBachelor.faculties());
+    mainWindow.setFaculties(faculties);
     mainWindow.show();
 
     return app.exec();

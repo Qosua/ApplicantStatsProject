@@ -25,10 +25,11 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     
-    void setMathStatistics(const QList<Applicant>& unCountedApplicants, const QList<FacultyCell>& faculties);
-
+    void setFaculties(const QList<FacultyCell>& faculties);
+    
 private:
     Ui::MainWindow *ui;
+    QList<FacultyCell> m_faculties;
 };
 
 #endif // MAINWINDOW_H

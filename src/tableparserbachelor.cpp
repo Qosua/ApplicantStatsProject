@@ -1,21 +1,6 @@
 #include "src/tableparserbachelor.h"
 
-TableParserBachelor::TableParserBachelor(const QString& tablePath, const QString& columnsNamesFilePath) {
-    
-    if(!QFile::exists(tablePath)) {
-        qDebug() << "CAN NOT FIND TABLE FILE" << tablePath << __FILE__ << ":" << __LINE__;
-        return;
-    }
-    
-    if(!QFile::exists(columnsNamesFilePath)) {
-        qDebug() << "CAN NOT FIND COLUMNS NAMES FILE" << columnsNamesFilePath << __FILE__ << ":" << __LINE__;
-        return;
-    }
-    
-    m_tablePath = tablePath;
-    m_columnsNamesFilePath = columnsNamesFilePath;
-    
-}
+TableParserBachelor::TableParserBachelor() {}
 
 TableParserBachelor::~TableParserBachelor() {
     
@@ -27,6 +12,24 @@ TableParserBachelor::~TableParserBachelor() {
         delete m_applicantsList;
         m_applicantsList = nullptr;
     }
+}
+
+void TableParserBachelor::setTablePath(const QString &path) {
+    
+    if(!QFile::exists(path)) {
+        qDebug() << "CAN NOT FIND TABLE FILE" << path << __FILE__ << ":" << __LINE__;
+        return;
+    }
+    m_tablePath = path;
+}
+
+void TableParserBachelor::setColumnsNamesPath(const QString &path) {
+    
+    if(!QFile::exists(path)) {
+        qDebug() << "CAN NOT FIND COLUMNS NAMES FILE" << path << __FILE__ << ":" << __LINE__;
+        return;
+    }
+    m_columnsNamesFilePath = path;
 }
 
 void TableParserBachelor::parseTable() {
@@ -93,15 +96,15 @@ void TableParserBachelor::parseTable() {
     
 }
 
-QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, StudyType priorityToDelete) {
+QList<Applicant>* TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, StudyType priorityToDelete) {
     
-    QList<Applicant> newList;
+    QList<Applicant>* newList = new QList<Applicant>;
     
     if(flag == ApplicantsFilterFlags::All) {
-        newList = *m_applicantsList;
+        *newList = *m_applicantsList;
 
-        for(int i = 0; i < newList.size(); ++i)
-            newList[i].deletePriority(priorityToDelete);
+        for(int i = 0; i < newList->size(); ++i)
+            (*newList)[i].deletePriority(priorityToDelete);
 
         return newList;
     }
@@ -116,11 +119,11 @@ QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, 
                     applicant.addPriority(priority);
 
             if(applicant.priorities().size() != 0)
-                newList.append(applicant);
+                newList->append(applicant);
         }
 
-        for(int i = 0; i < newList.size(); ++i)
-            newList[i].deletePriority(priorityToDelete);
+        for(int i = 0; i < newList->size(); ++i)
+            (*newList)[i].deletePriority(priorityToDelete);
 
         return newList;
     }
@@ -135,17 +138,17 @@ QList<Applicant> TableParserBachelor::getApplicants(ApplicantsFilterFlags flag, 
                     applicant.addPriority(priority);
             
             if(applicant.priorities().size() != 0)
-                newList.append(applicant);
+                newList->append(applicant);
             
         }
 
-        for(int i = 0; i < newList.size(); ++i)
-            newList[i].deletePriority(priorityToDelete);
+        for(int i = 0; i < newList->size(); ++i)
+            (*newList)[i].deletePriority(priorityToDelete);
 
         return newList;
     }
     
-    return QList<Applicant>();
+    return nullptr;
 }
 
 bool TableParserBachelor::setColumnsNames() {
@@ -176,7 +179,6 @@ bool TableParserBachelor::setColumnsNames() {
     }
     
     return true;
-    
 }
 
 void TableParserBachelor::printStatsToConsole() const {

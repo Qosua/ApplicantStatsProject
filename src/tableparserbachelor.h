@@ -15,12 +15,14 @@
 class TableParserBachelor {
     
 public:
-    TableParserBachelor() = delete;
-    TableParserBachelor(const QString& tablePath, const QString& columnsNamesFilePath);
+    TableParserBachelor();
     ~TableParserBachelor();
     
+    void setTablePath(const QString& path);
+    void setColumnsNamesPath(const QString& path);
+    
     void parseTable();
-    QList<Applicant> getApplicants(ApplicantsFilterFlags flag, StudyType infoFlag);
+    QList<Applicant>* getApplicants(ApplicantsFilterFlags flag, StudyType infoFlag);
     
 private:
     bool setColumnsNames();
@@ -36,7 +38,7 @@ private:
     
     QMap<QString, int> m_columnsNames;
     QXlsx::Document*   m_applicantsTable = nullptr;
-    QList<Applicant>*  m_applicantsList = nullptr;
+    QList<Applicant>*  m_applicantsList  = nullptr;
     
 };
 
