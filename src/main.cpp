@@ -10,25 +10,30 @@
 #include "src/facultycell.h"
 #include "src/mainwindow.h"
 #include "src/tableparserbachelor.h"
+#include "src/supportsystem.h"
 
 int main(int argc, char *argv[]) {
 
     QApplication app(argc, argv);
-    //app.setStyle(QStyleFactory::create("windows11"));
+    app.setStyle(QStyleFactory::create("windows11"));
+    
+    SupportSystem supportSystem;
+    supportSystem.initSystem();
     
     TableParserBachelor parserBachelor;
     MagicHat magicHatBachelor;
     MainWindow mainWindow;
     QList<Applicant>* applicantsList;
     
+    /*
     parserBachelor.setTablePath(":/data/maintable.xlsx");
-    parserBachelor.setColumnsNamesPath(":/programInfo/columnsNames.xlsx");
+    parserBachelor.setColumnsNamesPath(":/settings/columnsNames.xlsx");
     parserBachelor.parseTable();
     
     applicantsList = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue,
                                                                    StudyType::NonBudget);
     
-    magicHatBachelor.setKCP(":/programInfo/KCP.xlsx", "Бакалавры");
+    magicHatBachelor.setKCP(":/settings/KCP.xlsx", "Бакалавры");
     magicHatBachelor.setApplicantsList(applicantsList);
     
     magicHatBachelor.startPriorityRoundSimulation();
@@ -41,9 +46,9 @@ int main(int argc, char *argv[]) {
     QList<FacultyCell> faculties = magicHatBachelor.faculties();
     QList<Applicant>   uncountedApplicants = magicHatBachelor.uncountedApplicants();
     
-    /*
+    
     TableParserMaster parserMaster("C:/Repos/Qt/ApplicantStatsProject/Выгрузка маги 09.08.xlsx",
-                                    ":/programInfo/columnsNames.txt");
+                                    ":/settings/columnsNames.txt");
     parserMaster.parseTable();
     QList<Applicant> list11 = parserMaster.getApplicants(ApplicantsFilterFlags::All);
     QList<Applicant> list1 = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue,
@@ -52,7 +57,7 @@ int main(int argc, char *argv[]) {
     qDebug() << list11.size() << list1.size();
     
     MagicHat magicHatMaster;
-    magicHatMaster.setKCP(":/programInfo/kcpMasters.txt");
+    magicHatMaster.setKCP(":/settings/kcpMasters.txt");
     magicHatMaster.setApplicantsList(list1);
     
     magicHatMaster.startPriorityRoundSimulation();
@@ -61,9 +66,10 @@ int main(int argc, char *argv[]) {
     
     magicHatMaster.printStatsToConsole();
     magicHatMaster.printUncountedApplicants();
-    */
     
     mainWindow.setFaculties(faculties);
+    */
+    
     mainWindow.show();
 
     return app.exec();
