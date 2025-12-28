@@ -10,6 +10,10 @@ MainWindow::MainWindow(QWidget *parent)
     this->ui->splitter->setSizes(QList<int>() << 100 << 400);
     this->ui->splitter->setStyleSheet("QSplitter::handle{background-color:#21a366;}");
     
+    this->ui->bottomWidget->setStyleSheet("background-color: #181818");
+    this->ui->versionLabel->setStyleSheet("color: #888888");
+    this->ui->currentFileLabel->setStyleSheet("color: #888888");
+    
     // ui cells initialization
     {
         uiCells[facultiesNamesList[0]].btn = ui->bioBtn;
@@ -51,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
         connect(ui->bioBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(0);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->bio);
                 }
                 );
@@ -58,66 +63,77 @@ MainWindow::MainWindow(QWidget *parent)
         connect(ui->ivtBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(1);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->ivt);
                 }
                 );
         connect(ui->histBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(2);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->hist);
                 }
                 );
         connect(ui->mathBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(3);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->math);
                 }
                 );
         connect(ui->psyBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(4);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->psy);
                 }
                 );
         connect(ui->physBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(5);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->phys);
                 }
                 );
         connect(ui->inyazBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(6);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->inyaz);
                 }
                 );
         connect(ui->filoBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(7);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->filo);
                 }
                 );
         connect(ui->fspnBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(8);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->fspn);
                 }
                 );
         connect(ui->economBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(9);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->econom);
                 }
                 );
         connect(ui->urBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(10);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->ur);
                 }
                 );
         connect(ui->generalBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this](bool var)
                 {
+                    this->resetButtonsColor(11);
                     this->ui->pagesWidget->setCurrentWidget(this->ui->generalStat);
                 }
                 );
@@ -137,6 +153,9 @@ MainWindow::MainWindow(QWidget *parent)
     
     connect(this->ui->sortButton, &QPushButton::clicked,
             this, &MainWindow::sortTables);
+    
+    this->ui->versionLabel->setText("Версия: 0.8.0");
+    this->ui->currentFileLabel->setText("Текущая открытая таблица: Пусто");
     
 }
 
@@ -221,6 +240,9 @@ void MainWindow::saveTable(QString path) {
 
 void MainWindow::loadTables() {
     
+    disconnect(this->ui->tablesWidget, &QListWidget::itemDoubleClicked,
+               this, &MainWindow::chooseTable);
+    
     this->ui->tablesWidget->clear();
     
     QDir dataDir(APP_DATA_PATH);
@@ -235,6 +257,9 @@ void MainWindow::loadTables() {
         this->ui->tablesWidget->addItem(item);
         
     }
+    
+    connect(this->ui->tablesWidget, &QListWidget::itemDoubleClicked,
+            this, &MainWindow::chooseTable);
     
     if(!this->sortOrder) 
         this->ui->tablesWidget->sortItems();
@@ -259,6 +284,49 @@ void MainWindow::sortTables() {
     this->sortOrder = !this->sortOrder;
     
     loadTables();
+}
+
+void MainWindow::chooseTable(QListWidgetItem *item) {
+    
+    if(!QFile::exists(APP_DATA_PATH + "/" + item->text()))
+        return;
+    
+    this->ui->currentFileLabel->setText("Текущая открытая таблица: " + APP_DATA_PATH + "/" + item->text());
+    
+    emit tableChosen(APP_DATA_PATH + "/" + item->text());
+    
+}
+
+void MainWindow::resetButtonsColor(int execption) {
+    
+    ui->bioBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    ui->ivtBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    ui->histBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    ui->mathBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    ui->psyBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    ui->physBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    ui->inyazBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    ui->filoBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    ui->fspnBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    ui->economBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    ui->urBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    ui->generalBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
+    
+    switch(execption){
+    case 0: ui->bioBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    case 1: ui->ivtBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    case 2: ui->histBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    case 3: ui->mathBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    case 4: ui->psyBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    case 5: ui->physBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    case 6: ui->inyazBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    case 7: ui->filoBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    case 8: ui->fspnBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    case 9: ui->economBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    case 10: ui->urBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    case 11: ui->generalBtn->setStyleSheet("background-color: #252525; color: #999999;"); break;
+    }
+    
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event) {

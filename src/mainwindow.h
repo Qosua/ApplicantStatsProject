@@ -68,6 +68,9 @@ public:
     
     void setFaculties(const QList<FacultyCell>& faculties);
     
+signals:
+    void tableChosen(QString tablePath);
+    
 private:
     void processFaculties();
     void updateUi();
@@ -77,6 +80,9 @@ private:
     void loadTables();
     void openDataFolder();
     void sortTables();
+    void chooseTable(QListWidgetItem* item);
+    
+    void resetButtonsColor(int execption);
     
     bool sortOrder = true;
     Ui::MainWindow *ui;
