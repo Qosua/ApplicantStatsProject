@@ -299,7 +299,7 @@
              </property>
              <property name="icon">
               <iconset resource="../build/Desktop_Qt_6_8_3_MinGW_64_bit-Debug/debug/qmake_resources.qrc">
-               <normaloff>:/styles/folder-60.png</normaloff>:/styles/folder-60.png</iconset>
+               <normaloff>:/icons/folder-60.png</normaloff>:/icons/folder-60.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -319,7 +319,7 @@
              </property>
              <property name="icon">
               <iconset resource="../build/Desktop_Qt_6_8_3_MinGW_64_bit-Debug/debug/qmake_resources.qrc">
-               <normaloff>:/styles/sort-60.png</normaloff>:/styles/sort-60.png</iconset>
+               <normaloff>:/icons/sort-60.png</normaloff>:/icons/sort-60.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -339,7 +339,7 @@
              </property>
              <property name="icon">
               <iconset resource="../build/Desktop_Qt_6_8_3_MinGW_64_bit-Debug/debug/qmake_resources.qrc">
-               <normaloff>:/styles/update-60.png</normaloff>:/styles/update-60.png</iconset>
+               <normaloff>:/icons/update-60.png</normaloff>:/icons/update-60.png</iconset>
              </property>
              <property name="iconSize">
               <size>

@@ -10,13 +10,14 @@ SOURCES += \
     src/mainwindow.cpp \
     src/supportsystem.cpp \
     src/tableparserbachelor.cpp \
+    src/cachesystem.cpp \
 #        src/tableparsermaster.cpp
 
 resources.files +=  styles/white_style.qss
-resources.files +=  styles/exelicon.png
-resources.files +=  styles/sort-60.png
-resources.files +=  styles/folder-60.png
-resources.files +=  styles/update-60.png
+resources.files +=  icons/exelicon.png
+resources.files +=  icons/sort-60.png
+resources.files +=  icons/folder-60.png
+resources.files +=  icons/update-60.png
 
 resources.files += settings/KCP.xlsx
 resources.files += settings/columnsNames.xlsx
@@ -41,7 +42,8 @@ HEADERS += \
     src/supportsystem.h \
     src/tableparserbachelor.h \
 #    src/tableparsermaster.h \
-    src/xlsx.h
+    src/xlsx.h \
+    src/cachesystem.h \
 
 FORMS += \
     src/mainwindow.ui

@@ -252,7 +252,7 @@ void MainWindow::loadTables() {
         
         QListWidgetItem* item = new QListWidgetItem;
         item->setText(entry);
-        item->setIcon(QIcon(":/styles/exelicon.png"));
+        item->setIcon(QIcon(":/icons/exelicon.png"));
         item->setBackground(QBrush(QColor("#212121")));
         
         this->ui->tablesWidget->addItem(item);
@@ -270,7 +270,7 @@ void MainWindow::loadTables() {
 }
 
 void MainWindow::openDataFolder() {
-    
+        
     QDesktopServices::openUrl(APP_DATA_PATH);
     
 }

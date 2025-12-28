@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     TableParserBachelor parserBachelor;
     MagicHat magicHatBachelor;
     MainWindow mainWindow;
-    QList<Applicant>* applicantsList;
+    
     
     /*
     parserBachelor.setTablePath(":/data/maintable.xlsx");
