@@ -240,7 +240,7 @@ void MainWindow::saveTable(QString path) {
 
 void MainWindow::loadTables() {
     
-    disconnect(this->ui->tablesWidget, &QListWidget::itemDoubleClicked,
+    disconnect(this->ui->tablesWidget, &QListWidget::itemClicked,
                this, &MainWindow::chooseTable);
     
     this->ui->tablesWidget->clear();
@@ -253,12 +253,13 @@ void MainWindow::loadTables() {
         QListWidgetItem* item = new QListWidgetItem;
         item->setText(entry);
         item->setIcon(QIcon(":/styles/exelicon.png"));
+        item->setBackground(QBrush(QColor("#212121")));
         
         this->ui->tablesWidget->addItem(item);
         
     }
     
-    connect(this->ui->tablesWidget, &QListWidget::itemDoubleClicked,
+    connect(this->ui->tablesWidget, &QListWidget::itemClicked,
             this, &MainWindow::chooseTable);
     
     if(!this->sortOrder) 

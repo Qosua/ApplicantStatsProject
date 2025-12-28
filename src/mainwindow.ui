@@ -373,6 +373,12 @@
             <bold>false</bold>
            </font>
           </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
+          </property>
          </widget>
         </item>
        </layout>
