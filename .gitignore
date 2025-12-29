@@ -2,8 +2,8 @@
 /data
 *.xlsx
 *.xls
-!/programInfo/KCP.xlsx
-!/programInfo/columnsNames.xlsx
+!/settings/KCP.xlsx
+!/settings/columnsNames.xlsx
 /.qtcreator
 *.user.*
 *.user
