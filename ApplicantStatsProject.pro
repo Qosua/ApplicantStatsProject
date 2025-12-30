@@ -3,14 +3,15 @@ QT += quick core gui widgets charts
 CONFIG += c++17
 
 SOURCES += \
+    src/mainwidget.cpp \
     src/applicant.cpp \
     src/facultycell.cpp \
     src/magichat.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/supportsystem.cpp \
+    src/tablemanager.cpp \
     src/tableparserbachelor.cpp \
-    src/cachesystem.cpp \
 #        src/tableparsermaster.cpp
 
 resources.files +=  styles/white_style.qss
@@ -34,16 +35,17 @@ LIBS += -L$$PWD/src/QXlsx/lib -lQXlsx
 # !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    src/mainwidget.h \
     src/applicant.h \
     src/facultycell.h \
     src/magichat.h \
     src/mainwindow.h \
     src/namespaces.h \
     src/supportsystem.h \
+    src/tablemanager.h \
     src/tableparserbachelor.h \
 #    src/tableparsermaster.h \
     src/xlsx.h \
-    src/cachesystem.h \
 
 FORMS += \
-    src/mainwindow.ui
+    src/mainwidget.ui

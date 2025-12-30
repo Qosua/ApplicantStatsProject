@@ -2,7 +2,7 @@
 
 SupportSystem::SupportSystem() {}
 
-void SupportSystem::initSystem() {
+void SupportSystem::init() {
     
     if(!QDir().exists(APP_PATH))
         QDir().mkdir(APP_PATH);

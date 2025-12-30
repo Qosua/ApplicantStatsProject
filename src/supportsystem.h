@@ -22,7 +22,7 @@ public:
     QList<FacultyCell> fromCache(QString tablePath);
     bool isCacheExist(QString tablePath);
     
-    void initSystem();
+    void init();
     
 private:
     

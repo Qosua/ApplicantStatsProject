@@ -11,19 +11,14 @@
 #include "src/mainwindow.h"
 #include "src/tableparserbachelor.h"
 #include "src/supportsystem.h"
+#include "src/tablemanager.h"
 
 int main(int argc, char *argv[]) {
 
     QApplication app(argc, argv);
     app.setStyle(QStyleFactory::create("windows11"));
     
-    SupportSystem supportSystem;
-    supportSystem.initSystem();
-    
-    TableParserBachelor parserBachelor;
-    MagicHat magicHatBachelor;
     MainWindow mainWindow;
-    
     
     /*
     parserBachelor.setTablePath(":/data/maintable.xlsx");
