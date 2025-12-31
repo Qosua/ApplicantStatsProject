@@ -1,17 +1,7 @@
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QString>
-#include <QDebug>
 #include <QApplication>
-#include <QFile>
 #include <QStyleFactory>
 
-#include "src/magichat.h"
-#include "src/facultycell.h"
 #include "src/mainwindow.h"
-#include "src/tableparserbachelor.h"
-#include "src/supportsystem.h"
-#include "src/tablemanager.h"
 
 int main(int argc, char *argv[]) {
 

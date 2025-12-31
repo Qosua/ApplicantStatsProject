@@ -22,7 +22,8 @@ private:
     MainWidget mainWidget;
     SupportSystem supportSystem;
     TableManager tableManager;
-    
+    QWidget centralWidget;
+        
     QStackedLayout stackedLayout;
 };
 

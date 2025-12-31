@@ -5,10 +5,8 @@ MainWidget::MainWidget()
     : ui(new Ui::MainWidget) {
     
     this->ui->setupUi(this);
-    
     this->ui->splitter->setSizes(QList<int>() << 100 << 400);
     this->ui->splitter->setStyleSheet("QSplitter::handle{background-color:#21a366;}");
-    
     this->ui->bottomWidget->setStyleSheet("background-color: #181818");
     this->ui->versionLabel->setStyleSheet("color: #888888");
     this->ui->currentFileLabel->setStyleSheet("color: #888888");
@@ -49,7 +47,7 @@ MainWidget::MainWidget()
         uiCells[facultiesNamesList[10]].tabWidget = ui->tabWidgetur;
     }
     
-    // connections
+    // buttons connections
     {
         connect(ui->bioBtn, &QPushButton::clicked,
                 this->ui->pagesWidget, [this]()
@@ -141,16 +139,14 @@ MainWidget::MainWidget()
     for(const QString& name : facultiesNamesList) 
         uiCells[name].tabWidget->setTabText(0, "Общие (" + name + ")");
     
-    loadTables();
-    
     QObject::connect(this->ui->folderButton, &QPushButton::clicked,
                      this, &MainWidget::openDataFolder);
     
-    QObject::connect(this->ui->updateButton, &QPushButton::clicked,
-                     this, &MainWidget::loadTables);
-    
     QObject::connect(this->ui->sortButton, &QPushButton::clicked,
                      this, &MainWidget::sortTables);
+    
+    QObject::connect(this->ui->tablesWidget, &QListWidget::itemClicked,
+                     this, &MainWidget::chooseTable);
     
     this->ui->versionLabel->setText("Версия: 0.8.0");
     this->ui->currentFileLabel->setText("Текущая открытая таблица: Пусто");
@@ -232,21 +228,13 @@ void MainWidget::saveTable(QString path) {
     QFile file(path);
     file.copy(APP_DATA_PATH + "/" + name);
     
-    loadTables();
-    
 }
 
-void MainWidget::loadTables() {
-    
-    disconnect(this->ui->tablesWidget, &QListWidget::itemClicked,
-               this, &MainWidget::chooseTable);
+void MainWidget::loadTablesToUi(QList<QString> list) {
     
     this->ui->tablesWidget->clear();
     
-    QDir dataDir(APP_DATA_PATH);
-    QStringList entries = dataDir.entryList(QStringList() << "*.xlsx", QDir::Files);
-    
-    for (const QString &entry : entries) {
+    for (const QString &entry : list) {
         
         QListWidgetItem* item = new QListWidgetItem;
         item->setText(entry);
@@ -257,14 +245,21 @@ void MainWidget::loadTables() {
         
     }
     
-    connect(this->ui->tablesWidget, &QListWidget::itemClicked,
-            this, &MainWidget::chooseTable);
-    
     if(!this->sortOrder) 
         this->ui->tablesWidget->sortItems();
     else 
         this->ui->tablesWidget->sortItems(Qt::DescendingOrder);
     
+}
+
+void MainWidget::wait() {
+    
+    this->ui->tablesWidget->setEnabled(false);
+}
+
+void MainWidget::soptWait() {
+    
+    this->ui->tablesWidget->setEnabled(true);
 }
 
 void MainWidget::openDataFolder() {
@@ -281,8 +276,6 @@ void MainWidget::sortTables() {
         this->ui->tablesWidget->sortItems(Qt::DescendingOrder);
     
     this->sortOrder = !this->sortOrder;
-    
-    loadTables();
 }
 
 void MainWidget::chooseTable(QListWidgetItem *item) {

@@ -4,14 +4,10 @@
 
 MainWindow::MainWindow() {
     
+    mainWidget.setAcceptDrops(true);
     stackedLayout.addWidget(&mainWidget);
-    
-    QWidget* centralWidget = new QWidget;
-    centralWidget->setLayout(&stackedLayout);
-    this->setCentralWidget(centralWidget);
-    
-    supportSystem.init();
-    tableManager.init();
+    centralWidget.setLayout(&stackedLayout);
+    this->setCentralWidget(&centralWidget);
     
     QObject::connect(&mainWidget, &MainWidget::sendTable,
                      &tableManager, &TableManager::processTable);
@@ -19,6 +15,17 @@ MainWindow::MainWindow() {
     QObject::connect(&tableManager, &TableManager::sendFaculties,
                      &mainWidget, &MainWidget::processFaculties);
     
+    QObject::connect(&tableManager, &TableManager::sendTableList,
+                     &mainWidget, &MainWidget::loadTablesToUi);
+    
+    QObject::connect(&tableManager, &TableManager::waitForFinish,
+                     &mainWidget, &MainWidget::wait);
+    
+    QObject::connect(&tableManager, &TableManager::finished,
+                     &mainWidget, &MainWidget::soptWait);
+    
+    supportSystem.init();
+    tableManager.init();
     
 }
 

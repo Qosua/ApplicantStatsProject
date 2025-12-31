@@ -6,7 +6,7 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QFileSystemWatcher>
-#include <QFileSystemWatcher>
+#include <QTimer>
 
 #include "src/supportsystem.h"
 #include "src/applicant.h"
@@ -26,6 +26,9 @@ public:
     
 signals:
     void sendFaculties(QList<FacultyCell> faculties);
+    void sendTableList(QList<QString> list);
+    void waitForFinish();
+    void finished();
     
 private:
     void readCache(const QString& tableName);
@@ -33,10 +36,12 @@ private:
     
     void fileChanged(const QString& path);
     void directoryChanged(const QString& path);
+    void updateWatcher();
     
     QFileSystemWatcher watcher;
     TableParserBachelor parserBachelor;
     MagicHat magicHatBachelor;
+    QTimer timer;
     
 };
 

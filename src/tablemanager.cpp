@@ -4,19 +4,13 @@ TableManager::TableManager() {}
 
 void TableManager::init() {
     
-    QDir dataDir(APP_DATA_PATH);
-    QList<QString> dataEntr = dataDir.entryList();
-    
-    for(const QString& entry : dataEntr) 
-        watcher.addPath(APP_DATA_PATH + "/" + entry);
-    
-    watcher.addPath(APP_DATA_PATH + "/");
-    
     QObject::connect(&watcher, &QFileSystemWatcher::directoryChanged,
                      this, &TableManager::directoryChanged);
     
     QObject::connect(&watcher, &QFileSystemWatcher::fileChanged,
                      this, &TableManager::fileChanged);
+    
+    updateWatcher();
     
 }
 
@@ -25,11 +19,11 @@ void TableManager::processTable(const QString& tableName) {
     QFileInfo fileInfo(APP_DATA_PATH + "/" + tableName);
     QDir cacheDir(APP_CACHE_PATH);
     
-    QList<QString> cacheEntr = cacheDir.entryList();
+    QStringList cacheEntr = cacheDir.entryList();
     
-    for(const QString& entry : cacheEntr) {
+    for(const QString& entry : std::as_const(cacheEntr)) {
         
-        QList<QString> parts = entry.split('_');
+        QStringList parts = entry.split('_');
         
         if(parts[0] != "cache" or parts[2] != tableName)
             continue;
@@ -45,25 +39,25 @@ void TableManager::processTable(const QString& tableName) {
 }
 
 void TableManager::readCache(const QString& tableName) {
+    emit waitForFinish();
     
     
     
+    emit finished();
 }
 
 void TableManager::makeCache(const QString& tableName) {
+    emit waitForFinish();
     
     
     
+    emit finished();
 }
 
 void TableManager::fileChanged(const QString &path) {
     
-    qDebug() << path << "-file";
-    
-    if(!QFile::exists(path)) {
-        watcher.removePath(path);
-        return;   
-    }
+    if(!QFile::exists(path))
+        return;
     
     makeCache(path.split('/').last());
     
@@ -71,6 +65,30 @@ void TableManager::fileChanged(const QString &path) {
 
 void TableManager::directoryChanged(const QString &path) {
     
+    updateWatcher();
     
+}
+
+void TableManager::updateWatcher() {
+    
+    QDir dataDir(APP_DATA_PATH);
+    QStringList currentFiles = dataDir.entryList(QDir::Files | QDir::NoDotAndDotDot);
+    QStringList watchedFiles = watcher.files();
+    
+    for (const QString& path : std::as_const(watchedFiles)) {
+        
+        if (!QFile::exists(path)) 
+            watcher.removePath(path);
+    }
+    for (const QString& file : std::as_const(currentFiles)) {
+        
+        QString fullPath = dataDir.absoluteFilePath(file);
+        if (!watchedFiles.contains(fullPath) and !fullPath.contains('~') and !fullPath.endsWith(".tmp")) 
+            watcher.addPath(fullPath);
+    }
+    
+    watcher.addPath(APP_DATA_PATH + "/");
+    
+    emit sendTableList(currentFiles);
     
 }

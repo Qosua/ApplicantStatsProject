@@ -70,6 +70,9 @@ public:
     ~MainWidget();
     
     void processFaculties(QList<FacultyCell> faculties);
+    void loadTablesToUi(QList<QString> list);
+    void wait();
+    void soptWait();
     
 signals:
     void sendTable(const QString& tableName);
@@ -80,7 +83,6 @@ private:
     void setInfoToWidget(QWidget* widget,const QList<DirectionInfo>& directionInfo);
     
     void saveTable(QString path);
-    void loadTables();
     void openDataFolder();
     void sortTables();
     void chooseTable(QListWidgetItem* item);
