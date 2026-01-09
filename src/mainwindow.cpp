@@ -9,23 +9,29 @@ MainWindow::MainWindow() {
     centralWidget.setLayout(&stackedLayout);
     this->setCentralWidget(&centralWidget);
     
-    QObject::connect(&mainWidget, &MainWidget::sendTable,
+    QObject::connect(&mainWidget,   &MainWidget::sendTable,
                      &tableManager, &TableManager::processTable);
     
     QObject::connect(&tableManager, &TableManager::sendFaculties,
-                     &mainWidget, &MainWidget::processFaculties);
+                     &mainWidget,   &MainWidget::processFaculties);
     
     QObject::connect(&tableManager, &TableManager::sendTableList,
-                     &mainWidget, &MainWidget::loadTablesToUi);
+                     &mainWidget,   &MainWidget::loadTablesToUi);
     
     QObject::connect(&tableManager, &TableManager::waitForFinish,
-                     &mainWidget, &MainWidget::wait);
+                     &mainWidget,   &MainWidget::wait);
     
     QObject::connect(&tableManager, &TableManager::finished,
-                     &mainWidget, &MainWidget::soptWait);
+                     &mainWidget,   &MainWidget::soptWait);
+    
+    QObject::connect(this,          &MainWindow::initTableManager,
+                     &tableManager, &TableManager::init, Qt::SingleShotConnection);
+    
+    tableManager.moveToThread(&thread);
+    thread.start();
     
     supportSystem.init();
-    tableManager.init();
+    emit initTableManager();
     
 }
 

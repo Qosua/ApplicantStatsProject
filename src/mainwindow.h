@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QStackedLayout>
+#include <QThread>
 
 #include "src/applicant.h"
 #include "src/facultycell.h"
@@ -18,11 +19,15 @@ public:
     MainWindow();
     ~MainWindow();
     
+signals:
+    void initTableManager();
+    
 private:
     MainWidget mainWidget;
     SupportSystem supportSystem;
     TableManager tableManager;
     QWidget centralWidget;
+    QThread thread; 
         
     QStackedLayout stackedLayout;
 };

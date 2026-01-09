@@ -72,7 +72,7 @@ public:
     void processFaculties(QList<FacultyCell> faculties);
     void loadTablesToUi(QList<QString> list);
     void wait();
-    void soptWait();
+    void soptWait(QList<FacultyCell>* faculties);
     
 signals:
     void sendTable(const QString& tableName);

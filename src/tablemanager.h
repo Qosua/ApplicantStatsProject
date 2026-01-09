@@ -9,7 +9,6 @@
 #include <QTimer>
 
 #include "src/supportsystem.h"
-#include "src/applicant.h"
 #include "tableparserbachelor.h"
 #include "magichat.h"
 
@@ -28,7 +27,7 @@ signals:
     void sendFaculties(QList<FacultyCell> faculties);
     void sendTableList(QList<QString> list);
     void waitForFinish();
-    void finished();
+    void finished(QList<FacultyCell>* faculties);
     
 private:
     void readCache(const QString& tableName);
@@ -38,10 +37,7 @@ private:
     void directoryChanged(const QString& path);
     void updateWatcher();
     
-    QFileSystemWatcher watcher;
-    TableParserBachelor parserBachelor;
-    MagicHat magicHatBachelor;
-    QTimer timer;
+    QFileSystemWatcher* watcher;
     
 };
 

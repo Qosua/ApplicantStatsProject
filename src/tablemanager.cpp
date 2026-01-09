@@ -4,10 +4,12 @@ TableManager::TableManager() {}
 
 void TableManager::init() {
     
-    QObject::connect(&watcher, &QFileSystemWatcher::directoryChanged,
+    watcher = new QFileSystemWatcher;
+    
+    QObject::connect(watcher, &QFileSystemWatcher::directoryChanged,
                      this, &TableManager::directoryChanged);
     
-    QObject::connect(&watcher, &QFileSystemWatcher::fileChanged,
+    QObject::connect(watcher, &QFileSystemWatcher::fileChanged,
                      this, &TableManager::fileChanged);
     
     updateWatcher();
@@ -41,17 +43,42 @@ void TableManager::processTable(const QString& tableName) {
 void TableManager::readCache(const QString& tableName) {
     emit waitForFinish();
     
+    QList<FacultyCell>* list = new QList<FacultyCell>;
     
     
-    emit finished();
+    
+    emit finished(list);
+    list = nullptr;
 }
 
 void TableManager::makeCache(const QString& tableName) {
     emit waitForFinish();
     
+    TableParserBachelor parserBachelor;
+    MagicHat magicHatBachelor;
     
+    parserBachelor.setTablePath(":/data/maintable.xlsx");
+    parserBachelor.setColumnsNamesPath(":/settings/columnsNames.xlsx");
+    parserBachelor.parseTable();
     
-    emit finished();
+    QList<Applicant>* applicantsList = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue,
+                                                                    StudyType::NonBudget);
+    
+    magicHatBachelor.setKCP(":/settings/KCP.xlsx", "Бакалавры");
+    magicHatBachelor.setApplicantsList(applicantsList);
+    
+    magicHatBachelor.startPriorityRoundSimulation();
+    magicHatBachelor.rebalanceBudgetaryPlaces();
+    magicHatBachelor.startGeneralRoundSimulation();
+    
+    //magicHatBachelor.printStatsToConsole();
+    //magicHatBachelor.printUncountedApplicants();
+    
+    QList<FacultyCell>* faculties = magicHatBachelor.faculties();
+    //QList<Applicant>   uncountedApplicants = magicHatBachelor.uncountedApplicants();
+    
+    emit finished(faculties);
+    faculties = nullptr;
 }
 
 void TableManager::fileChanged(const QString &path) {
@@ -73,21 +100,21 @@ void TableManager::updateWatcher() {
     
     QDir dataDir(APP_DATA_PATH);
     QStringList currentFiles = dataDir.entryList(QDir::Files | QDir::NoDotAndDotDot);
-    QStringList watchedFiles = watcher.files();
+    QStringList watchedFiles = watcher->files();
     
     for (const QString& path : std::as_const(watchedFiles)) {
         
         if (!QFile::exists(path)) 
-            watcher.removePath(path);
+            watcher->removePath(path);
     }
     for (const QString& file : std::as_const(currentFiles)) {
         
         QString fullPath = dataDir.absoluteFilePath(file);
         if (!watchedFiles.contains(fullPath) and !fullPath.contains('~') and !fullPath.endsWith(".tmp")) 
-            watcher.addPath(fullPath);
+            watcher->addPath(fullPath);
     }
     
-    watcher.addPath(APP_DATA_PATH + "/");
+    watcher->addPath(APP_DATA_PATH + "/");
     
     emit sendTableList(currentFiles);
     

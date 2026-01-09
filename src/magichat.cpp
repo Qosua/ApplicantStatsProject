@@ -1,6 +1,9 @@
 #include "src/magichat.h"
 
-MagicHat::MagicHat() {}
+MagicHat::MagicHat() {
+    
+    m_facultyCells = new QList<FacultyCell>;
+}
 
 QList<Applicant> MagicHat::applicantsList() const {
     return m_applicantsList;
@@ -8,12 +11,8 @@ QList<Applicant> MagicHat::applicantsList() const {
 
 void MagicHat::setApplicantsList(QList<Applicant>* newApplicantsList) {
     
-    if (m_applicantsList == *newApplicantsList)
-        return;
-    
     m_applicantsList = *newApplicantsList;
     m_applicantsListCopy = *newApplicantsList;
-    emit applicantsListChanged();
 }
 
 void MagicHat::startPriorityRoundSimulation() {
@@ -25,11 +24,11 @@ void MagicHat::startPriorityRoundSimulation() {
         Applicant tempApplicant = elem;
         tempApplicant.priorities().clear();
         
-        for(const auto& elem1 : elem.priorities()){
+        for(const auto& priority : std::as_const(elem.priorities())){
             
-            if(elem1.studyType() != StudyType::Budget or elem1.isBVI()) {
+            if(priority.studyType() != StudyType::Budget or priority.isBVI()) {
                 
-                tempApplicant.addPriority(elem1);
+                tempApplicant.addPriority(priority);
             }
         }
         
@@ -54,9 +53,9 @@ void MagicHat::startPriorityRoundSimulation() {
         }
         
         bool deletePriority = true;
-        for(int j = 0; j < m_facultyCells.size(); ++j) {
+        for(int j = 0; j < m_facultyCells->size(); ++j) {
             
-            FacultyCell* facultyCell = &m_facultyCells[j];
+            FacultyCell* facultyCell = &(*m_facultyCells)[j];
             
             if(facultyCell->isAbleToAdd(priority)){
                 
@@ -84,14 +83,17 @@ void MagicHat::startPriorityRoundSimulation() {
             applicant->priorities().removeFirst();
         
     }
-
-    for(auto& elem : m_facultyCells){
-
-        for(auto& elem1 : elem.pool()) {
+    
+    
+    // TODO: make less then O(10 * m * n)
+    for(auto& elem : (*m_facultyCells)) {
+        
+        const auto& applicants = elem.pool();
+        for(auto& applicant : applicants) {
 
             for(int i = 0; i < m_applicantsList.size(); ++i) {
 
-                if(elem1.second.id() == m_applicantsList[i].id()) {
+                if(applicant.second.id() == m_applicantsList[i].id()) {
                     m_applicantsList.remove(i);
                     --i;
                 }
@@ -112,12 +114,10 @@ void MagicHat::startGeneralRoundSimulation() {
         Applicant tempApplicant = applicant;
         tempApplicant.priorities().clear();
         
-        for(const auto& priority : applicant.priorities()){
+        for(const auto& priority : std::as_const(applicant.priorities())){
             
-            if(priority.studyType() == StudyType::Budget){
-                
+            if(priority.studyType() == StudyType::Budget)
                 tempApplicant.addPriority(priority);
-            }
         }
         
         generalList.append(tempApplicant);
@@ -143,9 +143,9 @@ void MagicHat::startGeneralRoundSimulation() {
         }
         
         bool deletePriority = true;
-        for(int j = 0; j < m_facultyCells.size(); ++j){
+        for(int j = 0; j < m_facultyCells->size(); ++j){
             
-            FacultyCell* facultyCell = &m_facultyCells[j];
+            FacultyCell* facultyCell = &(*m_facultyCells)[j];
             
             if(facultyCell->isAbleToAdd(tempPriority)){
                 
@@ -181,7 +181,7 @@ void MagicHat::startGeneralRoundSimulation() {
 
 void MagicHat::rebalanceBudgetaryPlaces() {
     
-    for(auto& elem : m_facultyCells) {
+    for(auto& elem : (*m_facultyCells)) {
 
         if(elem.studyType() != StudyType::Budget)
             continue;
@@ -190,7 +190,7 @@ void MagicHat::rebalanceBudgetaryPlaces() {
         if(elem.code().mid(0,2) == "03" or elem.code().mid(0,2) == "11")
             continue;
 
-        for(auto& elem1 : m_facultyCells) {
+        for(auto& elem1 : (*m_facultyCells)) {
             
             if(elem.name() != elem1.name())
                 continue;
@@ -208,15 +208,15 @@ void MagicHat::rebalanceBudgetaryPlaces() {
     }
     
     
-    //Fix Physics rebalance
-    for(auto& elem : m_facultyCells) {
+    //Fix Physics rebalancing
+    for(auto& elem : (*m_facultyCells)) {
         
         if(elem.studyType() != StudyType::Budget)
             continue;
         if(elem.code().mid(0,2) != "03" and elem.code().mid(0,2) != "11")
             continue;
             
-        for(auto& elem1 : m_facultyCells) {
+        for(auto& elem1 : (*m_facultyCells)) {
             
             if(elem.studyType() == elem1.studyType())
                 continue;
@@ -237,9 +237,9 @@ void MagicHat::printStatsToConsole() {
     QString type;
     QString form;
 
-    for(int i = 0; i < m_facultyCells.size(); ++i) {
+    for(int i = 0; i < m_facultyCells->size(); ++i) {
         
-        switch(m_facultyCells[i].studyType()){
+        switch((*m_facultyCells)[i].studyType()){
         case StudyType::Budget:
             type = "Бюджет";
             break;
@@ -257,7 +257,7 @@ void MagicHat::printStatsToConsole() {
             break;
         }
         
-        switch(m_facultyCells[i].studyForm()){
+        switch((*m_facultyCells)[i].studyForm()){
         case StudyForm::Personal:
             form = "Очная";
             break;
@@ -270,25 +270,25 @@ void MagicHat::printStatsToConsole() {
         }
         
         qDebug() << "\n>----"
-                 << m_facultyCells[i].division() << "|"
-                 << m_facultyCells[i].code() << "|"
-                 <<  m_facultyCells[i].name() << "|"
-                 << QString::number(m_facultyCells[i].pool().size()) +
+                 << (*m_facultyCells)[i].division() << "|"
+                 << (*m_facultyCells)[i].code() << "|"
+                 <<  (*m_facultyCells)[i].name() << "|"
+                 << QString::number((*m_facultyCells)[i].pool().size()) +
                     "/" +
                     QString::number(m_facultyCells[i].capacity()) << "|"
                  << type << "|"
                  << form
                  << "----<";
 
-        if(m_facultyCells[i].pool().size() == 0) {
+        if((*m_facultyCells)[i].pool().size() == 0) {
             qDebug() << "НЕТ АБИТУРИЕНТОВ\n";
             continue;
         }
         
-        globalCounter += m_facultyCells[i].pool().size();
-        int counter = m_facultyCells[i].pool().size();
+        globalCounter += (*m_facultyCells)[i].pool().size();
+        int counter = (*m_facultyCells)[i].pool().size();
         
-        for(const auto& elem : m_facultyCells[i].pool()){
+        for(const auto& elem : (*m_facultyCells)[i].pool()){
 
             qDebug() << "" << counter <<  "-" <<  elem.second.id() << "-" << elem.second.FIO() << "-" << elem.first.egeScore() << elem.first.egeAdditionalScore() << (elem.first.isBVI() ? "БВИ" : "") << "Проритет -" << elem.first.priorityNumber();
             counter -= 1;
@@ -361,76 +361,76 @@ void MagicHat::printToExcel() {
     int globalCounter = 0;
 
     newDoc.selectSheet("ПМИ");
-    for(int i = 0; i < m_facultyCells.size(); ++i) {
+    for(int i = 0; i < m_facultyCells->size(); ++i) {
 
-        if(m_facultyCells[i].name() == "Прикладное программирование и информационные технологии" and m_facultyCells[i].studyType() == StudyType::Budget) {
+        if((*m_facultyCells)[i].name() == "Прикладное программирование и информационные технологии" and (*m_facultyCells)[i].studyType() == StudyType::Budget) {
 
-            globalCounter += m_facultyCells[i].pool().size();
-            int counter = m_facultyCells[i].pool().size();
-            for(int j = 0; j < m_facultyCells[i].pool().size() ; ++j){
+            globalCounter += (*m_facultyCells)[i].pool().size();
+            int counter = (*m_facultyCells)[i].pool().size();
+            for(int j = 0; j < (*m_facultyCells)[i].pool().size() ; ++j){
 
-                newDoc.write(j + 1, 1, m_facultyCells[i].pool()[j].second.id());
-                newDoc.write(j + 1, 2, m_facultyCells[i].pool()[j].second.FIO());
-                newDoc.write(j + 1, 3, m_facultyCells[i].pool()[j].first.egeScore());
-                newDoc.write(j + 1, 4, m_facultyCells[i].pool()[j].first.egeAdditionalScore());
-                newDoc.write(j + 1, 5, m_facultyCells[i].pool()[j].first.name());
+                newDoc.write(j + 1, 1, (*m_facultyCells)[i].pool()[j].second.id());
+                newDoc.write(j + 1, 2, (*m_facultyCells)[i].pool()[j].second.FIO());
+                newDoc.write(j + 1, 3, (*m_facultyCells)[i].pool()[j].first.egeScore());
+                newDoc.write(j + 1, 4, (*m_facultyCells)[i].pool()[j].first.egeAdditionalScore());
+                newDoc.write(j + 1, 5, (*m_facultyCells)[i].pool()[j].first.name());
             }
         }
     }
 
 
     newDoc.selectSheet("МКН");
-    for(int i = 0; i < m_facultyCells.size(); ++i) {
+    for(int i = 0; i < m_facultyCells->size(); ++i) {
 
-        if(m_facultyCells[i].name() == "Программирование, алгоритмы и анализ данных" and m_facultyCells[i].studyType() == StudyType::Budget) {
+        if((*m_facultyCells)[i].name() == "Программирование, алгоритмы и анализ данных" and (*m_facultyCells)[i].studyType() == StudyType::Budget) {
 
-            globalCounter += m_facultyCells[i].pool().size();
-            int counter = m_facultyCells[i].pool().size();
-            for(int j = 0; j < m_facultyCells[i].pool().size() ; ++j){
+            globalCounter += (*m_facultyCells)[i].pool().size();
+            int counter = (*m_facultyCells)[i].pool().size();
+            for(int j = 0; j < (*m_facultyCells)[i].pool().size() ; ++j){
 
-                newDoc.write(j + 1, 1, m_facultyCells[i].pool()[j].second.id());
-                newDoc.write(j + 1, 2, m_facultyCells[i].pool()[j].second.FIO());
-                newDoc.write(j + 1, 3, m_facultyCells[i].pool()[j].first.egeScore());
-                newDoc.write(j + 1, 4, m_facultyCells[i].pool()[j].first.egeAdditionalScore());
-                newDoc.write(j + 1, 5, m_facultyCells[i].pool()[j].first.name());
+                newDoc.write(j + 1, 1, (*m_facultyCells)[i].pool()[j].second.id());
+                newDoc.write(j + 1, 2, (*m_facultyCells)[i].pool()[j].second.FIO());
+                newDoc.write(j + 1, 3, (*m_facultyCells)[i].pool()[j].first.egeScore());
+                newDoc.write(j + 1, 4, (*m_facultyCells)[i].pool()[j].first.egeAdditionalScore());
+                newDoc.write(j + 1, 5, (*m_facultyCells)[i].pool()[j].first.name());
             }
         }
     }
 
 
     newDoc.selectSheet("ИБ");
-    for(int i = 0; i < m_facultyCells.size(); ++i) {
+    for(int i = 0; i < m_facultyCells->size(); ++i) {
 
-        if(m_facultyCells[i].name() == "Безопасность компьютерных систем" and m_facultyCells[i].studyType() == StudyType::Budget) {
+        if((*m_facultyCells)[i].name() == "Безопасность компьютерных систем" and (*m_facultyCells)[i].studyType() == StudyType::Budget) {
 
-            globalCounter += m_facultyCells[i].pool().size();
-            int counter = m_facultyCells[i].pool().size();
-            for(int j = 0; j < m_facultyCells[i].pool().size() ; ++j){
+            globalCounter += (*m_facultyCells)[i].pool().size();
+            int counter = (*m_facultyCells)[i].pool().size();
+            for(int j = 0; j < (*m_facultyCells)[i].pool().size() ; ++j){
 
-                newDoc.write(j + 1, 1, m_facultyCells[i].pool()[j].second.id());
-                newDoc.write(j + 1, 2, m_facultyCells[i].pool()[j].second.FIO());
-                newDoc.write(j + 1, 3, m_facultyCells[i].pool()[j].first.egeScore());
-                newDoc.write(j + 1, 4, m_facultyCells[i].pool()[j].first.egeAdditionalScore());
-                newDoc.write(j + 1, 5, m_facultyCells[i].pool()[j].first.name());
+                newDoc.write(j + 1, 1, (*m_facultyCells)[i].pool()[j].second.id());
+                newDoc.write(j + 1, 2, (*m_facultyCells)[i].pool()[j].second.FIO());
+                newDoc.write(j + 1, 3, (*m_facultyCells)[i].pool()[j].first.egeScore());
+                newDoc.write(j + 1, 4, (*m_facultyCells)[i].pool()[j].first.egeAdditionalScore());
+                newDoc.write(j + 1, 5, (*m_facultyCells)[i].pool()[j].first.name());
             }
         }
     }
 
 
     newDoc.selectSheet("КБ");
-    for(int i = 0; i < m_facultyCells.size(); ++i) {
+    for(int i = 0; i < m_facultyCells->size(); ++i) {
         
-        if(m_facultyCells[i].name() == "Математические методы защиты информации" and m_facultyCells[i].studyType() == StudyType::Budget) {
+        if((*m_facultyCells)[i].name() == "Математические методы защиты информации" and (*m_facultyCells)[i].studyType() == StudyType::Budget) {
 
-            globalCounter += m_facultyCells[i].pool().size();
-            int counter = m_facultyCells[i].pool().size();
-            for(int j = 0; j < m_facultyCells[i].pool().size() ; ++j){
+            globalCounter += (*m_facultyCells)[i].pool().size();
+            int counter = (*m_facultyCells)[i].pool().size();
+            for(int j = 0; j < (*m_facultyCells)[i].pool().size() ; ++j){
 
-                newDoc.write(j + 1, 1, m_facultyCells[i].pool()[j].second.id());
-                newDoc.write(j + 1, 2, m_facultyCells[i].pool()[j].second.FIO());
-                newDoc.write(j + 1, 3, m_facultyCells[i].pool()[j].first.egeScore());
-                newDoc.write(j + 1, 4, m_facultyCells[i].pool()[j].first.egeAdditionalScore());
-                newDoc.write(j + 1, 5, m_facultyCells[i].pool()[j].first.name());
+                newDoc.write(j + 1, 1, (*m_facultyCells)[i].pool()[j].second.id());
+                newDoc.write(j + 1, 2, (*m_facultyCells)[i].pool()[j].second.FIO());
+                newDoc.write(j + 1, 3, (*m_facultyCells)[i].pool()[j].first.egeScore());
+                newDoc.write(j + 1, 4, (*m_facultyCells)[i].pool()[j].first.egeAdditionalScore());
+                newDoc.write(j + 1, 5, (*m_facultyCells)[i].pool()[j].first.name());
             }
         }
     }
@@ -468,40 +468,41 @@ void MagicHat::setKCP(const QString &path, const QString& sheet) {
         QString type      = doc.read(i, 5).toString();
         QString kcp       = doc.read(i, 6).toString();
         
-        m_facultyCells.append(FacultyCell());
-        m_facultyCells.last().setName(name);
-        m_facultyCells.last().setDivision(division);
-        m_facultyCells.last().setCode(code);
-        m_facultyCells.last().setCapacity(kcp.toInt());
+        m_facultyCells->append(FacultyCell());
+        m_facultyCells->last().setName(name);
+        m_facultyCells->last().setDivision(division);
+        m_facultyCells->last().setCode(code);
+        m_facultyCells->last().setCapacity(kcp.toInt());
         
         if(studyForm.toLower() == "очная" or studyForm.toLower() == "очное")
-            m_facultyCells.last().setStudyForm(StudyForm::Personal);
+            m_facultyCells->last().setStudyForm(StudyForm::Personal);
         
         if(studyForm.toLower() == "заочная" or studyForm.toLower() == "заочное")
-            m_facultyCells.last().setStudyForm(StudyForm::NotPersonal);
+            m_facultyCells->last().setStudyForm(StudyForm::NotPersonal);
         
         if(studyForm.toLower() == "очно-заочная" or studyForm.toLower() == "очно-заочное")
-            m_facultyCells.last().setStudyForm(StudyForm::PersonalNotPersonal);
+            m_facultyCells->last().setStudyForm(StudyForm::PersonalNotPersonal);
         
         
         if(type.toLower() == "бюджет")
-            m_facultyCells.last().setStudyType(StudyType::Budget);
+            m_facultyCells->last().setStudyType(StudyType::Budget);
         
         if(type.toLower() == "внебюджет")
-            m_facultyCells.last().setStudyType(StudyType::NonBudget);
+            m_facultyCells->last().setStudyType(StudyType::NonBudget);
         
         if(type.toLower() == "отдельная квота")
-            m_facultyCells.last().setStudyType(StudyType::Kvot);
+            m_facultyCells->last().setStudyType(StudyType::Kvot);
         
         if(type.toLower() == "особое право")
-            m_facultyCells.last().setStudyType(StudyType::SpecialRight);
+            m_facultyCells->last().setStudyType(StudyType::SpecialRight);
         
         if(type.toLower() == "целевое" or type.toLower() == "целевая")
-            m_facultyCells.last().setStudyType(StudyType::CompanySponsor);
+            m_facultyCells->last().setStudyType(StudyType::CompanySponsor);
     }
 }
 
-QList<FacultyCell> MagicHat::faculties() const {
+QList<FacultyCell>* MagicHat::faculties() const {
+    
     return m_facultyCells;
 }
 
@@ -512,8 +513,8 @@ void MagicHat::printFaculties() {
     QString type;
     QString form;
     
-    QString tempCode = m_facultyCells[0].code();
-    for(const auto& elem : m_facultyCells) {
+    QString tempCode = (*m_facultyCells)[0].code();
+    for(const auto& elem : (*m_facultyCells)) {
 
         if(tempCode != elem.code()) {
             qDebug() << "\n";

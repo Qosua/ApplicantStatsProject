@@ -257,7 +257,7 @@ void MainWidget::wait() {
     this->ui->tablesWidget->setEnabled(false);
 }
 
-void MainWidget::soptWait() {
+void MainWidget::soptWait(QList<FacultyCell>* faculties) {
     
     this->ui->tablesWidget->setEnabled(true);
 }
