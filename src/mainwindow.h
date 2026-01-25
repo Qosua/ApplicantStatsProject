@@ -24,12 +24,13 @@ signals:
     
 private:
     MainWidget mainWidget;
+    QWidget centralWidget;
+    QStackedLayout stackedLayout;
+
     SupportSystem supportSystem;
     TableManager tableManager;
-    QWidget centralWidget;
     QThread thread; 
-        
-    QStackedLayout stackedLayout;
+
 };
 
 #endif // MAINWINDOW_H

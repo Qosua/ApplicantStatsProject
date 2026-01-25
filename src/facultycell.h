@@ -64,12 +64,6 @@ private:
     StudyType m_studyType; //Budget, CompanySponsor,...
     QList<QPair<PriorityInfo, Applicant>> m_pool;
 
-    // Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged FINAL)
-    // Q_PROPERTY(int capacity READ capacity WRITE setCapacity NOTIFY capacityChanged FINAL)
-    // Q_PROPERTY(QString code READ code WRITE setCode NOTIFY codeChanged FINAL)
-    // Q_PROPERTY(QString studyForm READ studyForm WRITE setStudyForm NOTIFY studyFormChanged FINAL)
-    // Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged FINAL)
-    // Q_PROPERTY(QList<QPair<PriorityInfo, Applicant> > pool READ pool WRITE setPool NOTIFY poolChanged FINAL)
 };
 
 #endif // FACULTYCELL_H

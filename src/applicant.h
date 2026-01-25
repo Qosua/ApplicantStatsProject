@@ -90,18 +90,6 @@ signals:
     void isBVIChanged();
     void divisionChanged();
     
-    // Q_PROPERTY(int egeScore READ egeScore WRITE setEgeScore NOTIFY egeScoreChanged FINAL)
-    // Q_PROPERTY(int egeAdditionalScore READ egeAdditionalScore WRITE setEgeAdditionalScore NOTIFY egeAdditionalScoreChanged FINAL)
-    // Q_PROPERTY(int priorityNumber READ priorityNumber WRITE setPriorityNumber NOTIFY priorityNumberChanged FINAL)
-    // Q_PROPERTY(QString code READ code WRITE setCode NOTIFY codeChanged FINAL)
-    // Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged FINAL)
-    // Q_PROPERTY(QString studyForm READ studyForm WRITE setStudyForm NOTIFY studyFormChanged FINAL)
-    // Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged FINAL)
-    // Q_PROPERTY(QList<int> subjectScores READ subjectScores WRITE setSubjectScores NOTIFY subjectScoresChanged FINAL)
-    // Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged FINAL)
-    // Q_PROPERTY(bool m_admissionFlag READ admissionFlag WRITE setAdmissionFlag NOTIFY admissionFlagChanged FINAL)
-    // Q_PROPERTY(bool isBVI READ isBVI WRITE setIsBVI NOTIFY isBVIChanged FINAL)
-    // Q_PROPERTY(QString division READ division WRITE setDivision NOTIFY divisionChanged FINAL)
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -148,10 +136,5 @@ signals:
     void emailChanged();
     void FIOChanged();
     
-    // Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged FINAL)
-    // Q_PROPERTY(QList<PriorityInfo> priorities READ priorities WRITE setPriorities NOTIFY prioritiesChanged FINAL)
-    // Q_PROPERTY(QString phoneNumber READ phoneNumber WRITE setPhoneNumber NOTIFY phoneNumberChanged FINAL)
-    // Q_PROPERTY(QString email READ email WRITE setEmail NOTIFY emailChanged FINAL)
-    // Q_PROPERTY(QString FIO READ FIO WRITE setFIO NOTIFY FIOChanged FINAL)
 };
 #endif // APPLICANT_H

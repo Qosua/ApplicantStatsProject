@@ -26,17 +26,7 @@
 #include "src/applicant.h"
 #include "src/facultycell.h"
 #include "src/supportsystem.h"
-
-// I know that direction is a wrong word
-struct DirectionInfo {
-    
-    int size = 0;
-    int studentsCount = 0;
-    int minScore = 500;
-    int maxScore = 0;
-    QString name;
-    QList<QPair<PriorityInfo, Applicant>> pool;
-};
+#include "src/tablemanager.h"
 
 struct uiCell {
     
@@ -68,17 +58,15 @@ class MainWidget : public QWidget {
 public:
     MainWidget();
     ~MainWidget();
-    
-    void processFaculties(QList<FacultyCell> faculties);
+
     void loadTablesToUi(QList<QString> list);
+    void stopWaiting(UniversityData* data);
     void wait();
-    void soptWait(QList<FacultyCell>* faculties);
     
 signals:
     void sendTable(const QString& tableName);
     
 private:
-    void parseFaculties();
     void updateUi();
     void setInfoToWidget(QWidget* widget,const QList<DirectionInfo>& directionInfo);
     
@@ -90,15 +78,11 @@ private:
     void resetButtonsColor(int execption);
     
     bool sortOrder = true;
-    Ui::MainWidget* ui;
     QList<FacultyCell> m_faculties;
-    
-    // ha ha ha
-    QHash<QString,
-          QHash<QString,
-                QHash<StudyForm,
-                      DirectionInfo>>>  database;
     QHash<QString, uiCell> uiCells;
+
+    Ui::MainWidget* ui = nullptr;
+    UniversityData* currentData = nullptr;
     
 protected:
     void dragEnterEvent(QDragEnterEvent *event);

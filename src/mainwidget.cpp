@@ -157,60 +157,11 @@ MainWidget::~MainWidget() {
     delete ui;
 }
 
-void MainWidget::processFaculties(QList<FacultyCell> faculties) {
-    
-    m_faculties = faculties;
-    
-    updateUi();
-}
-
-void MainWidget::parseFaculties() {
-    
-    for(const auto& faculty : m_faculties) {
-        
-        auto& currentElem = database[faculty.division()]
-                                    [faculty.name()]
-                                    [faculty.studyForm()];
-        
-        if(faculty.studyType() != StudyType::Budget) {
-            
-            currentElem.size += faculty.pool().size();
-            currentElem.studentsCount += faculty.pool().size();
-        }
-        else {
-            
-            currentElem.name = faculty.name();
-            currentElem.size += faculty.pool().size();
-            currentElem.studentsCount += faculty.capacity();
-        }
-        
-        currentElem.pool = faculty.pool();
-        
-        if(faculty.pool().isEmpty() or faculty.studyType() != StudyType::Budget)
-            continue;
-        
-        currentElem.maxScore = std::max(
-            faculty.pool().last().first.egeScore(),
-            currentElem.maxScore
-            );
-        
-        currentElem.minScore = std::min(
-            faculty.pool().first().first.egeScore(),
-            currentElem.minScore
-            );
-    }
-    
-    return;
-    
-}
-
 void MainWidget::updateUi() {
-    
-    parseFaculties();
     
     for(const QString& name : facultiesNamesList) {
         
-        QList<QString> directionsNames = database[name].keys();
+        QList<QString> directionsNames = (*currentData)[name].keys();
         
         for(const QString& directionName : directionsNames) {
             
@@ -257,7 +208,14 @@ void MainWidget::wait() {
     this->ui->tablesWidget->setEnabled(false);
 }
 
-void MainWidget::soptWait(QList<FacultyCell>* faculties) {
+void MainWidget::stopWaiting(UniversityData* data) {
+
+    if(currentData)
+        delete currentData;
+
+    currentData = data;
+
+    updateUi();
     
     this->ui->tablesWidget->setEnabled(true);
 }
