@@ -25,9 +25,9 @@ struct DirectionInfo {
 };
 
 typedef QHash<QString, //Faculty name
-            QHash<QString, // Direction name
-                QHash<StudyForm, // Personly, Personaly-NotPersonaly,...
-                    DirectionInfo>>> UniversityData;
+              QHash<QString, // Direction name
+                    QHash<StudyForm, // Personly, Personaly-NotPersonaly,...
+                          DirectionInfo>>> UniversityData;
 
 class TableManager : public QObject {
     
@@ -48,7 +48,7 @@ private:
     void readCache(const QString& tableName);
     void makeCache(const QString& tableName);
     UniversityData* makeDataForCaching(QList<FacultyCell>* faculties);
-    void makeCacheTable(UniversityData* data);
+    void makeCacheTable(UniversityData* data, const QString& tableName);
     
     void fileChanged(const QString& path);
     void directoryChanged(const QString& path);

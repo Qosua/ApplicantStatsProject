@@ -30,7 +30,7 @@ void TableManager::processTable(const QString& tableName) {
         if(parts[0] != "cache" or parts[2] != tableName)
             continue;
         
-        QString stringDateTime = fileInfo.lastModified().toString("yyyy-MM-dd hh:mm:ss");
+        QString stringDateTime = fileInfo.lastModified().toString("yyyy-MM-dd-hh-mm-ss");
         
         if(parts[1] == stringDateTime) {
             readCache(tableName);
@@ -38,6 +38,7 @@ void TableManager::processTable(const QString& tableName) {
         }
     }
     
+    //TODO: Take in account file date
     makeCache(tableName);
     
 }
@@ -79,7 +80,7 @@ void TableManager::makeCache(const QString& tableName) {
     //QList<Applicant>   uncountedApplicants = magicHatBachelor.uncountedApplicants();
 
     UniversityData* data = makeDataForCaching(faculties);
-    makeCacheTable(data);
+    makeCacheTable(data, tableName);
     
     emit finished(data);
 }
@@ -88,44 +89,117 @@ UniversityData* TableManager::makeDataForCaching(QList<FacultyCell> *faculties) 
 
     UniversityData* data = new UniversityData;
 
-    for(const auto& faculty : std::as_const(*faculties)) {
+    for(auto& direction : *faculties) {
 
-        auto& currentElem = (*data)[faculty.division()]
-                                   [faculty.name()]
-                                   [faculty.studyForm()];
+        auto& currentElem = (*data)[direction.division()]
+                                   [direction.name()]
+                                   [direction.studyForm()];
 
-        if(faculty.studyType() != StudyType::Budget) {
+        if(direction.studyType() != StudyType::Budget) {
 
-            currentElem.size += faculty.pool().size();
-            currentElem.studentsCount += faculty.pool().size();
+            currentElem.size += direction.pool().size();
+            currentElem.studentsCount += direction.pool().size();
         }
         else {
 
-            currentElem.name = faculty.name();
-            currentElem.size += faculty.pool().size();
-            currentElem.studentsCount += faculty.capacity();
+            currentElem.name = direction.name();
+            currentElem.size += direction.pool().size();
+            currentElem.studentsCount += direction.capacity();
         }
 
-        currentElem.pool = faculty.pool();
+        currentElem.pool += direction.pool();
 
-        if(faculty.pool().isEmpty() or faculty.studyType() != StudyType::Budget)
+        if(direction.pool().isEmpty() or direction.studyType() != StudyType::Budget)
             continue;
 
         currentElem.maxScore = std::max(
-            faculty.pool().last().first.egeScore(),
+            direction.pool().last().first.egeScore(),
             currentElem.maxScore
-            );
+        );
 
         currentElem.minScore = std::min(
-            faculty.pool().first().first.egeScore(),
+            direction.pool().first().first.egeScore(),
             currentElem.minScore
-            );
+        );
     }
 
     return data;
 }
 
-void TableManager::makeCacheTable(UniversityData *data) {
+void TableManager::makeCacheTable(UniversityData *data, const QString& tableName) {
+
+    QXlsx::Document xlsx;
+
+    for(auto faculty = data->constBegin(); faculty != data->constEnd(); ++faculty) {
+
+        int column = 1;
+        int row = 1;
+
+        xlsx.addSheet(faculty.key());
+        xlsx.selectSheet(faculty.key());
+
+        auto directionBegin = faculty.value().constBegin();
+        auto directionEnd = faculty.value().constEnd();
+
+        for(auto direction = directionBegin; direction != directionEnd; ++direction) {
+
+            auto directionInfoBegin = direction.value().constBegin();
+            auto directionInfoEnd = direction.value().constEnd();
+
+            for(auto directionInfo = directionInfoBegin; directionInfo != directionInfoEnd; ++directionInfo) {
+
+                auto poolBegin = directionInfo.value().pool.constBegin();
+                auto poolEnd = directionInfo.value().pool.constEnd();
+
+                for(auto applicant = poolBegin; applicant != poolEnd; ++applicant) {
+
+                    QString studyType;
+                    QString studyForm;
+
+                    switch(applicant->first.studyType()){
+                    case StudyType::Budget:         studyType = "Общий конкурс"; break;
+                    case StudyType::Kvot:           studyType = "Квота"; break;
+                    case StudyType::CompanySponsor: studyType = "Целевое"; break;
+                    case StudyType::SpecialRight:   studyType = "Особое право"; break;
+                    }
+
+                    switch(applicant->first.studyForm()){
+                    case StudyForm::Personal:            studyForm = "Очное"; break;
+                    case StudyForm::PersonalNotPersonal: studyForm = "Очно-заочное"; break;
+                    case StudyForm::NotPersonal:         studyForm = "Заочное"; break;
+                    }
+
+                    xlsx.write(row, column++, applicant->second.id());
+                    xlsx.write(row, column++, applicant->second.FIO());
+                    xlsx.write(row, column++, applicant->first.name());
+                    xlsx.write(row, column++, applicant->first.code());
+                    xlsx.write(row, column++, applicant->first.priorityNumber());
+                    xlsx.write(row, column++, studyType);
+                    xlsx.write(row, column++, studyForm);
+                    xlsx.write(row, column++, (applicant->first.isBVI() ? "БВИ" : "не БВИ"));
+                    xlsx.write(row, column++, applicant->first.egeScore());
+                    xlsx.write(row, column++, applicant->first.subjectScores()[0]);
+                    xlsx.write(row, column++, applicant->first.subjectScores()[1]);
+                    xlsx.write(row, column++, applicant->first.subjectScores()[2]);
+
+                    column = 1;
+                    row += 1;
+                }
+            }
+        }
+    }
+
+    QString savePath = APP_CACHE_PATH +
+                       "/cache_" +
+                       QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") +
+                       "_" + tableName;
+
+    if(xlsx.saveAs(savePath)) {
+        qDebug() << "CACHING DONE SUCCESFUL";
+    }
+    else {
+        qDebug() << "CACHING ERROR";
+    }
 
 }
 
