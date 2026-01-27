@@ -275,7 +275,7 @@ void MagicHat::printStatsToConsole() {
                  <<  (*m_facultyCells)[i].name() << "|"
                  << QString::number((*m_facultyCells)[i].pool().size()) +
                     "/" +
-                    QString::number(m_facultyCells[i].capacity()) << "|"
+                        QString::number((*m_facultyCells)[i].capacity()) << "|"
                  << type << "|"
                  << form
                  << "----<";

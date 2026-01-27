@@ -47,7 +47,7 @@ signals:
 private:
     void readCache(const QString& tableName);
     void makeCache(const QString& tableName);
-    UniversityData* makeDataForCaching(QList<FacultyCell>* faculties);
+    UniversityData* makeDataForCaching(QList<FacultyCell>* directions);
     void makeCacheTable(UniversityData* data, const QString& tableName);
     
     void fileChanged(const QString& path);

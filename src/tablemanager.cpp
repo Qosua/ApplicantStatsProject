@@ -22,6 +22,7 @@ void TableManager::processTable(const QString& tableName) {
     QDir cacheDir(APP_CACHE_PATH);
     
     QStringList cacheEntr = cacheDir.entryList();
+    QString stringDateTime = fileInfo.lastModified().toString("yyyy-MM-dd-hh-mm-ss");
     
     for(const QString& entry : std::as_const(cacheEntr)) {
         
@@ -30,15 +31,12 @@ void TableManager::processTable(const QString& tableName) {
         if(parts[0] != "cache" or parts[2] != tableName)
             continue;
         
-        QString stringDateTime = fileInfo.lastModified().toString("yyyy-MM-dd-hh-mm-ss");
-        
         if(parts[1] == stringDateTime) {
             readCache(tableName);
             return;
         }
     }
-    
-    //TODO: Take in account file date
+
     makeCache(tableName);
     
 }
@@ -47,7 +45,49 @@ void TableManager::readCache(const QString& tableName) {
     emit waitForFinish();
     
     UniversityData* data = new UniversityData;
-    
+    QFileInfo fileInfo(APP_DATA_PATH + "/" + tableName);
+    QString stringDateTime = fileInfo.lastModified().toString("yyyy-MM-dd-hh-mm-ss");
+
+    QXlsx::Document xlsx(APP_CACHE_PATH + "/cache_" + stringDateTime + "_" + tableName);
+    QStringList sheetNames = xlsx.sheetNames();
+
+    for(const QString& sheetName : sheetNames) {
+
+        xlsx.selectSheet(sheetName);
+
+        for(int i = 1; xlsx.read(i, 1).isValid(); ++i) {
+
+            int id =                xlsx.read(i, 1).toInt();
+            QString FIO =           xlsx.read(i, 2).toString();
+            QString directionName = xlsx.read(i, 3).toString();
+            QString code =          xlsx.read(i, 4).toString();
+            int prirityNumber =     xlsx.read(i, 5).toInt();
+            QString studyTypeStr =  xlsx.read(i, 6).toString();
+            QString studyFormStr =  xlsx.read(i, 7).toString();
+            bool isBVI =            (xlsx.read(i, 8).toString() == "БВИ" ? true : false);
+            int egeSum =            xlsx.read(i, 9).toInt();
+            int subj1 =             xlsx.read(i, 10).toInt();
+            int subj2 =             xlsx.read(i, 11).toInt();
+            int subj3 =             xlsx.read(i, 12).toInt();
+
+            StudyForm form = StudyForm::Error;
+            StudyType type = StudyType::Error;
+
+            if(studyFormStr == "Очное") form = StudyForm::Personal;
+            else if(studyFormStr == "Очно-заочное") form = StudyForm::PersonalNotPersonal;
+            else if(studyFormStr == "Заочное") form = StudyForm::NotPersonal;
+
+            if(studyTypeStr == "Общий конкурс") type = StudyType::Budget;
+            else if(studyTypeStr == "Отдельная квота") type = StudyType::Kvot;
+            else if(studyTypeStr == "Целевое") type = StudyType::CompanySponsor;
+            else if(studyTypeStr == "Особое право") type = StudyType::SpecialRight;
+
+
+
+
+
+        }
+    }
     
     
     emit finished(data);
@@ -85,11 +125,11 @@ void TableManager::makeCache(const QString& tableName) {
     emit finished(data);
 }
 
-UniversityData* TableManager::makeDataForCaching(QList<FacultyCell> *faculties) {
+UniversityData* TableManager::makeDataForCaching(QList<FacultyCell> *directions) {
 
     UniversityData* data = new UniversityData;
 
-    for(auto& direction : *faculties) {
+    for(const auto& direction : std::as_const(*directions)) {
 
         auto& currentElem = (*data)[direction.division()]
                                    [direction.name()]
@@ -102,7 +142,6 @@ UniversityData* TableManager::makeDataForCaching(QList<FacultyCell> *faculties) 
         }
         else {
 
-            currentElem.name = direction.name();
             currentElem.size += direction.pool().size();
             currentElem.studentsCount += direction.capacity();
         }
@@ -112,15 +151,8 @@ UniversityData* TableManager::makeDataForCaching(QList<FacultyCell> *faculties) 
         if(direction.pool().isEmpty() or direction.studyType() != StudyType::Budget)
             continue;
 
-        currentElem.maxScore = std::max(
-            direction.pool().last().first.egeScore(),
-            currentElem.maxScore
-        );
-
-        currentElem.minScore = std::min(
-            direction.pool().first().first.egeScore(),
-            currentElem.minScore
-        );
+        currentElem.maxScore = std::max(direction.pool().last().first.egeScore(), currentElem.maxScore);
+        currentElem.minScore = std::min(direction.pool().first().first.egeScore(), currentElem.minScore);
     }
 
     return data;
@@ -129,6 +161,8 @@ UniversityData* TableManager::makeDataForCaching(QList<FacultyCell> *faculties) 
 void TableManager::makeCacheTable(UniversityData *data, const QString& tableName) {
 
     QXlsx::Document xlsx;
+    QFileInfo fileInfo(APP_DATA_PATH + "/" + tableName);
+    QString stringDateTime = fileInfo.lastModified().toString("yyyy-MM-dd-hh-mm-ss");
 
     for(auto faculty = data->constBegin(); faculty != data->constEnd(); ++faculty) {
 
@@ -158,7 +192,7 @@ void TableManager::makeCacheTable(UniversityData *data, const QString& tableName
 
                     switch(applicant->first.studyType()){
                     case StudyType::Budget:         studyType = "Общий конкурс"; break;
-                    case StudyType::Kvot:           studyType = "Квота"; break;
+                    case StudyType::Kvot:           studyType = "Отдельная квота"; break;
                     case StudyType::CompanySponsor: studyType = "Целевое"; break;
                     case StudyType::SpecialRight:   studyType = "Особое право"; break;
                     }
@@ -171,7 +205,7 @@ void TableManager::makeCacheTable(UniversityData *data, const QString& tableName
 
                     xlsx.write(row, column++, applicant->second.id());
                     xlsx.write(row, column++, applicant->second.FIO());
-                    xlsx.write(row, column++, applicant->first.name());
+                    xlsx.write(row, column++, directionInfo.value().name);
                     xlsx.write(row, column++, applicant->first.code());
                     xlsx.write(row, column++, applicant->first.priorityNumber());
                     xlsx.write(row, column++, studyType);
@@ -189,10 +223,7 @@ void TableManager::makeCacheTable(UniversityData *data, const QString& tableName
         }
     }
 
-    QString savePath = APP_CACHE_PATH +
-                       "/cache_" +
-                       QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss") +
-                       "_" + tableName;
+    QString savePath = APP_CACHE_PATH + "/cache_" + stringDateTime + "_" + tableName;
 
     if(xlsx.saveAs(savePath)) {
         qDebug() << "CACHING DONE SUCCESFUL";
