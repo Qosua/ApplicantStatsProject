@@ -1,6 +1,5 @@
 #include "main-widget.h"
-
-#include "ui_mainwidget.h"
+#include "ui_main-widget.h"
 
 MainWidget::MainWidget() : ui(new Ui::MainWidget) {
 

@@ -4,10 +4,13 @@
 #include <QFileSystemWatcher>
 #include <QHash>
 #include <QString>
+#include <QDir>
 
 #include "../applicants-faculthy-data/faculthy-direction.h"
 #include "../applicants-faculthy-data/table-parser-bachelor.h"
 #include "magic-hat.h"
+#include "../applicants-faculthy-data/namespaces.h"
+#include "../data-processing/support-system.h"
 
 struct DirectionInfo {
 

@@ -16,7 +16,6 @@ set(Qt6_DIR "${CMAKE_PREFIX_PATH}/lib/cmake/Qt6")
 add_subdirectory(libs)
 include(FetchContent)
 
-
 find_package(Qt6 COMPONENTS
         Core
         Gui
@@ -24,23 +23,40 @@ find_package(Qt6 COMPONENTS
         Charts
         REQUIRED)
 
-file(GLOB_RECURSE SOURCES "src/*.cpp")
-
 add_executable(ApplicantStatsProject
-        ${SOURCES}
+
+        src/gui/main-widget.ui
+
+        src/xlsx.h
+        src/gui/window-manager.h
+        src/gui/main-widget.h
+        src/data-processing/table-manager.h
+        src/data-processing/support-system.h
+        src/data-processing/magic-hat.h
+        src/applicants-faculthy-data/table-parser-bachelor.h
+        src/applicants-faculthy-data/namespaces.h
+        src/applicants-faculthy-data/faculthy-direction.h
+        src/applicants-faculthy-data/applicant.h
+
+        src/main.cpp
+        src/gui/window-manager.cpp
+        src/gui/main-widget.cpp
+        src/data-processing/table-manager.cpp
+        src/data-processing/support-system.cpp
+        src/data-processing/magic-hat.cpp
+        src/applicants-faculthy-data/table-parser-bachelor.cpp
+        src/applicants-faculthy-data/faculthy-direction.cpp
+        src/applicants-faculthy-data/applicant.cpp
+
         resources.qrc
-)
-target_include_directories(ApplicantStatsProject
-        PRIVATE ${CMAKE_SOURCE_DIR}
-        PRIVATE ${CMAKE_SOURCE_DIR}/src
 )
 target_link_libraries(ApplicantStatsProject PRIVATE
         Qt6::Core
         Qt6::Gui
         Qt6::Widgets
+        QXlsx::QXlsx
         Qt6::Charts
         $<$<PLATFORM_ID:Windows>:dwmapi>
-        QXlsx::QXlsx
 )
 
 if (WIN32)

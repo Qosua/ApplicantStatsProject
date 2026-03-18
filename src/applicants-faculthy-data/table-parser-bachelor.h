@@ -10,7 +10,7 @@
 
 #include "applicant.h"
 #include "namespaces.h"
-#include "src/xlsx.h"
+#include "../xlsx.h"
 
 class TableParserBachelor {
     

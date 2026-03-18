@@ -3,8 +3,8 @@
 /libs
 *.xlsx
 *.xls
-!/settings/KCP.xlsx
-!/settings/columnsNames.xlsx
+!/config/KCP.xlsx
+!/config/columnsNames.xlsx
 /.qtcreator
 *.user.*
 *.user`

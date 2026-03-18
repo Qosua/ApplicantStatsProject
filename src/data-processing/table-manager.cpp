@@ -1,4 +1,4 @@
-#include "../tablemanager.h"
+#include "table-manager.h"
 
 TableManager::TableManager() {}
 
@@ -116,7 +116,7 @@ void TableManager::makeCache(const QString& tableName) {
     //magicHatBachelor.printStatsToConsole();
     //magicHatBachelor.printUncountedApplicants();
     
-    QList<FacultyCell>* faculties = magicHatBachelor.faculties();
+    QList<Direction>* faculties = magicHatBachelor.faculties();
     //QList<Applicant>   uncountedApplicants = magicHatBachelor.uncountedApplicants();
 
     UniversityData* data = makeDataForCaching(faculties);
@@ -125,7 +125,7 @@ void TableManager::makeCache(const QString& tableName) {
     emit finished(data);
 }
 
-UniversityData* TableManager::makeDataForCaching(QList<FacultyCell> *directions) {
+UniversityData* TableManager::makeDataForCaching(QList<Direction> *directions) {
 
     UniversityData* data = new UniversityData;
 

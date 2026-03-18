@@ -1,13 +1,13 @@
-#include "src/facultycell.h"
+#include "faculthy-direction.h"
 
-FacultyCell::FacultyCell() {}
+Direction::Direction() {}
 
-FacultyCell::FacultyCell(const FacultyCell &copy) {
+Direction::Direction(const Direction &copy) {
 
     *this = copy;
 }
 
-void FacultyCell::operator=(const FacultyCell &copy) {
+void Direction::operator=(const Direction &copy) {
 
     m_capacity = copy.m_capacity;
     m_name = copy.m_name;
@@ -18,79 +18,79 @@ void FacultyCell::operator=(const FacultyCell &copy) {
     m_division = copy.m_division;
 }
 
-QString FacultyCell::name() const {
+QString Direction::name() const {
     return m_name;
 }
 
-void FacultyCell::setName(const QString &newName) {
+void Direction::setName(const QString &newName) {
     if (m_name == newName)
         return;
     m_name = newName;
     emit nameChanged();
 }
 
-QString FacultyCell::division() const {
+QString Direction::division() const {
     return m_division;  
 }
 
-void FacultyCell::setDivision(const QString &newName) {
+void Direction::setDivision(const QString &newName) {
     m_division = newName;
 }
 
-int FacultyCell::capacity() const {
+int Direction::capacity() const {
     return m_capacity;
 }
 
-void FacultyCell::setCapacity(int newCapacity) {
+void Direction::setCapacity(int newCapacity) {
     if (m_capacity == newCapacity)
         return;
     m_capacity = newCapacity;
     emit capacityChanged();
 }
 
-QString FacultyCell::code() const {
+QString Direction::code() const {
     return m_code;
 }
 
-void FacultyCell::setCode(const QString &newCode) {
+void Direction::setCode(const QString &newCode) {
     if (m_code == newCode)
         return;
     m_code = newCode;
     emit codeChanged();
 }
 
-StudyForm FacultyCell::studyForm() const {
+StudyForm Direction::studyForm() const {
     return m_studyForm;
 }
 
-void FacultyCell::setStudyForm(const StudyForm &newStudyForm) {
+void Direction::setStudyForm(const StudyForm &newStudyForm) {
     if (m_studyForm == newStudyForm)
         return;
     m_studyForm = newStudyForm;
     emit studyFormChanged();
 }
 
-StudyType FacultyCell::studyType() const {
+StudyType Direction::studyType() const {
     return m_studyType;
 }
 
-void FacultyCell::setStudyType(const StudyType &newType) {
+void Direction::setStudyType(const StudyType &newType) {
     if (m_studyType == newType)
         return;
     m_studyType = newType;
     emit typeChanged();
 }
 
-QList<QPair<PriorityInfo, Applicant>> FacultyCell::pool() const {
+QList<QPair<PriorityInfo, Applicant>> Direction::pool() const {
     return m_pool;
 }
 
-void FacultyCell::setPool(const QList<QPair<PriorityInfo, Applicant>> &newPool) {
+void Direction::setPool(const QList<QPair<PriorityInfo, Applicant>> &newPool) {
     m_pool = newPool;
     emit poolChanged();
 }
 
-void FacultyCell::addToPool(const PriorityInfo &priority, const Applicant &applicant) {
+void Direction::addToPool(const PriorityInfo &priority, const Applicant &applicant) {
     
     m_pool.append({priority, applicant});
     
@@ -102,7 +102,7 @@ void FacultyCell::addToPool(const PriorityInfo &priority, const Applicant &appli
     
 }
 
-bool FacultyCell::isAbleToAdd(PriorityInfo priority) {
+bool Direction::isAbleToAdd(PriorityInfo priority) {
     
     if(m_capacity <= 0)
         return false;
@@ -128,7 +128,7 @@ bool FacultyCell::isAbleToAdd(PriorityInfo priority) {
     
 }
 
-QPair<PriorityInfo, Applicant*> FacultyCell::getUnsuitableApplicant() {
+QPair<PriorityInfo, Applicant*> Direction::getUnsuitableApplicant() {
     
     if(m_pool.size() > m_capacity){
         
@@ -144,7 +144,7 @@ QPair<PriorityInfo, Applicant*> FacultyCell::getUnsuitableApplicant() {
     return {PriorityInfo(), nullptr};
 }
 
-int FacultyCell::getPoolSize() {
+int Direction::getPoolSize() {
 
     return m_pool.size();
 }

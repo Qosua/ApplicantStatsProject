@@ -1,16 +1,18 @@
-#ifndef MAINWIDGET_H
+    #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
 #include <QListWidgetItem>
 #include <QPushButton>
 #include <QTabWidget>
 #include <QWidget>
+#include <QDesktopServices>
+#include <QDragEnterEvent>
+#include <QMimeData>
 
 #include "../applicants-faculthy-data/applicant.h"
 #include "../data-processing/table-manager.h"
 
 struct uiCell {
-
     QPushButton* btn;
     QTabWidget* tabWidget;
 };
@@ -27,9 +29,11 @@ const QString facultiesNamesList[] = {"Факультет биологии и э
                                       "Экономический факультет",
                                       "Юридический факультет"};
 
+QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWidget;
 }
+QT_END_NAMESPACE
 
 class MainWidget : public QWidget {
     Q_OBJECT

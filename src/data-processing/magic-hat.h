@@ -5,7 +5,7 @@
 
 #include "../applicants-faculthy-data/applicant.h"
 #include "../applicants-faculthy-data/faculthy-direction.h"
-#include "src/xlsx.h"
+#include "../xlsx.h"
 
 class MagicHat : public QObject {
     Q_OBJECT

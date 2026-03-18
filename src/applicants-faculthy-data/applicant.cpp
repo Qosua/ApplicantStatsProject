@@ -1,4 +1,4 @@
-#include "src/applicants-faculthy-data/applicant.h"
+#include "applicant.h"
 
 #include "qdebug.h"
 

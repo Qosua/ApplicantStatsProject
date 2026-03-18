@@ -1,4 +1,4 @@
-#include "src/tableparserbachelor.h"
+#include "table-parser-bachelor.h"
 
 TableParserBachelor::TableParserBachelor() {}
 

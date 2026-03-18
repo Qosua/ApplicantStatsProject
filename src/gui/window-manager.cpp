@@ -1,4 +1,3 @@
-#include "ui_mainwidget.h"
 #include "window-manager.h"
 
 WindowManager::WindowManager() {
