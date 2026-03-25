@@ -33,10 +33,11 @@ add_executable(ApplicantStatsProject
         src/data-processing/table-manager.h
         src/data-processing/support-system.h
         src/data-processing/magic-hat.h
-        src/applicants-faculthy-data/table-parser-bachelor.h
-        src/applicants-faculthy-data/namespaces.h
-        src/applicants-faculthy-data/faculthy-direction.h
-        src/applicants-faculthy-data/applicant.h
+        src/applicants-faculty-data/table-parser-bachelor.h
+        src/applicants-faculty-data/namespaces.h
+        src/applicants-faculty-data/faculty-direction.h
+        src/applicants-faculty-data/applicant.h
+        src/applicants-faculty-data/priority-info.h
 
         src/main.cpp
         src/gui/window-manager.cpp
@@ -44,9 +45,10 @@ add_executable(ApplicantStatsProject
         src/data-processing/table-manager.cpp
         src/data-processing/support-system.cpp
         src/data-processing/magic-hat.cpp
-        src/applicants-faculthy-data/table-parser-bachelor.cpp
-        src/applicants-faculthy-data/faculthy-direction.cpp
-        src/applicants-faculthy-data/applicant.cpp
+        src/applicants-faculty-data/table-parser-bachelor.cpp
+        src/applicants-faculty-data/faculty-direction.cpp
+        src/applicants-faculty-data/applicant.cpp
+        src/applicants-faculty-data/priority-info.cpp
 
         resources.qrc
 )

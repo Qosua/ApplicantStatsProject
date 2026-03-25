@@ -1,15 +1,15 @@
-    #ifndef MAINWIDGET_H
+#ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
+#include <QDesktopServices>
+#include <QDragEnterEvent>
 #include <QListWidgetItem>
+#include <QMimeData>
 #include <QPushButton>
 #include <QTabWidget>
 #include <QWidget>
-#include <QDesktopServices>
-#include <QDragEnterEvent>
-#include <QMimeData>
 
-#include "../applicants-faculthy-data/applicant.h"
+#include "../applicants-faculty-data/applicant.h"
 #include "../data-processing/table-manager.h"
 
 struct uiCell {
@@ -39,37 +39,38 @@ class MainWidget : public QWidget {
     Q_OBJECT
 public:
     MainWidget();
-    ~MainWidget();
+    ~MainWidget() override;
 
-    void loadTablesToUi(QList<QString> list);
-    void stopWaiting(UniversityData* data);
-    void wait();
+    void getProceededTable(QList<FacultyDirection>* data);
+    void loadTablesToUi(QList<QString> list) const;
+
+    void stopWaiting() const;
+    void wait() const;
 
 signals:
-    void sendTable(const QString& tableName);
+    void sendTablePathToProcess(const QString& tableName);
 
 private:
     void updateUi();
-    void setInfoToWidget(QWidget* widget, const QList<DirectionInfo>& directionInfo);
 
-    void saveTable(QString path);
-    void openDataFolder();
+    static void saveTable(const QString& path);
+    static void openDataFolder();
     void sortTables();
-    void chooseTable(QListWidgetItem* item);
+    void chooseTable(const QListWidgetItem* item);
 
-    void resetButtonsColor(int execption);
+    void resetButtonsColor(int exception) const;
 
     bool sortOrder = true;
-    QList<Direction> m_faculties;
+    QList<FacultyDirection> m_faculties;
     QHash<QString, uiCell> uiCells;
 
     Ui::MainWidget* ui = nullptr;
-    UniversityData* currentData = nullptr;
+    QList<FacultyDirection>* currentData = nullptr;
 
 protected:
-    void dragEnterEvent(QDragEnterEvent* event);
-    void dropEvent(QDropEvent* event);
-    void dragMoveEvent(QDragMoveEvent* event);
+    void dragEnterEvent(QDragEnterEvent* event) override;
+    void dropEvent(QDropEvent* event) override;
+    void dragMoveEvent(QDragMoveEvent* event) override;
 };
 
 #endif  // MAINWIDGET_H

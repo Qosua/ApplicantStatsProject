@@ -1,4 +1,5 @@
 #include "main-widget.h"
+
 #include "ui_main-widget.h"
 
 MainWidget::MainWidget() : ui(new Ui::MainWidget) {
@@ -118,35 +119,27 @@ MainWidget::~MainWidget() { delete ui; }
 
 void MainWidget::updateUi() {
 
-    for (const QString &name : facultiesNamesList) {
 
-	QList<QString> directionsNames = (*currentData)[name].keys();
 
-	for (const QString &directionName : directionsNames) {
-
-	    QWidget *widget = new QWidget;
-	    uiCells[name].tabWidget->addTab(widget, directionName);
-	}
-    }
 }
 
-void MainWidget::saveTable(QString path) {
+void MainWidget::saveTable(const QString &path) {
 
-    QString name = path.split('/').last();
+    const QString name = path.split('/').last();
 
     QFile file(path);
-    file.copy(APP_DATA_PATH + "/" + name);
+    file.copy(SupportSystem::appDataPath + "/" + name);
 }
 
-void MainWidget::loadTablesToUi(QList<QString> list) {
+void MainWidget::loadTablesToUi(QList<QString> list) const {
 
     this->ui->tablesWidget->clear();
 
-    for (const QString &entry : list) {
+    for (const QString &tableName : list) {
 
-	QListWidgetItem *item = new QListWidgetItem;
-	item->setText(entry);
-	item->setIcon(QIcon(":/icons/exelicon.png"));
+	auto item = new QListWidgetItem;
+	item->setText(tableName);
+	item->setIcon(QIcon(":/icons/excel-icon.png"));
 	item->setBackground(QBrush(QColor("#212121")));
 
 	this->ui->tablesWidget->addItem(item);
@@ -158,9 +151,11 @@ void MainWidget::loadTablesToUi(QList<QString> list) {
 	this->ui->tablesWidget->sortItems(Qt::DescendingOrder);
 }
 
-void MainWidget::wait() { this->ui->tablesWidget->setEnabled(false); }
+void MainWidget::wait() const { this->ui->tablesWidget->setEnabled(false); }
 
-void MainWidget::stopWaiting(UniversityData *data) {
+void MainWidget::stopWaiting() const { this->ui->tablesWidget->setEnabled(true); }
+
+void MainWidget::getProceededTable(QList<FacultyDirection> *data) {
 
     if (currentData)
 	delete currentData;
@@ -168,11 +163,9 @@ void MainWidget::stopWaiting(UniversityData *data) {
     currentData = data;
 
     updateUi();
-
-    this->ui->tablesWidget->setEnabled(true);
 }
 
-void MainWidget::openDataFolder() { QDesktopServices::openUrl(APP_DATA_PATH); }
+void MainWidget::openDataFolder() { QDesktopServices::openUrl(SupportSystem::appDataPath); }
 
 void MainWidget::sortTables() {
 
@@ -184,18 +177,18 @@ void MainWidget::sortTables() {
     this->sortOrder = !this->sortOrder;
 }
 
-void MainWidget::chooseTable(QListWidgetItem *item) {
+void MainWidget::chooseTable(const QListWidgetItem *item) {
 
-    if (!QFile::exists(APP_DATA_PATH + "/" + item->text()))
+    if (!QFile::exists(SupportSystem::appDataPath + "/" + item->text()))
 	return;
 
-    this->ui->currentFileLabel->setText("Текущая открытая таблица: " + APP_DATA_PATH + "/" +
+    this->ui->currentFileLabel->setText("Текущая открытая таблица: " + SupportSystem::appDataPath + "/" +
                                         item->text());
 
-    emit sendTable(item->text());
+    emit sendTablePathToProcess(item->text());
 }
 
-void MainWidget::resetButtonsColor(int execption) {
+void MainWidget::resetButtonsColor(const int exception) const {
 
     ui->bioBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
     ui->ivtBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
@@ -210,7 +203,7 @@ void MainWidget::resetButtonsColor(int execption) {
     ui->urBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
     ui->generalBtn->setStyleSheet("background-color: 2d2d2d; color: #ffffff;");
 
-    switch (execption) {
+    switch (exception) {
 	case 0:
 	    ui->bioBtn->setStyleSheet("background-color: #252525; color: #999999;");
 	    break;
@@ -247,6 +240,8 @@ void MainWidget::resetButtonsColor(int execption) {
 	case 11:
 	    ui->generalBtn->setStyleSheet("background-color: #252525; color: #999999;");
 	    break;
+	default:;
+	    break;
     }
 }
 
@@ -260,18 +255,13 @@ void MainWidget::dragEnterEvent(QDragEnterEvent *event) {
 
 void MainWidget::dropEvent(QDropEvent *event) {
 
-    const QMimeData *mimeData = event->mimeData();
+    if (const auto mimeData = event->mimeData(); mimeData->hasUrls()) {
 
-    if (mimeData->hasUrls()) {
-
-	QList<QUrl> urlList = mimeData->urls();
-
-	for (const QUrl &url : urlList) {
+	for (auto urlList = mimeData->urls(); const QUrl &url : urlList) {
 
 	    QString filePath = url.toLocalFile();
-	    QStringList partialUrl = filePath.split('.');
 
-	    if (partialUrl.last() == "xlsx")
+	    if (auto partialUrl = filePath.split('.'); partialUrl.last() == "xlsx")
 		saveTable(filePath);
 	}
 	event->acceptProposedAction();

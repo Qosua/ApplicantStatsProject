@@ -3,8 +3,8 @@
 
 #include <QFile>
 
-#include "../applicants-faculthy-data/applicant.h"
-#include "../applicants-faculthy-data/faculthy-direction.h"
+#include "../applicants-faculty-data/applicant.h"
+#include "../applicants-faculty-data/faculty-direction.h"
 #include "../xlsx.h"
 
 class MagicHat : public QObject {
@@ -14,7 +14,7 @@ public:
 
     QList<Applicant> applicantsList() const;
     QList<Applicant> uncountedApplicants() const;
-    QList<Direction> *faculties() const;
+    QList<FacultyDirection> *faculties() const;
 
     void setApplicantsList(QList<Applicant> *newApplicantsList);
     void setKCP(const QString &path, const QString &sheet);
@@ -32,6 +32,6 @@ private:
     QList<Applicant> m_applicantsListCopy;
     QList<Applicant> m_applicantsList;
     QList<Applicant> m_uncountedApplicants;
-    QList<Direction> *m_facultyCells;
+    QList<FacultyDirection> *m_facultyCells;
 };
 #endif  // MAGICHAT_H

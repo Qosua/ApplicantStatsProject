@@ -1,6 +1,6 @@
 /cmake-build-debug
-/data
 /libs
+/.idea
 *.xlsx
 *.xls
 !/config/KCP.xlsx

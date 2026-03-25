@@ -1,6 +1,6 @@
 #include "magic-hat.h"
 
-MagicHat::MagicHat() { m_facultyCells = new QList<Direction>; }
+MagicHat::MagicHat() { m_facultyCells = new QList<FacultyDirection>; }
 
 QList<Applicant> MagicHat::applicantsList() const { return m_applicantsList; }
 
@@ -50,7 +50,7 @@ void MagicHat::startPriorityRoundSimulation() {
 	bool deletePriority = true;
 	for (int j = 0; j < m_facultyCells->size(); ++j) {
 
-	    Direction* facultyCell = &(*m_facultyCells)[j];
+	    FacultyDirection* facultyCell = &(*m_facultyCells)[j];
 
 	    if (facultyCell->isAbleToAdd(priority)) {
 
@@ -135,7 +135,7 @@ void MagicHat::startGeneralRoundSimulation() {
 	bool deletePriority = true;
 	for (int j = 0; j < m_facultyCells->size(); ++j) {
 
-	    Direction* facultyCell = &(*m_facultyCells)[j];
+	    FacultyDirection* facultyCell = &(*m_facultyCells)[j];
 
 	    if (facultyCell->isAbleToAdd(tempPriority)) {
 
@@ -443,7 +443,7 @@ void MagicHat::setKCP(const QString& path, const QString& sheet) {
 	QString type = doc.read(i, 5).toString();
 	QString kcp = doc.read(i, 6).toString();
 
-	m_facultyCells->append(Direction());
+	m_facultyCells->append(FacultyDirection());
 	m_facultyCells->last().setName(name);
 	m_facultyCells->last().setDivision(division);
 	m_facultyCells->last().setCode(code);
@@ -475,7 +475,7 @@ void MagicHat::setKCP(const QString& path, const QString& sheet) {
     }
 }
 
-QList<Direction>* MagicHat::faculties() const { return m_facultyCells; }
+QList<FacultyDirection>* MagicHat::faculties() const { return m_facultyCells; }
 
 void MagicHat::printFaculties() {
 

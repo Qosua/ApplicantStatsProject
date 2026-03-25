@@ -1,51 +1,38 @@
 #ifndef TABLEMANAGER_H
 #define TABLEMANAGER_H
 
+#include <QDir>
 #include <QFileSystemWatcher>
 #include <QHash>
 #include <QString>
-#include <QDir>
 
-#include "../applicants-faculthy-data/faculthy-direction.h"
-#include "../applicants-faculthy-data/table-parser-bachelor.h"
-#include "magic-hat.h"
-#include "../applicants-faculthy-data/namespaces.h"
+#include "../applicants-faculty-data/faculty-direction.h"
+#include "../applicants-faculty-data/namespaces.h"
+#include "../applicants-faculty-data/table-parser-bachelor.h"
 #include "../data-processing/support-system.h"
-
-struct DirectionInfo {
-
-    int size = 0;
-    int studentsCount = 0;
-    int minScore = 500;
-    int maxScore = 0;
-    QString name;
-    QList<QPair<PriorityInfo, Applicant>> pool;
-};
-
-typedef QHash<QString,                // Faculty name
-              QHash<QString,          // Direction name
-                    QHash<StudyForm,  // Personly, Personaly-NotPersonaly,...
-                          DirectionInfo>>>
-    UniversityData;
+#include "magic-hat.h"
 
 class TableManager : public QObject {
     Q_OBJECT
 public:
     TableManager();
+    ~TableManager();
 
     void init();
-    void processTable(const QString& tableName);
 
 signals:
     void sendTableList(QList<QString> list);
+    void processTable(const QString& tableName);
+    void sendProceededData(QList<FacultyDirection>* data);
     void waitForFinish();
-    void finished(UniversityData* data);
+    void finished();
 
 private:
-    void readCache(const QString& tableName);
-    void makeCache(const QString& tableName);
-    UniversityData* makeDataForCaching(QList<Direction>* directions);
-    void makeCacheTable(UniversityData* data, const QString& tableName);
+    void processTableHandle(const QString& tableName);
+    QList<FacultyDirection>* readCache(const QString& tableName);
+    QList<FacultyDirection>* makeCache(const QString& tableName);
+    //QList<FacultyDirection>* makeDataForCaching(QList<FacultyDirection>* directions);
+    //void makeCacheTable(QList<Applicant>* data, const QString& tableName);
 
     void fileChanged(const QString& path);
     void directoryChanged(const QString& path);

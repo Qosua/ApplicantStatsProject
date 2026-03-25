@@ -1,5 +1,5 @@
-#ifndef FACULTYCELL_H
-#define FACULTYCELL_H
+#ifndef FACULTY_DIRECTION_H
+#define FACULTY_DIRECTION_H
 
 #include <QDebug>
 #include <QObject>
@@ -9,14 +9,12 @@
 #include "applicant.h"
 #include "namespaces.h"
 
-class Direction : public QObject {
-
-    Q_OBJECT
+class FacultyDirection {
 
 public:
-    Direction();
-    Direction(const Direction &copy);
-    void operator=(const Direction &copy);
+    FacultyDirection();
+    FacultyDirection(const FacultyDirection &copy);
+    void operator=(const FacultyDirection &copy);
 
     QString name() const;
     void setName(const QString &newName);
@@ -46,15 +44,6 @@ public:
 
     int getPoolSize();
 
-signals:
-    void divisionChanged();
-    void nameChanged();
-    void capacityChanged();
-    void codeChanged();
-    void studyFormChanged();
-    void typeChanged();
-    void poolChanged();
-
 private:
     int m_capacity;
     QString m_division;
@@ -65,4 +54,4 @@ private:
     QList<QPair<PriorityInfo, Applicant>> m_pool;
 };
 
-#endif  // FACULTYCELL_H
+#endif  // FACULTY_DIRECTION_H
