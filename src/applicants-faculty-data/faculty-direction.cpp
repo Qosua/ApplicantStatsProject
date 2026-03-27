@@ -17,11 +17,7 @@ void FacultyDirection::operator=(const FacultyDirection &copy) {
 
 QString FacultyDirection::name() const { return m_name; }
 
-void FacultyDirection::setName(const QString &newName) {
-    if (m_name == newName)
-	return;
-    m_name = newName;
-}
+void FacultyDirection::setName(const QString &newName) { m_name = newName; }
 
 QString FacultyDirection::division() const { return m_division; }
 
@@ -29,35 +25,19 @@ void FacultyDirection::setDivision(const QString &newName) { m_division = newNam
 
 int FacultyDirection::capacity() const { return m_capacity; }
 
-void FacultyDirection::setCapacity(int newCapacity) {
-    if (m_capacity == newCapacity)
-	return;
-    m_capacity = newCapacity;
-}
+void FacultyDirection::setCapacity(int newCapacity) { m_capacity = newCapacity; }
 
 QString FacultyDirection::code() const { return m_code; }
 
-void FacultyDirection::setCode(const QString &newCode) {
-    if (m_code == newCode)
-	return;
-    m_code = newCode;
-}
+void FacultyDirection::setCode(const QString &newCode) { m_code = newCode; }
 
 StudyForm FacultyDirection::studyForm() const { return m_studyForm; }
 
-void FacultyDirection::setStudyForm(const StudyForm &newStudyForm) {
-    if (m_studyForm == newStudyForm)
-	return;
-    m_studyForm = newStudyForm;
-}
+void FacultyDirection::setStudyForm(const StudyForm &newStudyForm) { m_studyForm = newStudyForm; }
 
 StudyType FacultyDirection::studyType() const { return m_studyType; }
 
-void FacultyDirection::setStudyType(const StudyType &newType) {
-    if (m_studyType == newType)
-	return;
-    m_studyType = newType;
-}
+void FacultyDirection::setStudyType(const StudyType &newType) { m_studyType = newType; }
 
 QList<QPair<PriorityInfo, Applicant>> FacultyDirection::pool() const { return m_pool; }
 
@@ -81,8 +61,8 @@ bool FacultyDirection::isAbleToAdd(PriorityInfo priority) {
     if (m_capacity <= 0)
 	return false;
 
-    if (m_name != priority.name() or m_code != priority.code() or
-        m_studyForm != priority.studyForm() or m_studyType != priority.studyType()) {
+    if (m_name != priority.name() or m_code != priority.code()
+        or m_studyForm != priority.studyForm() or m_studyType != priority.studyType()) {
 	// qDebug() << "PRIORITY IN WRONG GROUP" << __FILE__ << ":" << __LINE__;
 	return false;
     }
@@ -116,3 +96,24 @@ QPair<PriorityInfo, Applicant *> FacultyDirection::getUnsuitableApplicant() {
 }
 
 int FacultyDirection::getPoolSize() { return m_pool.size(); }
+
+QDataStream &operator<<(QDataStream &out, const FacultyDirection &p) {
+    out << p.m_capacity;
+    out << p.m_name;
+    out << p.m_code;
+    out << p.m_studyForm;
+    out << p.m_studyType;
+    out << p.m_pool;
+    out << p.m_division;
+    return out;
+}
+QDataStream &operator>>(QDataStream &in, FacultyDirection &p) {
+    in >> p.m_capacity;
+    in >> p.m_name;
+    in >> p.m_code;
+    in >> p.m_studyForm;
+    in >> p.m_studyType;
+    in >> p.m_pool;
+    in >> p.m_division;
+    return in;
+}

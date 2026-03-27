@@ -7,3 +7,4 @@ AllowShortIfStatementsOnASingleLine: Never
 KeepEmptyLinesAtTheStartOfBlocks: true
 MaxEmptyLinesToKeep: 1
 AccessModifierOffset: -4
+BreakBeforeBinaryOperators: All

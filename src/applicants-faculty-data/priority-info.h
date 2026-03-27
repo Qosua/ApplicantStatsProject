@@ -1,8 +1,8 @@
 #ifndef APPLICANTSTATSPROJECT_PRIORITYINFO_H
 #define APPLICANTSTATSPROJECT_PRIORITYINFO_H
 
+#include <QDataStream>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <algorithm>
 
@@ -59,6 +59,9 @@ public:
 
     StudyType studyType() const;
     void setStudyType(const StudyType& newType);
+
+    friend QDataStream& operator<<(QDataStream& out, const PriorityInfo& p);
+    friend QDataStream& operator>>(QDataStream& in, PriorityInfo& p);
 
 private:
     int m_id;

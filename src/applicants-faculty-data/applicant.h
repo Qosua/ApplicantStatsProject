@@ -36,6 +36,9 @@ public:
     QString FIO() const;
     void setFIO(const QString& newFIO);
 
+    friend QDataStream& operator<<(QDataStream& out, const Applicant& p);
+    friend QDataStream& operator>>(QDataStream& in, Applicant& p);
+
 private:
     int m_id;
     QList<PriorityInfo> m_priorities;

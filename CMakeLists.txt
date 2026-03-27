@@ -20,7 +20,6 @@ find_package(Qt6 COMPONENTS
         Core
         Gui
         Widgets
-        Charts
         REQUIRED)
 
 add_executable(ApplicantStatsProject
@@ -57,7 +56,6 @@ target_link_libraries(ApplicantStatsProject PRIVATE
         Qt6::Gui
         Qt6::Widgets
         QXlsx::QXlsx
-        Qt6::Charts
         $<$<PLATFORM_ID:Windows>:dwmapi>
 )
 

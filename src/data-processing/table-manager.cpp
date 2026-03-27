@@ -2,45 +2,35 @@
 
 TableManager::TableManager() {}
 
-TableManager::~TableManager() {
-
-        delete watcher;
-}
+TableManager::~TableManager() { delete watcher; }
 
 void TableManager::init() {
 
     watcher = new QFileSystemWatcher;
 
-    QObject::connect(watcher, &QFileSystemWatcher::directoryChanged,
-             this, &TableManager::directoryChanged);
+    QObject::connect(watcher, &QFileSystemWatcher::directoryChanged, this,
+                     &TableManager::directoryChanged);
 
-    QObject::connect(watcher, &QFileSystemWatcher::fileChanged,
-             this, &TableManager::fileChanged);
-
-    QObject::connect(this, &TableManager::processTable,
-                    this, &TableManager::processTableHandle);
+    QObject::connect(this, &TableManager::processTable, this, &TableManager::processTableHandle);
 
     updateWatcher();
 }
 
 void TableManager::processTableHandle(const QString& tableName) {
 
-    QFileInfo fileInfo(SupportSystem::appCachePath + "/" + tableName);
     QDir cacheDir(SupportSystem::appCachePath);
-
     QList<QString> cacheEntry = cacheDir.entryList();
-    const QString stringDateTime = fileInfo.lastModified().toString("yyyy-MM-dd-hh-mm-ss");
 
     for (const QString& entry : std::as_const(cacheEntry)) {
 
-	QStringList parts = entry.split('_');
+	QList<QString> parts = entry.split('_');
 
-	if (parts[0] != "cache" or parts[2] != tableName)
+	if (parts[0] != "cache" or parts[2] != tableNameInCache(tableName))
 	    continue;
 
-	if (parts[1] == stringDateTime) {
+	if (parts[1] == tableLastChangeDate(tableName)) {
 
-	    QList<FacultyDirection>* data = readCache(tableName);
+	    QList<FacultyDirection>* data = loadCache(tableName);
 	    emit sendProceededData(data);
 	    return;
 	}
@@ -50,12 +40,23 @@ void TableManager::processTableHandle(const QString& tableName) {
     emit sendProceededData(data);
 }
 
-QList<FacultyDirection>* TableManager::readCache(const QString& tableName) {
+QList<FacultyDirection>* TableManager::loadCache(const QString& tableName) {
     emit waitForFinish();
 
-    QList<FacultyDirection>* data;
+    auto* data = new QList<FacultyDirection>();
 
+    QFile file(SupportSystem::appCachePath + +"/cache_" + tableLastChangeDate(tableName) + "_"
+               + tableNameInCache(tableName));
 
+    if (!file.open(QIODevice::ReadOnly)) {
+	qCritical() << file.errorString();
+	return nullptr;
+    }
+
+    QDataStream stream(&file);
+    stream.setVersion(QDataStream::Qt_6_8);
+
+    stream >> *data;
 
     emit finished();
     return data;
@@ -71,8 +72,8 @@ QList<FacultyDirection>* TableManager::makeCache(const QString& tableName) {
     parserBachelor.setColumnsNamesPath(":/config/columnsNames.xlsx");
     parserBachelor.parseTable();
 
-    QList<Applicant>* applicantsList =
-        parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue, StudyType::NonBudget);
+    QList<Applicant>* applicantsList
+        = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue, StudyType::NonBudget);
 
     magicHatBachelor.setKCP(":/config/KCP.xlsx", "Бакалавры");
     magicHatBachelor.setApplicantsList(applicantsList);
@@ -83,64 +84,28 @@ QList<FacultyDirection>* TableManager::makeCache(const QString& tableName) {
 
     QList<FacultyDirection>* data = magicHatBachelor.faculties();
 
+    saveCache(data, tableName);
+
     emit finished();
     return data;
 }
 
-// QList<Applicant>* TableManager::makeDataForCaching(QList<FacultyDirection>* directions) {
-//
-//     UniversityData* data = new UniversityData;
-//
-//     for (const auto& direction : std::as_const(*directions)) {
-//
-// 	auto& currentElem = (*data)[direction.division()][direction.name()][direction.studyForm()];
-//
-// 	if (direction.studyType() != StudyType::Budget) {
-//
-// 	    currentElem.size += direction.pool().size();
-// 	    currentElem.studentsCount += direction.pool().size();
-// 	} else {
-//
-// 	    currentElem.size += direction.pool().size();
-// 	    currentElem.studentsCount += direction.capacity();
-// 	}
-//
-// 	currentElem.pool += direction.pool();
-//
-// 	if (direction.pool().isEmpty() or direction.studyType() != StudyType::Budget)
-// 	    continue;
-//
-// 	currentElem.maxScore =
-// 	    std::max(direction.pool().last().first.egeScore(), currentElem.maxScore);
-// 	currentElem.minScore =
-// 	    std::min(direction.pool().first().first.egeScore(), currentElem.minScore);
-//     }
-//
-//     return data;
-// }
+void TableManager::saveCache(QList<FacultyDirection>* data, const QString& tableName) {
 
-// void TableManager::makeCacheTable(UniversityData* data, const QString& tableName) {
-//
-//     QFileInfo fileInfo(SupportSystem::appDataPath + "/" + tableName);
-//     QString stringDateTime = fileInfo.lastModified().toString("yyyy-MM-dd-hh-mm-ss");
-//
-//     QString savePath = SupportSystem::appCachePath + "/cache_" + stringDateTime + "_" + tableName;
-//     QFile someFile(savePath);
-//     someFile.open(QIODevice::WriteOnly);
-//
-//     QDataStream stream(&someFile);
-//
-//     // stream << *data;
-//
-//     someFile.close();
-// }
+    QFile file(SupportSystem::appCachePath + "/cache_" + tableLastChangeDate(tableName) + "_"
+               + tableNameInCache(tableName));
 
-void TableManager::fileChanged(const QString& path) {
-
-    if (!QFile::exists(path))
+    if (!file.open(QIODevice::WriteOnly)) {
+	qCritical() << file.errorString();
 	return;
+    }
 
-    // makeCache(path.split('/').last());
+    QDataStream stream(&file);
+    stream.setVersion(QDataStream::Qt_6_8);
+
+    stream << *data;
+
+    file.close();
 }
 
 void TableManager::directoryChanged(const QString& path) { updateWatcher(); }
@@ -159,12 +124,28 @@ void TableManager::updateWatcher() {
     for (const QString& file : std::as_const(currentFiles)) {
 
 	QString fullPath = dataDir.absoluteFilePath(file);
-	if (!watchedFiles.contains(fullPath) and !fullPath.contains('~') and
-	    !fullPath.endsWith(".tmp"))
+	if (!watchedFiles.contains(fullPath) and !fullPath.contains('~')
+	    and !fullPath.endsWith(".tmp"))
 	    watcher->addPath(fullPath);
     }
 
     watcher->addPath(SupportSystem::appDataPath + "/");
 
     emit sendTableList(currentFiles);
+}
+
+QString TableManager::tableNameInCache(const QString& tableName) {
+
+    QString tempName = tableName;
+    tempName.replace(' ', '%');
+    tempName.replace('_', '%');
+    tempName += ".bin";
+    return tempName;
+}
+
+QString TableManager::tableLastChangeDate(const QString& tableName) {
+
+    QFileInfo fileInfo(SupportSystem::appDataPath + "/" + tableName);
+    const QString stringDateTime = fileInfo.lastModified().toString("yyyy-MM-dd-hh-mm-ss");
+    return stringDateTime;
 }

@@ -3,56 +3,69 @@
 int PriorityInfo::egeAdditionalScore() const { return m_egeAdditionalScore; }
 
 void PriorityInfo::setEgeAdditionalScore(int newEgeAdditionalScore) {
-    if (m_egeAdditionalScore == newEgeAdditionalScore)
-	return;
     m_egeAdditionalScore = newEgeAdditionalScore;
 }
 
 int PriorityInfo::priorityNumber() const { return m_priorityNumber; }
 
 void PriorityInfo::setPriorityNumber(int newPriorityNumber) {
-    if (m_priorityNumber == newPriorityNumber)
-	return;
     m_priorityNumber = newPriorityNumber;
 }
 
 QString PriorityInfo::code() const { return m_code; }
 
-void PriorityInfo::setCode(const QString &newCode) {
-    if (m_code == newCode)
-	return;
-    m_code = newCode;
-}
+void PriorityInfo::setCode(const QString &newCode) { m_code = newCode; }
 
 QString PriorityInfo::name() const { return m_name; }
 
-void PriorityInfo::setName(const QString &newName) {
-    if (m_name == newName)
-	return;
-    m_name = newName;
-}
+void PriorityInfo::setName(const QString &newName) { m_name = newName; }
 
 StudyForm PriorityInfo::studyForm() const { return m_studyForm; }
 
-void PriorityInfo::setStudyForm(const StudyForm &newStudyForm) {
-    if (m_studyForm == newStudyForm)
-	return;
-    m_studyForm = newStudyForm;
-}
+void PriorityInfo::setStudyForm(const StudyForm &newStudyForm) { m_studyForm = newStudyForm; }
 
 StudyType PriorityInfo::studyType() const { return m_studyType; }
 
-void PriorityInfo::setStudyType(const StudyType &newType) {
-    if (m_studyType == newType)
-	return;
-    m_studyType = newType;
+void PriorityInfo::setStudyType(const StudyType &newType) { m_studyType = newType; }
+
+QDataStream &operator<<(QDataStream &out, const PriorityInfo &p) {
+    out << p.m_id;
+    out << p.m_egeScore;
+    out << p.m_egeAdditionalScore;
+    out << p.m_priorityNumber;
+    out << p.m_code;
+    out << p.m_name;
+    out << p.m_division;
+    out << p.m_subjectScores;
+    out << p.m_admissionFlag;
+    out << p.m_isBVI;
+    out << static_cast<qint32>(p.m_studyForm);
+    out << static_cast<qint32>(p.m_studyType);
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, PriorityInfo &p) {
+    qint32 studyForm, studyType;
+    in >> p.m_id;
+    in >> p.m_egeScore;
+    in >> p.m_egeAdditionalScore;
+    in >> p.m_priorityNumber;
+    in >> p.m_code;
+    in >> p.m_name;
+    in >> p.m_division;
+    in >> p.m_subjectScores;
+    in >> p.m_admissionFlag;
+    in >> p.m_isBVI;
+    in >> studyForm;
+    in >> studyType;
+    p.m_studyForm = static_cast<StudyForm>(studyForm);
+    p.m_studyType = static_cast<StudyType>(studyType);
+    return in;
 }
 
 QList<int> PriorityInfo::subjectScores() const { return m_subjectScores; }
 
 void PriorityInfo::setSubjectScores(const QList<int> &newSubjectScores) {
-    if (m_subjectScores == newSubjectScores)
-	return;
     m_subjectScores = newSubjectScores;
 }
 
@@ -64,35 +77,19 @@ void PriorityInfo::addSubject(int score) {
 
 int PriorityInfo::id() const { return m_id; }
 
-void PriorityInfo::setId(int newId) {
-    if (m_id == newId)
-	return;
-    m_id = newId;
-}
+void PriorityInfo::setId(int newId) { m_id = newId; }
 
 bool PriorityInfo::admissionFlag() const { return m_admissionFlag; }
 
-void PriorityInfo::setAdmissionFlag(bool newAdmissionsFlag) {
-    if (m_admissionFlag == newAdmissionsFlag)
-	return;
-    m_admissionFlag = newAdmissionsFlag;
-}
+void PriorityInfo::setAdmissionFlag(bool newAdmissionsFlag) { m_admissionFlag = newAdmissionsFlag; }
 
 bool PriorityInfo::isBVI() const { return m_isBVI; }
 
-void PriorityInfo::setIsBVI(bool newIsBVI) {
-    if (m_isBVI == newIsBVI)
-	return;
-    m_isBVI = newIsBVI;
-}
+void PriorityInfo::setIsBVI(bool newIsBVI) { m_isBVI = newIsBVI; }
 
 QString PriorityInfo::division() const { return m_division; }
 
-void PriorityInfo::setDivision(const QString &newDivision) {
-    if (m_division == newDivision)
-	return;
-    m_division = newDivision;
-}
+void PriorityInfo::setDivision(const QString &newDivision) { m_division = newDivision; }
 
 PriorityInfo::PriorityInfo() {}
 
@@ -114,13 +111,12 @@ void PriorityInfo::operator=(const PriorityInfo &copy) {
 }
 
 bool PriorityInfo::operator==(const PriorityInfo &copy) const {
-    return ((m_egeScore == copy.m_egeScore) and
-            (m_egeAdditionalScore == copy.m_egeAdditionalScore) and
-            (m_priorityNumber == copy.m_priorityNumber) and (m_code == copy.m_code) and
-            (m_name == copy.m_name) and (m_studyForm == copy.m_studyForm) and
-            (m_studyType == copy.m_studyType) and (m_subjectScores == copy.m_subjectScores) and
-            (m_id == copy.m_id) and (m_admissionFlag == copy.m_admissionFlag) and
-            (m_isBVI == copy.m_isBVI) and (m_division == copy.m_division));
+    return ((m_egeScore == copy.m_egeScore) and (m_egeAdditionalScore == copy.m_egeAdditionalScore)
+            and (m_priorityNumber == copy.m_priorityNumber) and (m_code == copy.m_code)
+            and (m_name == copy.m_name) and (m_studyForm == copy.m_studyForm)
+            and (m_studyType == copy.m_studyType) and (m_subjectScores == copy.m_subjectScores)
+            and (m_id == copy.m_id) and (m_admissionFlag == copy.m_admissionFlag)
+            and (m_isBVI == copy.m_isBVI) and (m_division == copy.m_division));
 }
 
 bool PriorityInfo::operator!=(const PriorityInfo &copy) const { return !(*this == copy); }
@@ -176,8 +172,4 @@ bool PriorityInfo::operator>=(const PriorityInfo &copy) const { return !(*this <
 
 int PriorityInfo::egeScore() const { return m_egeScore; }
 
-void PriorityInfo::setEgeScore(int newEgeScore) {
-    if (m_egeScore == newEgeScore)
-	return;
-    m_egeScore = newEgeScore;
-}
+void PriorityInfo::setEgeScore(int newEgeScore) { m_egeScore = newEgeScore; }

@@ -4,9 +4,8 @@
 #include <QDir>
 #include <QFileSystemWatcher>
 #include <QHash>
-#include <QString>
+#include <QString>#include "../applicants-faculty-data/faculty-direction.h"
 
-#include "../applicants-faculty-data/faculty-direction.h"
 #include "../applicants-faculty-data/namespaces.h"
 #include "../applicants-faculty-data/table-parser-bachelor.h"
 #include "../data-processing/support-system.h"
@@ -20,6 +19,9 @@ public:
 
     void init();
 
+    static QString tableNameInCache(const QString& tableName);
+    static QString tableLastChangeDate(const QString& tableName);
+
 signals:
     void sendTableList(QList<QString> list);
     void processTable(const QString& tableName);
@@ -29,12 +31,10 @@ signals:
 
 private:
     void processTableHandle(const QString& tableName);
-    QList<FacultyDirection>* readCache(const QString& tableName);
+    QList<FacultyDirection>* loadCache(const QString& tableName);
     QList<FacultyDirection>* makeCache(const QString& tableName);
-    //QList<FacultyDirection>* makeDataForCaching(QList<FacultyDirection>* directions);
-    //void makeCacheTable(QList<Applicant>* data, const QString& tableName);
+    void saveCache(QList<FacultyDirection>* data, const QString& tableName);
 
-    void fileChanged(const QString& path);
     void directoryChanged(const QString& path);
     void updateWatcher();
 
