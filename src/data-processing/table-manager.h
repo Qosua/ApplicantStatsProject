@@ -4,11 +4,12 @@
 #include <QDir>
 #include <QFileSystemWatcher>
 #include <QHash>
-#include <QString>#include "../applicants-faculty-data/faculty-direction.h"
+#include <QString>
 
+#include "../applicants-faculty-data/faculty-direction.h"
 #include "../applicants-faculty-data/namespaces.h"
 #include "../applicants-faculty-data/table-parser-bachelor.h"
-#include "../data-processing/support-system.h"
+#include "../support-system.h"
 #include "magic-hat.h"
 
 class TableManager : public QObject {

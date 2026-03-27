@@ -19,18 +19,16 @@ include(FetchContent)
 find_package(Qt6 COMPONENTS
         Core
         Gui
-        Widgets
+        Qml
+        Quick
+        Graphs
         REQUIRED)
 
 add_executable(ApplicantStatsProject
 
-        src/gui/main-widget.ui
-
         src/xlsx.h
-        src/gui/window-manager.h
-        src/gui/main-widget.h
         src/data-processing/table-manager.h
-        src/data-processing/support-system.h
+        src/support-system.h
         src/data-processing/magic-hat.h
         src/applicants-faculty-data/table-parser-bachelor.h
         src/applicants-faculty-data/namespaces.h
@@ -39,10 +37,8 @@ add_executable(ApplicantStatsProject
         src/applicants-faculty-data/priority-info.h
 
         src/main.cpp
-        src/gui/window-manager.cpp
-        src/gui/main-widget.cpp
         src/data-processing/table-manager.cpp
-        src/data-processing/support-system.cpp
+        src/support-system.cpp
         src/data-processing/magic-hat.cpp
         src/applicants-faculty-data/table-parser-bachelor.cpp
         src/applicants-faculty-data/faculty-direction.cpp
@@ -54,7 +50,9 @@ add_executable(ApplicantStatsProject
 target_link_libraries(ApplicantStatsProject PRIVATE
         Qt6::Core
         Qt6::Gui
-        Qt6::Widgets
+        Qt6::Qml
+        Qt6::Quick
+        Qt6::Graphs
         QXlsx::QXlsx
         $<$<PLATFORM_ID:Windows>:dwmapi>
 )

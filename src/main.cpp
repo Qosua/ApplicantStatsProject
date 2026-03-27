@@ -1,15 +1,13 @@
-#include <QApplication>
-#include <QStyleFactory>
+#include <QGuiApplication>
 
-#include "gui/window-manager.h"
+#include "support-system.h"
 
 int main(int argc, char *argv[]) {
 
-    QApplication app(argc, argv);
-    QApplication::setStyle(QStyleFactory::create("windows11"));
+    QGuiApplication app(argc, argv);
+    SupportSystem::init();
 
-    WindowManager winManager;
-    winManager.show();
+    
 
-    return QApplication::exec();
+    return QGuiApplication::exec();
 }
