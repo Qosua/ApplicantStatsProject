@@ -47,6 +47,16 @@ add_executable(ApplicantStatsProject
 
         resources.qrc
 )
+
+qt_add_qml_module(ApplicantStatsProject
+        URI ApplicantStatsProjectModule
+        VERSION 1.0
+        NO_PLUGIN
+        QML_FILES
+        src/gui_qml/Main.qml
+        src/gui_qml/StatsPage.qml
+)
+
 target_link_libraries(ApplicantStatsProject PRIVATE
         Qt6::Core
         Qt6::Gui
