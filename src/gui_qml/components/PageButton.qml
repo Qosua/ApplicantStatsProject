@@ -4,39 +4,74 @@ import QtGraphs
 import QtQuick.Controls
 import ApplicantStatsProjectModule
 
-function defineColor(hovered, chose) {
-    if(chose) {
-        return btnChoseBackgroundColor;
-    }
-    if(hovered)
-        return "red"
-
-    return ""
-
-}
-
 Button {
-    property bool isButtonChecked: false
-    property string iconSource: ""
-    property color btnBackgroundColor: "#26282b"
-    property color btnChoseBackgroundColor: "#123462"
+    function defineColor(hovered, chose) {
+        if (chose)
+            return btnChoseBackgroundColor;
+
+        if (hovered)
+            return btnHoverBackgroundColor;
+
+        return btnBackgroundColor;
+    }
+
+    property bool isBtnChecked: false
+    property string btnIconSource: ""
+    property string btnToolTipName: ""
+    property color btnBackgroundColor: "transparent"
+    property color btnChoseBackgroundColor: "#556da3"
+    property color btnHoverBackgroundColor: "#393b40"
 
     flat: true
-    icon.source: iconSource
-    icon.width: 25
-    icon.height: 25
-    icon.color: "#BBBBBB"
+    icon.source: btnIconSource
+    icon.width: 22
+    icon.height: 22
+    icon.color: "#ced0d6"
     antialiasing: true
     hoverEnabled: true
 
-    onClicked: {
-        isButtonChecked = !isButtonChecked
-    }
 
     Rectangle {
         anchors.fill: parent
-        color:  { return isButtonChecked ? btnHoverBackgroundColor : btnBackgroundColor}
+        color: { return defineColor(parent.hovered, parent.isBtnChecked)}
         radius: 8
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 100
+            }
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    HoverHandler {
+        id: hover
+    }
+    ToolTip {
+        visible: hover.hovered
+        delay: 1
+
+        x: parent.width + 6
+        y: (parent.height - height) / 2
+
+        contentItem: Text {
+            text: btnToolTipName
+            color: "#ffffff"
+            font.pixelSize: 15
+        }
+
+        background: Rectangle {
+            color: "#2b2b2b"
+            radius: 5
+            border.color: "#556da3"
+
+            Behavior on color {
+                ColorAnimation {
+                    duration: 100
+                }
+            }
+        }
     }
 
 }

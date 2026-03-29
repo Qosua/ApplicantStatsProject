@@ -8,33 +8,43 @@ SplitView {
 
     orientation: Qt.Horizontal
     handle: Rectangle {
-        implicitWidth: 6
-        implicitHeight: 6
-        color: SplitHandle.hovered ? "steelblue" : "#26282b"
+
+        implicitWidth: 3
+
+        color: SplitHandle.hovered ? "#556da3" : "transparent"
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 100
+            }
+        }
     }
 
+
     Rectangle {
-        SplitView.preferredWidth: parent.width / 3
+        SplitView.preferredWidth: parent.width / 4
         SplitView.minimumWidth: parent.width / 10
 
-        border.color: "#3e3e3e"
+        border.color: "#434343"
         border.width: 1
 
         color: "#191a1c"
-        radius: 10
+        topLeftRadius: 10
+        bottomLeftRadius: 10
 
     }
 
     Rectangle {
         id: test
-        SplitView.preferredWidth: parent.width / (2 / 3)
+        SplitView.preferredWidth: parent.width / (3 / 4)
         SplitView.minimumWidth: parent.width / 10
 
-        border.color: "#3e3e3e"
+        border.color: "#434343"
         border.width: 1
 
         color: "#191a1c"
-        radius: 10
+        topRightRadius: 10
+        bottomRightRadius: 10
 
     }
 
