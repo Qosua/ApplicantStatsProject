@@ -17,6 +17,9 @@ SplitView {
         SplitView.preferredWidth: parent.width / 3
         SplitView.minimumWidth: parent.width / 10
 
+        border.color: "#3e3e3e"
+        border.width: 1
+
         color: "#191a1c"
         radius: 10
 
@@ -26,6 +29,9 @@ SplitView {
         id: test
         SplitView.preferredWidth: parent.width / (2 / 3)
         SplitView.minimumWidth: parent.width / 10
+
+        border.color: "#3e3e3e"
+        border.width: 1
 
         color: "#191a1c"
         radius: 10

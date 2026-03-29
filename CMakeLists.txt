@@ -55,6 +55,7 @@ qt_add_qml_module(ApplicantStatsProject
         QML_FILES
         src/gui_qml/Main.qml
         src/gui_qml/StatsPage.qml
+        src/gui_qml/components/PageButton.qml
 )
 
 target_link_libraries(ApplicantStatsProject PRIVATE

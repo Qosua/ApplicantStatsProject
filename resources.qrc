@@ -5,6 +5,11 @@
         <file>resources/icons/sort-60.png</file>
         <file>resources/icons/folder-60.png</file>
         <file>resources/icons/update-60.png</file>
+        <file>resources/icons/bar-chart-100.png</file>
+        <file>resources/icons/bar-chart.png</file>
+        <file>resources/icons/settings.png</file>
+        <file>resources/icons/menu-burger.png</file>
+        <file>resources/icons/stats.png</file>
         <file>config/KCP.xlsx</file>
         <file>config/columnsNames.xlsx</file>
     </qresource>

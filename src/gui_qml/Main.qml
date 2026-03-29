@@ -16,21 +16,53 @@ Window {
     title: "UntitledProject"
 
 
+    // pages menu
     Rectangle {
-        id: pagesBar
-        width: 32
+        id: pagesMenu
+        width: 35
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
+        anchors.margins: 10
+        anchors.topMargin: 10
         color: "#26282b"
+
+        ColumnLayout {
+            anchors.fill: parent
+            spacing: 10
+
+
+            PageButton {
+                Layout.preferredWidth: parent.width
+                Layout.preferredHeight: parent.width
+                Layout.alignment: Qt.AlignHCenter
+
+                iconSource: "qrc:/resources/icons/stats.png"
+            }
+            PageButton {
+                Layout.preferredWidth: parent.width
+                Layout.preferredHeight: parent.width
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+
+                iconSource: "qrc:/resources/icons/settings.png"
+            }
+            Rectangle {
+                Layout.preferredWidth: parent.width
+                Layout.preferredHeight: parent.height
+                color: "transparent"
+            }
+
+        }
     }
 
+    // pages
     StackLayout {
-        id: stackLayout
+        id: pagesStack
+
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.left: pagesBar.right
+        anchors.left: pagesMenu.right
         anchors.margins: 10
 
         StatsPage {
