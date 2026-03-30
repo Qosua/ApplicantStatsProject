@@ -9,7 +9,7 @@ SplitView {
     orientation: Qt.Horizontal
     handle: Rectangle {
 
-        implicitWidth: 3
+        implicitWidth: 4
 
         color: SplitHandle.hovered ? "#556da3" : "transparent"
 
@@ -22,6 +22,7 @@ SplitView {
 
 
     Rectangle {
+
         SplitView.preferredWidth: parent.width / 4
         SplitView.minimumWidth: parent.width / 10
 
@@ -32,10 +33,49 @@ SplitView {
         topLeftRadius: 10
         bottomLeftRadius: 10
 
+        SplitView {
+
+            anchors.fill: parent
+            orientation: Qt.Vertical
+            handle: Rectangle {
+
+                implicitHeight: 5
+
+                color: SplitHandle.hovered ? "#556da3" : "#26282b"
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: 100
+                    }
+                }
+            }
+
+            Rectangle {
+                color: "#191a1c"
+                border.width: 1
+                border.color: "#434343"
+                topLeftRadius: 10
+                SplitView.preferredHeight: parent.height / 2
+                SplitView.minimumHeight: parent.height / 10
+
+
+
+            }
+
+            TablesList {
+                color: "#191a1c"
+                border.width: 1
+                border.color: "#434343"
+                bottomLeftRadius: 10
+                SplitView.preferredHeight: parent.height / 2
+                SplitView.minimumHeight: parent.height / 10
+
+
+            }
+        }
     }
 
     Rectangle {
-        id: test
         SplitView.preferredWidth: parent.width / (3 / 4)
         SplitView.minimumWidth: parent.width / 10
 
@@ -45,6 +85,8 @@ SplitView {
         color: "#191a1c"
         topRightRadius: 10
         bottomRightRadius: 10
+
+
 
     }
 
