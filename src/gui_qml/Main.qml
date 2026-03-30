@@ -6,16 +6,15 @@ import ApplicantStatsProjectModule
 
 Window {
     id: window
-    width: 1280
-    height: 720
-    minimumWidth: 320
-    minimumHeight: 200
+
+    property int currentPageIndex: 0
+
+    width: 1280; minimumWidth: 320
+    height: 720; minimumHeight: 200
 
     visible: true
     color: "#26282b"
-    title: "UntitledProject"
-
-    property int currentPageIndex: 0
+    title: ""
 
     // pages menu
     Rectangle {
@@ -26,7 +25,6 @@ Window {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-
         anchors.margins: 8
         anchors.topMargin: 10
         anchors.bottomMargin: 10

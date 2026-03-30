@@ -26,11 +26,11 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.left: someKindOfBorder.right
         anchors.right: view.left
-        color: "#2e2e2e"
-        width: 1
         anchors.margins: 1
         anchors.leftMargin: 0
         anchors.rightMargin: 0
+        color: "#2e2e2e"
+        width: 1
     }
 
     Rectangle {
@@ -44,7 +44,9 @@ Rectangle {
 
         ListView {
 
-            model: 4
+            model: 20
+            spacing: 1
+            clip: true
 
             anchors.fill: parent
             anchors.margins: 4
@@ -52,8 +54,9 @@ Rectangle {
 
             delegate: Rectangle {
                 width: parent.width
-                height: 30
+                height: 27
                 color: "red"
+                radius: 8
                 anchors.horizontalCenter: parent.horizontalCenter
             }
         }
