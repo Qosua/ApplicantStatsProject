@@ -38,7 +38,6 @@ add_executable(ApplicantStatsProject
 
         src/main.cpp
         src/data-processing/table-manager.cpp
-        src/support-system.cpp
         src/data-processing/magic-hat.cpp
         src/applicants-faculty-data/table-parser-bachelor.cpp
         src/applicants-faculty-data/faculty-direction.cpp

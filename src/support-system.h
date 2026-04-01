@@ -10,7 +10,25 @@ class SupportSystem {
 public:
     SupportSystem();
 
-    static void init();
+    static void init() {
+
+	bool result = true;
+
+	if (!QDir().exists(SupportSystem::appRootDataPath))
+	    result *= QDir().mkdir(SupportSystem::appRootDataPath);
+
+	if (!QDir().exists(SupportSystem::appCachePath))
+	    result *= QDir().mkdir(SupportSystem::appCachePath);
+
+	if (!QDir().exists(SupportSystem::appDataPath))
+	    result *= QDir().mkdir(appDataPath);
+
+	if (!QDir().exists(SupportSystem::appConfigPath))
+	    result *= QDir().mkdir(appConfigPath);
+
+	if (!result)
+	    qDebug() << "SupportSystem INIT ERROR";
+    }
 
     inline const static QString appRootDataPath
         = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)

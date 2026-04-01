@@ -26,7 +26,7 @@ SplitView {
         SplitView.preferredWidth: parent.width / 4
         SplitView.minimumWidth: parent.width / 10
 
-        border.color: "#434343"
+        border.color: "#323232"
         border.width: 1
 
         color: "#191a1c"
@@ -53,11 +53,10 @@ SplitView {
             Rectangle {
                 color: "#191a1c"
                 border.width: 1
-                border.color: "#434343"
+                border.color: "#323232"
                 topLeftRadius: 10
                 SplitView.preferredHeight: parent.height / 2
                 SplitView.minimumHeight: parent.height / 10
-
 
 
             }
@@ -65,7 +64,7 @@ SplitView {
             TablesList {
                 color: "#191a1c"
                 border.width: 1
-                border.color: "#434343"
+                border.color: "#323232"
                 bottomLeftRadius: 10
                 SplitView.preferredHeight: parent.height / 2
                 SplitView.minimumHeight: parent.height / 10
@@ -79,13 +78,12 @@ SplitView {
         SplitView.preferredWidth: parent.width / (3 / 4)
         SplitView.minimumWidth: parent.width / 10
 
-        border.color: "#434343"
+        border.color: "#323232"
         border.width: 1
 
         color: "#191a1c"
         topRightRadius: 10
         bottomRightRadius: 10
-
 
 
     }
