@@ -20,7 +20,6 @@ SplitView {
         }
     }
 
-
     Rectangle {
 
         SplitView.preferredWidth: parent.width / 4

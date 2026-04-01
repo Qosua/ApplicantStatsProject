@@ -57,6 +57,8 @@ qt_add_qml_module(ApplicantStatsProject
         src/gui_qml/components/PageButton.qml
         src/gui_qml/TablesList.qml
         src/gui_qml/visual-effects/LeftTopGradient.qml
+        src/gui_qml/PagesMenu.qml
+        src/gui_qml/StatusBar.qml
 )
 
 target_link_libraries(ApplicantStatsProject PRIVATE

@@ -14,91 +14,15 @@ Window {
 
     visible: true
     color: "#26282b"
-    title: ""
 
     LeftTopGradient {
         anchors.fill: parent
     }
 
-    // pages menu
-    Rectangle {
+    PagesMenu {
         id: pagesMenu
-        width: 48
-        radius: 12
-
-        anchors.top: parent.top
-        anchors.bottom: statusBar.top
-        anchors.left: parent.left
-        anchors.margins: 10
-        anchors.topMargin: 10
-        anchors.bottomMargin: 0
-
-        border.color: "#323232"
-        border.width: 1
-
-        color: "#191a1c"
-
-        ColumnLayout {
-
-            property int innerPadding: 6
-
-            spacing: 8
-
-            anchors.fill: parent
-            anchors.topMargin: innerPadding
-
-            PageButton {
-                Layout.preferredWidth: parent.width - (parent.innerPadding * 2)
-                Layout.preferredHeight: parent.width - (parent.innerPadding * 2)
-                Layout.alignment: Qt.AlignHCenter
-
-                btnIconSource: "qrc:/resources/icons/stats.png"
-                btnToolTipName: " Статистика "
-
-                isBtnChecked: (window.currentPageIndex === 0)
-                onClicked: {
-                    window.currentPageIndex = 0
-                }
-
-            }
-            PageButton {
-                Layout.preferredWidth: parent.width - (parent.innerPadding * 2)
-                Layout.preferredHeight: parent.width - (parent.innerPadding * 2)
-                Layout.alignment: Qt.AlignHCenter
-
-                btnIconSource: "qrc:/resources/icons/menu-burger.png"
-                btnToolTipName: " Логи "
-
-                isBtnChecked: (window.currentPageIndex === 1)
-                onClicked: {
-                    window.currentPageIndex = 1
-                }
-
-            }
-            PageButton {
-                Layout.preferredWidth: parent.width - (parent.innerPadding * 2)
-                Layout.preferredHeight: parent.width - (parent.innerPadding * 2)
-                Layout.alignment: Qt.AlignHCenter
-
-                btnIconSource: "qrc:/resources/icons/settings.png"
-                btnToolTipName: " Настройки "
-
-                isBtnChecked: (window.currentPageIndex === 2)
-                onClicked: {
-                    window.currentPageIndex = 2
-                }
-
-            }
-            Rectangle {
-                Layout.preferredWidth: parent.width
-                Layout.preferredHeight: parent.height
-                color: "transparent"
-            }
-
-        }
     }
 
-    // pages
     StackLayout {
         id: pagesStack
 
@@ -118,39 +42,16 @@ Window {
         }
 
         Rectangle {
-            color: "red"
+            color: "#232b40"
         }
 
         Rectangle {
-            color: "blue"
+            color: "#7160a8"
         }
     }
 
-    // status bar
-    Rectangle {
+    StatusBar {
         id: statusBar
-
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.leftMargin: 15
-        anchors.rightMargin: 15
-        anchors.topMargin: 5
-
-        color: "#26282b"
-        height: 30
-
-        Text {
-            text: "Путь:  C: > some > very > long > path > to > data > table.xlsx"
-            font.pointSize: 11
-            color: "#aaaaaa"
-
-            anchors.left: parent.left
-            anchors.horizontalCenter: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-
-        }
-
     }
 
 }

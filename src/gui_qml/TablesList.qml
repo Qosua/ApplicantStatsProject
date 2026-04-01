@@ -11,9 +11,8 @@ Rectangle {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        anchors.right: someKindOfBorder.left
 
-        width: 50
+        width: 40
         color: "transparent"
         bottomLeftRadius: 10
 
@@ -24,11 +23,9 @@ Rectangle {
         id: someKindOfBorder
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.left: someKindOfBorder.right
-        anchors.right: view.left
-        anchors.margins: 1
-        anchors.leftMargin: 0
-        anchors.rightMargin: 0
+        anchors.left: buttonsBar.right
+        anchors.topMargin: 1
+        anchors.bottomMargin: 1
         color: "#2e2e2e"
         width: 1
     }
@@ -38,8 +35,8 @@ Rectangle {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
+        anchors.left: someKindOfBorder.right
         anchors.margins: 10
-        width: parent.width - 51
         color: "transparent"
 
         ListView {
