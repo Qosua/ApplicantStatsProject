@@ -26,10 +26,7 @@ SplitView {
         SplitView.preferredWidth: parent.width / 4
         SplitView.minimumWidth: parent.width / 10
 
-        border.color: "#323232"
-        border.width: 1
-
-        color: "#191a1c"
+        color: "transparent"
         topLeftRadius: 10
         bottomLeftRadius: 10
 
@@ -41,7 +38,7 @@ SplitView {
 
                 implicitHeight: 5
 
-                color: SplitHandle.hovered ? "#556da3" : "#26282b"
+                color: SplitHandle.hovered ? "#556da3" : "transparent"
 
                 Behavior on color {
                     ColorAnimation {

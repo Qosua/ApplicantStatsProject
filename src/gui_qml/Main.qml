@@ -16,19 +16,8 @@ Window {
     color: "#26282b"
     title: ""
 
-    Canvas {
+    LeftTopGradient {
         anchors.fill: parent
-        onPaint: {
-            var ctx = getContext("2d")
-            ctx.clearRect(0, 0, parent.width, parent.height)
-            var cx = width * 0.1
-            var cy = -height * 0.05
-            var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, width * 0.20)
-            grad.addColorStop(0.0, "rgba(85, 109, 163, 0.5)")
-            grad.addColorStop(1.0, "rgba(85, 109, 163, 0.0)")
-            ctx.fillStyle = grad
-            ctx.fillRect(0, 0, width, height)
-        }
     }
 
     // pages menu
@@ -154,11 +143,9 @@ Window {
         Text {
             text: "Путь:  C: > some > very > long > path > to > data > table.xlsx"
             font.pointSize: 11
-            color: "#888888"
+            color: "#aaaaaa"
 
             anchors.left: parent.left
-            anchors.bottom: parent.bottom
-            anchors.top: parent.top
             anchors.horizontalCenter: parent.left
             anchors.verticalCenter: parent.verticalCenter
 
