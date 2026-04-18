@@ -8,8 +8,7 @@
 #include "../applicants-faculty-data/faculty-direction.h"
 #include "../xlsx.h"
 
-class MagicHat : public QObject {
-    Q_OBJECT
+class MagicHat {
 public:
     MagicHat();
 
@@ -17,8 +16,8 @@ public:
     QList<Applicant> uncountedApplicants() const;
     std::shared_ptr<QList<FacultyDirection>> faculties() const;
 
-    void setApplicantsList(QList<Applicant> *newApplicantsList);
-    void setKCP(const QString &path, const QString &sheet);
+    void setApplicantsList(std::shared_ptr<QList<Applicant>> newApplicantsList);
+    void setPathToKCP(const QString &path, const QString &sheet);
 
     void startPriorityRoundSimulation();
     void startGeneralRoundSimulation();
@@ -30,8 +29,8 @@ public:
     void printToExcel();
 
 private:
-    QList<Applicant> m_applicantsListCopy;
-    QList<Applicant> m_applicantsList;
+    std::shared_ptr<QList<Applicant>> m_applicantsListCopy;
+    std::shared_ptr<QList<Applicant>> m_applicantsList;
     QList<Applicant> m_uncountedApplicants;
     std::shared_ptr<QList<FacultyDirection>> m_facultyCells;
 };

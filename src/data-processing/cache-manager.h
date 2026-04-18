@@ -8,7 +8,6 @@
 #include <memory>
 
 #include "../applicants-faculty-data/faculty-direction.h"
-#include "../applicants-faculty-data/namespaces.h"
 #include "../applicants-faculty-data/table-parser-bachelor.h"
 #include "../support-system.h"
 #include "magic-hat.h"

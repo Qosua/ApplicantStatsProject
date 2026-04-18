@@ -124,24 +124,24 @@ Rectangle {
                     id: delegatHover
                     cursorShape: Qt.PointingHandCursor
                 }
-                Image {
-                    id: icon
-                    source: tableIconPath
-                    height: parent.height - 10
-                    width: parent.height - 10
-                    //fillMode: Image.PreserveAspectFit
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: 6
-                }
                 Text {
                     id: tableLastChangeDateText
                     text: "(" + tableLastChangeDate + ")"
                     font.pointSize: 9
                     color: "#999999"
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: icon.right
+                    anchors.left: parent.left
                     anchors.margins: 4
+                }
+                Image {
+                    id: icon
+                    source: tableIconPath
+                    height: parent.height - 10
+                    width: parent.height - 10
+                    //fillMode: Image.PreserveAspectFit
+                    anchors.left: tableLastChangeDateText.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: 6
                 }
                 Text {
                     id: tableNameText
@@ -149,7 +149,7 @@ Rectangle {
                     font.pointSize: 10
                     color: "#eeeeee"
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: tableLastChangeDateText.right
+                    anchors.left: icon.right
                     anchors.leftMargin: 4
                 }
 

@@ -1,19 +1,5 @@
 #include "table-parser-bachelor.h"
 
-TableParserBachelor::TableParserBachelor() {}
-
-TableParserBachelor::~TableParserBachelor() {
-
-    if (m_applicantsTable) {
-	delete m_applicantsTable;
-	m_applicantsTable = nullptr;
-    }
-    if (m_applicantsList) {
-	delete m_applicantsList;
-	m_applicantsList = nullptr;
-    }
-}
-
 void TableParserBachelor::setTablePath(const QString& path) {
 
     if (!QFile::exists(path)) {
@@ -34,17 +20,8 @@ void TableParserBachelor::setColumnsNamesPath(const QString& path) {
 
 void TableParserBachelor::parseTable() {
 
-    if (m_applicantsTable) {
-	delete m_applicantsTable;
-	m_applicantsTable = nullptr;
-    }
-    if (m_applicantsList) {
-	delete m_applicantsList;
-	m_applicantsList = nullptr;
-    }
-
-    m_applicantsTable = new QXlsx::Document(m_tablePath);
-    m_applicantsList = new QList<Applicant>;
+    m_applicantsTable.reset(new QXlsx::Document(m_tablePath));
+    m_applicantsList.reset(new QList<Applicant>);
 
     setColumnsNames();
 
@@ -107,10 +84,10 @@ void TableParserBachelor::parseTable() {
     *m_applicantsList = tempHash.values();
 }
 
-QList<Applicant>* TableParserBachelor::getApplicants(ApplicantsFilterFlags flag,
-                                                     StudyType priorityToDelete) {
+std::shared_ptr<QList<Applicant>> TableParserBachelor::getApplicants(
+    ApplicantsFilterFlags flag, StudyType priorityToDelete) const {
 
-    QList<Applicant>* newList = new QList<Applicant>;
+    std::shared_ptr<QList<Applicant>> newList = std::make_shared<QList<Applicant>>();
 
     if (flag == ApplicantsFilterFlags::All) {
 	*newList = *m_applicantsList;

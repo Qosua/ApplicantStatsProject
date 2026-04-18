@@ -7,6 +7,7 @@
 #include <QList>
 #include <QMap>
 #include <QTextStream>
+#include <memory>
 
 #include "../xlsx.h"
 #include "applicant.h"
@@ -15,14 +16,12 @@
 class TableParserBachelor {
 
 public:
-    TableParserBachelor();
-    ~TableParserBachelor();
-
     void setTablePath(const QString& path);
     void setColumnsNamesPath(const QString& path);
 
     void parseTable();
-    QList<Applicant>* getApplicants(ApplicantsFilterFlags flag, StudyType priorityToDelete);
+    std::shared_ptr<QList<Applicant>> getApplicants(ApplicantsFilterFlags flag,
+                                                    StudyType priorityToDelete) const;
 
 private:
     bool setColumnsNames();
@@ -37,8 +36,8 @@ private:
     QString m_columnsNamesFilePath;
 
     QMap<QString, int> m_columnsNames;
-    QXlsx::Document* m_applicantsTable = nullptr;
-    QList<Applicant>* m_applicantsList = nullptr;
+    std::unique_ptr<QXlsx::Document> m_applicantsTable;
+    std::shared_ptr<QList<Applicant>> m_applicantsList;
 };
 
 #endif  // TABLEPARSERBACHELOR_H

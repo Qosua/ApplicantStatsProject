@@ -2,19 +2,19 @@
 
 MagicHat::MagicHat() { m_facultyCells = std::make_shared<QList<FacultyDirection>>(); }
 
-QList<Applicant> MagicHat::applicantsList() const { return m_applicantsList; }
+QList<Applicant> MagicHat::applicantsList() const { return *m_applicantsList; }
 
-void MagicHat::setApplicantsList(QList<Applicant>* newApplicantsList) {
+void MagicHat::setApplicantsList(std::shared_ptr<QList<Applicant>> newApplicantsList) {
 
-    m_applicantsList = *newApplicantsList;
-    m_applicantsListCopy = *newApplicantsList;
+    m_applicantsList = newApplicantsList;
+    m_applicantsListCopy = std::make_shared<QList<Applicant>>(*newApplicantsList);
 }
 
 void MagicHat::startPriorityRoundSimulation() {
 
     QList<Applicant> applicantsList;
 
-    for (auto& elem : m_applicantsList) {
+    for (auto& elem : *m_applicantsList) {
 
 	Applicant tempApplicant = elem;
 	tempApplicant.priorities().clear();
@@ -83,10 +83,10 @@ void MagicHat::startPriorityRoundSimulation() {
 	const auto& applicants = elem.pool();
 	for (auto& applicant : applicants) {
 
-	    for (int i = 0; i < m_applicantsList.size(); ++i) {
+	    for (int i = 0; i < m_applicantsList->size(); ++i) {
 
-		if (applicant.second.id() == m_applicantsList[i].id()) {
-		    m_applicantsList.remove(i);
+		if (applicant.second.id() == (*m_applicantsList)[i].id()) {
+		    m_applicantsList->remove(i);
 		    --i;
 		}
 	    }
@@ -100,7 +100,7 @@ void MagicHat::startGeneralRoundSimulation() {
 
     QList<Applicant> generalList;
 
-    for (auto& applicant : m_applicantsList) {
+    for (auto& applicant : *m_applicantsList) {
 
 	Applicant tempApplicant = applicant;
 	tempApplicant.priorities().clear();
@@ -286,7 +286,7 @@ void MagicHat::printUncountedApplicants() {
 
     for (auto& elem : m_uncountedApplicants) {
 
-	for (const auto elem1 : m_applicantsListCopy) {
+	for (const auto elem1 : *m_applicantsListCopy) {
 
 	    if (elem.id() == elem1.id())
 		elem = elem1;
@@ -418,7 +418,7 @@ void MagicHat::printToExcel() {
     }
 }
 
-void MagicHat::setKCP(const QString& path, const QString& sheet) {
+void MagicHat::setPathToKCP(const QString& path, const QString& sheet) {
 
     QFile input(path);
 

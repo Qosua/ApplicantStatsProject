@@ -63,10 +63,10 @@ std::shared_ptr<QList<FacultyDirection>> CacheManager::makeCache(const QString& 
     parserBachelor.setColumnsNamesPath(":/config/columnsNames.xlsx");
     parserBachelor.parseTable();
 
-    QList<Applicant>* applicantsList
+    std::shared_ptr<QList<Applicant>> applicantsList
         = parserBachelor.getApplicants(ApplicantsFilterFlags::AdmissionsTrue, StudyType::NonBudget);
 
-    magicHatBachelor.setKCP(":/config/KCP.xlsx", "Бакалавры");
+    magicHatBachelor.setPathToKCP(":/config/KCP.xlsx", "Бакалавры");
     magicHatBachelor.setApplicantsList(applicantsList);
 
     magicHatBachelor.startPriorityRoundSimulation();
