@@ -2,6 +2,7 @@
 #define MAGICHAT_H
 
 #include <QFile>
+#include <memory>
 
 #include "../applicants-faculty-data/applicant.h"
 #include "../applicants-faculty-data/faculty-direction.h"
@@ -14,7 +15,7 @@ public:
 
     QList<Applicant> applicantsList() const;
     QList<Applicant> uncountedApplicants() const;
-    QList<FacultyDirection> *faculties() const;
+    std::shared_ptr<QList<FacultyDirection>> faculties() const;
 
     void setApplicantsList(QList<Applicant> *newApplicantsList);
     void setKCP(const QString &path, const QString &sheet);
@@ -32,6 +33,6 @@ private:
     QList<Applicant> m_applicantsListCopy;
     QList<Applicant> m_applicantsList;
     QList<Applicant> m_uncountedApplicants;
-    QList<FacultyDirection> *m_facultyCells;
+    std::shared_ptr<QList<FacultyDirection>> m_facultyCells;
 };
 #endif  // MAGICHAT_H

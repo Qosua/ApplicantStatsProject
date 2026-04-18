@@ -1,6 +1,6 @@
 #include "magic-hat.h"
 
-MagicHat::MagicHat() { m_facultyCells = new QList<FacultyDirection>; }
+MagicHat::MagicHat() { m_facultyCells = std::make_shared<QList<FacultyDirection>>(); }
 
 QList<Applicant> MagicHat::applicantsList() const { return m_applicantsList; }
 
@@ -183,8 +183,8 @@ void MagicHat::rebalanceBudgetaryPlaces() {
 	    if (elem.studyType() == elem1.studyType())
 		continue;
 
-	    if (elem.studyForm() == elem1.studyForm() and elem.code() == elem1.code() and
-	        elem1.studyType() != StudyType::Budget) {
+	    if (elem.studyForm() == elem1.studyForm() and elem.code() == elem1.code()
+	        and elem1.studyType() != StudyType::Budget) {
 
 		elem.setCapacity(elem.capacity() + (elem1.capacity() - elem1.getPoolSize()));
 	    }
@@ -253,8 +253,8 @@ void MagicHat::printStatsToConsole() {
 
 	qDebug() << "\n>----" << (*m_facultyCells)[i].division() << "|"
 	         << (*m_facultyCells)[i].code() << "|" << (*m_facultyCells)[i].name() << "|"
-	         << QString::number((*m_facultyCells)[i].pool().size()) + "/" +
-	                QString::number((*m_facultyCells)[i].capacity())
+	         << QString::number((*m_facultyCells)[i].pool().size()) + "/"
+	                + QString::number((*m_facultyCells)[i].capacity())
 	         << "|" << type << "|" << form << "----<";
 
 	if ((*m_facultyCells)[i].pool().size() == 0) {
@@ -338,9 +338,8 @@ void MagicHat::printToExcel() {
     newDoc.selectSheet("ПМИ");
     for (int i = 0; i < m_facultyCells->size(); ++i) {
 
-	if ((*m_facultyCells)[i].name() ==
-	        "Прикладное программирование и информационные технологии" and
-	    (*m_facultyCells)[i].studyType() == StudyType::Budget) {
+	if ((*m_facultyCells)[i].name() == "Прикладное программирование и информационные технологии"
+	    and (*m_facultyCells)[i].studyType() == StudyType::Budget) {
 
 	    globalCounter += (*m_facultyCells)[i].pool().size();
 	    int counter = (*m_facultyCells)[i].pool().size();
@@ -358,8 +357,8 @@ void MagicHat::printToExcel() {
     newDoc.selectSheet("МКН");
     for (int i = 0; i < m_facultyCells->size(); ++i) {
 
-	if ((*m_facultyCells)[i].name() == "Программирование, алгоритмы и анализ данных" and
-	    (*m_facultyCells)[i].studyType() == StudyType::Budget) {
+	if ((*m_facultyCells)[i].name() == "Программирование, алгоритмы и анализ данных"
+	    and (*m_facultyCells)[i].studyType() == StudyType::Budget) {
 
 	    globalCounter += (*m_facultyCells)[i].pool().size();
 	    int counter = (*m_facultyCells)[i].pool().size();
@@ -377,8 +376,8 @@ void MagicHat::printToExcel() {
     newDoc.selectSheet("ИБ");
     for (int i = 0; i < m_facultyCells->size(); ++i) {
 
-	if ((*m_facultyCells)[i].name() == "Безопасность компьютерных систем" and
-	    (*m_facultyCells)[i].studyType() == StudyType::Budget) {
+	if ((*m_facultyCells)[i].name() == "Безопасность компьютерных систем"
+	    and (*m_facultyCells)[i].studyType() == StudyType::Budget) {
 
 	    globalCounter += (*m_facultyCells)[i].pool().size();
 	    int counter = (*m_facultyCells)[i].pool().size();
@@ -396,8 +395,8 @@ void MagicHat::printToExcel() {
     newDoc.selectSheet("КБ");
     for (int i = 0; i < m_facultyCells->size(); ++i) {
 
-	if ((*m_facultyCells)[i].name() == "Математические методы защиты информации" and
-	    (*m_facultyCells)[i].studyType() == StudyType::Budget) {
+	if ((*m_facultyCells)[i].name() == "Математические методы защиты информации"
+	    and (*m_facultyCells)[i].studyType() == StudyType::Budget) {
 
 	    globalCounter += (*m_facultyCells)[i].pool().size();
 	    int counter = (*m_facultyCells)[i].pool().size();
@@ -475,7 +474,7 @@ void MagicHat::setKCP(const QString& path, const QString& sheet) {
     }
 }
 
-QList<FacultyDirection>* MagicHat::faculties() const { return m_facultyCells; }
+std::shared_ptr<QList<FacultyDirection>> MagicHat::faculties() const { return m_facultyCells; }
 
 void MagicHat::printFaculties() {
 
@@ -522,10 +521,10 @@ void MagicHat::printFaculties() {
 		break;
 	}
 
-	qDebug() << elem.code() + " " + elem.name() + "-" + form + "-" + type + "-" +
-	                QString::number(elem.capacity()) + "-" +
-	                QString::number(elem.pool().size()) + "-" +
-	                QString::number(
+	qDebug() << elem.code() + " " + elem.name() + "-" + form + "-" + type + "-"
+	                + QString::number(elem.capacity()) + "-"
+	                + QString::number(elem.pool().size()) + "-"
+	                + QString::number(
 	                    (elem.pool().size() != 0 ? elem.pool()[0].first.egeScore() : 0));
     }
 }

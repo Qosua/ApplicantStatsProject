@@ -44,8 +44,8 @@ public:
 
     int getPoolSize();
 
-    friend QDataStream& operator<<(QDataStream& out, const FacultyDirection& p);
-    friend QDataStream& operator>>(QDataStream& in, FacultyDirection& p);
+    friend QDataStream &operator<<(QDataStream &out, const FacultyDirection &p);
+    friend QDataStream &operator>>(QDataStream &in, FacultyDirection &p);
 
 private:
     int m_capacity;

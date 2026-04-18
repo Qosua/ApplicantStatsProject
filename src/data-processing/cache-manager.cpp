@@ -1,9 +1,5 @@
 #include "cache-manager.h"
 
-CacheManager::CacheManager() {}
-
-CacheManager::~CacheManager() {}
-
 void CacheManager::init() {
 
     QObject::connect(this, &CacheManager::processTable, this, &CacheManager::processTableHandle);
@@ -25,20 +21,20 @@ void CacheManager::processTableHandle(const QString& tableName) {
 
 	if (parts[1] == tableLastChangeDate(tableName)) {
 
-	    QList<FacultyDirection>* data = loadCache(tableName);
+	    auto data = loadCache(tableName);
 	    emit sendProceededData(data);
 	    return;
 	}
     }
 
-    QList<FacultyDirection>* data = makeCache(tableName);
+    auto data = makeCache(tableName);
     emit sendProceededData(data);
 }
 
-QList<FacultyDirection>* CacheManager::loadCache(const QString& tableName) {
+std::shared_ptr<QList<FacultyDirection>> CacheManager::loadCache(const QString& tableName) {
     emit waitForFinish();
 
-    auto* data = new QList<FacultyDirection>();
+    auto data = std::make_shared<QList<FacultyDirection>>();
 
     QFile file(SupportSystem::appCachePath + +"/cache_" + tableLastChangeDate(tableName) + "_"
                + tableNameInCache(tableName));
@@ -57,7 +53,7 @@ QList<FacultyDirection>* CacheManager::loadCache(const QString& tableName) {
     return data;
 }
 
-QList<FacultyDirection>* CacheManager::makeCache(const QString& tableName) {
+std::shared_ptr<QList<FacultyDirection>> CacheManager::makeCache(const QString& tableName) {
     emit waitForFinish();
 
     TableParserBachelor parserBachelor;
@@ -77,7 +73,7 @@ QList<FacultyDirection>* CacheManager::makeCache(const QString& tableName) {
     magicHatBachelor.rebalanceBudgetaryPlaces();
     magicHatBachelor.startGeneralRoundSimulation();
 
-    QList<FacultyDirection>* data = magicHatBachelor.faculties();
+    auto data = magicHatBachelor.faculties();
 
     saveCache(data, tableName);
 
@@ -85,7 +81,8 @@ QList<FacultyDirection>* CacheManager::makeCache(const QString& tableName) {
     return data;
 }
 
-void CacheManager::saveCache(QList<FacultyDirection>* data, const QString& tableName) {
+void CacheManager::saveCache(const std::shared_ptr<QList<FacultyDirection>>& data,
+                             const QString& tableName) {
 
     QFile file(SupportSystem::appCachePath + "/cache_" + tableLastChangeDate(tableName) + "_"
                + tableNameInCache(tableName));
