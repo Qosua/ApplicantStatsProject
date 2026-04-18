@@ -5,6 +5,8 @@ import QtQuick.Controls
 import ApplicantStatsProjectModule
 
 Button {
+    id: root
+
     function defineColor(hovered, chose) {
         if (chose)
             return btnChoseBackgroundColor;
@@ -18,6 +20,8 @@ Button {
     property bool isBtnChecked: false
     property string btnIconSource: ""
     property string btnToolTipName: ""
+    property int btnToolTipDelay: 1
+    property color btnIconColor: "#ced0d6"
     property color btnBackgroundColor: "transparent"
     property color btnChoseBackgroundColor: "#556da3"
     property color btnHoverBackgroundColor: "#393b40"
@@ -26,7 +30,7 @@ Button {
     icon.source: btnIconSource
     icon.width: 22
     icon.height: 22
-    icon.color: "#ced0d6"
+    icon.color: btnIconColor
     antialiasing: true
     hoverEnabled: true
 
@@ -47,10 +51,11 @@ Button {
 
     HoverHandler {
         id: hover
+        cursorShape: Qt.PointingHandCursor
     }
     ToolTip {
-        visible: hover.hovered
-        delay: 1
+        visible: {return hover.hovered && root.btnToolTipName !== ""}
+        delay: btnToolTipDelay
 
         x: parent.width + 6
         y: (parent.height - height) / 2

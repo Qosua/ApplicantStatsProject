@@ -27,22 +27,25 @@ find_package(Qt6 COMPONENTS
 add_executable(ApplicantStatsProject
 
         src/xlsx.h
-        src/data-processing/table-manager.h
+        src/data-processing/cache-manager.h
         src/support-system.h
+        src/qml-helper.h
         src/data-processing/magic-hat.h
         src/applicants-faculty-data/table-parser-bachelor.h
         src/applicants-faculty-data/namespaces.h
         src/applicants-faculty-data/faculty-direction.h
         src/applicants-faculty-data/applicant.h
         src/applicants-faculty-data/priority-info.h
+        src/models/tables-list-model.h
 
         src/main.cpp
-        src/data-processing/table-manager.cpp
+        src/data-processing/cache-manager.cpp
         src/data-processing/magic-hat.cpp
         src/applicants-faculty-data/table-parser-bachelor.cpp
         src/applicants-faculty-data/faculty-direction.cpp
         src/applicants-faculty-data/applicant.cpp
         src/applicants-faculty-data/priority-info.cpp
+        src/models/tables-list-model.cpp
 
         resources.qrc
 )

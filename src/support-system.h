@@ -30,6 +30,10 @@ public:
 	    qDebug() << "SupportSystem INIT ERROR";
     }
 
+signals:
+    void initCacheManager();
+
+public:
     inline const static QString appRootDataPath
         = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
           + "/Applicants-Stats-Project";

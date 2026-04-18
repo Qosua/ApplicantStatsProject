@@ -10,6 +10,10 @@
         <file>resources/icons/settings.png</file>
         <file>resources/icons/menu-burger.png</file>
         <file>resources/icons/stats.png</file>
+        <file>resources/icons/menu-dots-vertical.png</file>
+        <file>resources/icons/edit.png</file>
+        <file>resources/icons/folder.png</file>
+        <file>resources/icons/sort-alpha-down.png</file>
         <file>config/KCP.xlsx</file>
         <file>config/columnsNames.xlsx</file>
     </qresource>

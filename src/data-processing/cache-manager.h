@@ -12,11 +12,11 @@
 #include "../support-system.h"
 #include "magic-hat.h"
 
-class TableManager : public QObject {
+class CacheManager : public QObject {
     Q_OBJECT
 public:
-    TableManager();
-    ~TableManager();
+    CacheManager();
+    ~CacheManager();
 
     void init();
 
@@ -24,7 +24,6 @@ public:
     static QString tableLastChangeDate(const QString& tableName);
 
 signals:
-    void sendTableList(QList<QString> list);
     void processTable(const QString& tableName);
     void sendProceededData(QList<FacultyDirection>* data);
     void waitForFinish();
@@ -35,11 +34,6 @@ private:
     QList<FacultyDirection>* loadCache(const QString& tableName);
     QList<FacultyDirection>* makeCache(const QString& tableName);
     void saveCache(QList<FacultyDirection>* data, const QString& tableName);
-
-    void directoryChanged(const QString& path);
-    void updateWatcher();
-
-    QFileSystemWatcher* watcher;
 };
 
 #endif  // TABLEMANAGER_H

@@ -1,22 +1,17 @@
-#include "table-manager.h"
+#include "cache-manager.h"
 
-TableManager::TableManager() {}
+CacheManager::CacheManager() {}
 
-TableManager::~TableManager() { delete watcher; }
+CacheManager::~CacheManager() {}
 
-void TableManager::init() {
+void CacheManager::init() {
 
-    watcher = new QFileSystemWatcher;
-
-    QObject::connect(watcher, &QFileSystemWatcher::directoryChanged, this,
-                     &TableManager::directoryChanged);
-
-    QObject::connect(this, &TableManager::processTable, this, &TableManager::processTableHandle);
-
-    updateWatcher();
+    QObject::connect(this, &CacheManager::processTable, this, &CacheManager::processTableHandle);
 }
 
-void TableManager::processTableHandle(const QString& tableName) {
+void CacheManager::processTableHandle(const QString& tableName) {
+
+    qDebug() << "processTable called with:" << tableName;
 
     QDir cacheDir(SupportSystem::appCachePath);
     QList<QString> cacheEntry = cacheDir.entryList();
@@ -40,7 +35,7 @@ void TableManager::processTableHandle(const QString& tableName) {
     emit sendProceededData(data);
 }
 
-QList<FacultyDirection>* TableManager::loadCache(const QString& tableName) {
+QList<FacultyDirection>* CacheManager::loadCache(const QString& tableName) {
     emit waitForFinish();
 
     auto* data = new QList<FacultyDirection>();
@@ -62,7 +57,7 @@ QList<FacultyDirection>* TableManager::loadCache(const QString& tableName) {
     return data;
 }
 
-QList<FacultyDirection>* TableManager::makeCache(const QString& tableName) {
+QList<FacultyDirection>* CacheManager::makeCache(const QString& tableName) {
     emit waitForFinish();
 
     TableParserBachelor parserBachelor;
@@ -90,7 +85,7 @@ QList<FacultyDirection>* TableManager::makeCache(const QString& tableName) {
     return data;
 }
 
-void TableManager::saveCache(QList<FacultyDirection>* data, const QString& tableName) {
+void CacheManager::saveCache(QList<FacultyDirection>* data, const QString& tableName) {
 
     QFile file(SupportSystem::appCachePath + "/cache_" + tableLastChangeDate(tableName) + "_"
                + tableNameInCache(tableName));
@@ -108,33 +103,7 @@ void TableManager::saveCache(QList<FacultyDirection>* data, const QString& table
     file.close();
 }
 
-void TableManager::directoryChanged(const QString& path) { updateWatcher(); }
-
-void TableManager::updateWatcher() {
-
-    QDir dataDir(SupportSystem::appDataPath);
-    QList<QString> currentFiles = dataDir.entryList(QDir::Files | QDir::NoDotAndDotDot);
-    QList<QString> watchedFiles = watcher->files();
-
-    for (const QString& path : std::as_const(watchedFiles)) {
-
-	if (!QFile::exists(path))
-	    watcher->removePath(path);
-    }
-    for (const QString& file : std::as_const(currentFiles)) {
-
-	QString fullPath = dataDir.absoluteFilePath(file);
-	if (!watchedFiles.contains(fullPath) and !fullPath.contains('~')
-	    and !fullPath.endsWith(".tmp"))
-	    watcher->addPath(fullPath);
-    }
-
-    watcher->addPath(SupportSystem::appDataPath + "/");
-
-    emit sendTableList(currentFiles);
-}
-
-QString TableManager::tableNameInCache(const QString& tableName) {
+QString CacheManager::tableNameInCache(const QString& tableName) {
 
     QString tempName = tableName;
     tempName.replace(' ', '%');
@@ -143,7 +112,7 @@ QString TableManager::tableNameInCache(const QString& tableName) {
     return tempName;
 }
 
-QString TableManager::tableLastChangeDate(const QString& tableName) {
+QString CacheManager::tableLastChangeDate(const QString& tableName) {
 
     QFileInfo fileInfo(SupportSystem::appDataPath + "/" + tableName);
     const QString stringDateTime = fileInfo.lastModified().toString("yyyy-MM-dd-hh-mm-ss");
