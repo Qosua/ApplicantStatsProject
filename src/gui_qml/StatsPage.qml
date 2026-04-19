@@ -54,7 +54,10 @@ SplitView {
                 SplitView.preferredHeight: parent.height / 2
                 SplitView.minimumHeight: parent.height / 10
 
-
+                FacultyTreeView {
+                    anchors.fill: parent
+                    anchors.margins: 8
+                }
             }
 
             TablesList {

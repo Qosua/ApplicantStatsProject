@@ -31,6 +31,7 @@ add_executable(ApplicantStatsProject
         src/support-system.h
         src/qml-helper.h
         src/data-processing/magic-hat.h
+        src/models/tree-view-model.h
         src/applicants-faculty-data/table-parser-bachelor.h
         src/applicants-faculty-data/namespaces.h
         src/applicants-faculty-data/faculty-direction.h
@@ -41,6 +42,7 @@ add_executable(ApplicantStatsProject
         src/main.cpp
         src/data-processing/cache-manager.cpp
         src/data-processing/magic-hat.cpp
+        src/models/tree-view-model.cpp
         src/applicants-faculty-data/table-parser-bachelor.cpp
         src/applicants-faculty-data/faculty-direction.cpp
         src/applicants-faculty-data/applicant.cpp
@@ -62,6 +64,7 @@ qt_add_qml_module(ApplicantStatsProject
         src/gui_qml/visual-effects/LeftTopGradient.qml
         src/gui_qml/PagesMenu.qml
         src/gui_qml/StatusBar.qml
+        src/gui_qml/FacultyTreeView.qml
 )
 
 target_link_libraries(ApplicantStatsProject PRIVATE

@@ -32,9 +32,6 @@ void MagicHat::startPriorityRoundSimulation() {
 
     for (int i = -1; applicantsList.size() > 0;) {
 
-	if (applicantsList.size() == 0)  //???
-	    break;
-
 	i = (i + 1) % applicantsList.size();
 
 	Applicant* applicant = &applicantsList[i];
@@ -115,9 +112,6 @@ void MagicHat::startGeneralRoundSimulation() {
     }
 
     for (int i = -1; generalList.size() > 0;) {
-
-	if (generalList.size() == 0)
-	    break;
 
 	i = (i + 1) % generalList.size();
 

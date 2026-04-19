@@ -8,12 +8,16 @@
 
 #include "data-processing/cache-manager.h"
 #include "models/tables-list-model.h"
+#include "models/tree-view-model.h"
 #include "qml-helper.h"
 #include "support-system.h"
 
-void connectSignals(QmlHelper& qmlHelper, CacheManager& cacheManager) {
+void connectSignals(QmlHelper& qmlHelper, CacheManager& cacheManager,
+                    TreeViewModel& treeViewModel) {
     QObject::connect(&qmlHelper, &QmlHelper::sendSignalToProceedTable, &cacheManager,
                      &CacheManager::processTable);
+    QObject::connect(&cacheManager, &CacheManager::sendProceededData, &treeViewModel,
+                     &TreeViewModel::setFaculties);
 }
 
 void moveToThread(QThread& thread, CacheManager& cacheManager) {
@@ -34,8 +38,9 @@ int main(int argc, char* argv[]) {
     QSortFilterProxyModel proxyModel;
     QmlHelper qmlHelper;
     CacheManager cacheManager;
+    TreeViewModel treeViewModel;
 
-    connectSignals(qmlHelper, cacheManager);
+    connectSignals(qmlHelper, cacheManager, treeViewModel);
     moveToThread(cacheThread, cacheManager);
 
     proxyModel.setSourceModel(&tablesListModel);
@@ -44,6 +49,7 @@ int main(int argc, char* argv[]) {
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("sortFilterProxyModel", &proxyModel);
     engine.rootContext()->setContextProperty("qmlHelper", &qmlHelper);
+    engine.rootContext()->setContextProperty("treeViewModel", &treeViewModel);
     engine.loadFromModule("ApplicantStatsProjectModule", "Main");
 
     int ret = QGuiApplication::exec();
