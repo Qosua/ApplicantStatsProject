@@ -10,10 +10,12 @@ TreeView {
     selectionModel: ItemSelectionModel {
     }
 
-    rowSpacing: 4
+    rowSpacing: 3
 
     delegate: TreeViewDelegate {
         id: treeDelegate
+
+        implicitWidth: treeView.width
 
         topPadding: 5
         bottomPadding: 5
@@ -27,9 +29,9 @@ TreeView {
 
             Label {
                 anchors.centerIn: parent
-                text: treeDelegate.expanded ? "\\" : "-"
+                text: treeDelegate.expanded ? "-" : "+"
                 font.bold: true
-                color: "#e74c3c"
+                color: "#607ab5"
                 font.pixelSize: 18
             }
         }
@@ -38,6 +40,14 @@ TreeView {
             spacing: 10
 
             Label {
+                visible: !model.isDivision
+                text: model.code ?? "ОШИБКА КОДА НАПРАВЛЕНИЯ"
+                font.pixelSize: 14
+                color: "#888888"
+                verticalAlignment: Text.AlignVCenter
+                Layout.fillHeight: true
+            }
+            Label {
                 text: model.display
                 color: "#CCCCCC"
                 font.pixelSize: model.isDivision ? 16 : 14
@@ -45,10 +55,18 @@ TreeView {
                 Layout.fillHeight: true
             }
             Label {
-                visible: !model.isDivision
-                text: model.code ?? "ОШИБКА КОДА НАПРАВЛЕНИЯ"
+                visible: (!model.isDivision && model.studyForm !== "")
+                text: model.studyForm ?? "ОШИБКА ФОРМЫ ОБУЧЕНИЯ"
                 font.pixelSize: 14
-                color: "#888888"
+                color: "#6c758a"
+                verticalAlignment: Text.AlignVCenter
+                Layout.fillHeight: true
+            }
+            Label {
+                visible: !model.isDivision
+                text: model.studyType ?? "ОШИБКА ВИДА ОБУЧЕНИЯ"
+                font.pixelSize: 14
+                color: "#87a586"
                 verticalAlignment: Text.AlignVCenter
                 Layout.fillHeight: true
             }
@@ -72,6 +90,7 @@ TreeView {
 
         background: Rectangle {
             radius: 8
+            implicitWidth: treeView.width
             color: treeDelegate.current ? "#3a4660"
                 : treeDelegate.hovered ? "#393b40"
                     : "transparent"

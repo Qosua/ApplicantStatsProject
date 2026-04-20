@@ -142,13 +142,13 @@ QVariant TreeViewModel::data(const QModelIndex &index, int role) const {
 		return {};
 	    switch (m_faculties->at(node->sourceIndex).studyForm()) {
 		case StudyForm::Personal:
-		    return QStringLiteral("Очная");
+		    return QStringLiteral("");
 		case StudyForm::NotPersonal:
 		    return QStringLiteral("Заочная");
 		case StudyForm::PersonalNotPersonal:
 		    return QStringLiteral("Очно-заочная");
 		default:
-		    return QStringLiteral("—");
+		    return QStringLiteral("ОШИБКА ФОРМЫ ОБУЧЕНИЯ");
 	    }
 
 	case StudyTypeRole:
@@ -166,7 +166,7 @@ QVariant TreeViewModel::data(const QModelIndex &index, int role) const {
 		case StudyType::SpecialRight:
 		    return QStringLiteral("Особое право");
 		default:
-		    return QStringLiteral("—");
+		    return QStringLiteral("ОШИБКА ТИПА ОБУЧЕНИЯ");
 	    }
 
 	default:

@@ -1,5 +1,5 @@
-#ifndef TREEVIEWMODEL_H
-#define TREEVIEWMODEL_H
+#ifndef APPLICANTSTATSPROJECT_TREEVIEWMODEL_H
+#define APPLICANTSTATSPROJECT_TREEVIEWMODEL_H
 
 #include <QAbstractItemModel>
 #include <memory>
@@ -38,9 +38,9 @@ public:
 
 private:
     struct TreeNode {
-	QString display;          // Текст для отображения
-	bool isDivision = false;  // Узел-факультет или направление
-	int sourceIndex = -1;     // Индекс в исходном QList<FacultyDirection> (-1 для факультетов)
+	QString display;
+	bool isDivision = false;
+	int sourceIndex = -1;
 	TreeNode *parent = nullptr;
 	QList<TreeNode *> children;
 
@@ -55,4 +55,4 @@ private:
     std::shared_ptr<QList<FacultyDirection>> m_faculties;
 };
 
-#endif  // TREEVIEWMODEL_H
+#endif  // APPLICANTSTATSPROJECT_TREEVIEWMODEL_H
