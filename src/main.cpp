@@ -32,12 +32,12 @@ int main(int argc, char* argv[]) {
 
     QGuiApplication app(argc, argv);
     SupportSystem::init();
-
     QThread cacheThread;
+    CacheManager cacheManager;
+
     TablesListModel tablesListModel;
     QSortFilterProxyModel proxyModel;
     QmlHelper qmlHelper;
-    CacheManager cacheManager;
     TreeViewModel treeViewModel;
 
     connectSignals(qmlHelper, cacheManager, treeViewModel);
