@@ -77,6 +77,8 @@ TreeView {
                 color: {
                     if (model.isDivision)
                         return "#888888"
+                    if (model.capacity === 0)
+                        return "#27ae60"
                     let ratio = (model.poolSize ?? 0) / Math.max(model.capacity ?? 1, 1)
                     return ratio >= 1.0 ? "#27ae60" : ratio >= 0.7 ? "#f39c12" : "#e74c3c"
                 }

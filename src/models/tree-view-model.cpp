@@ -130,7 +130,10 @@ QVariant TreeViewModel::data(const QModelIndex &index, int role) const {
 	case CapacityRole:
 	    if (node->isDivision || !m_faculties)
 		return {};
-	    return m_faculties->at(node->sourceIndex).capacity();
+	    if (m_faculties->at(node->sourceIndex).studyType() == StudyType::Budget)
+		return m_faculties->at(node->sourceIndex).capacity();
+	    else
+		return m_faculties->at(node->sourceIndex).pool().size();
 
 	case PoolSizeRole:
 	    if (node->isDivision || !m_faculties)

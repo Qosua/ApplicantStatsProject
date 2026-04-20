@@ -19,9 +19,7 @@ Rectangle {
 
         RowLayout {
             anchors.fill: parent
-            anchors.margins: 4
-            anchors.leftMargin: 6
-            anchors.rightMargin: 6
+            anchors.margins: 3
             spacing: 5
 
             Item {
