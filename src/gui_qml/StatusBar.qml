@@ -17,24 +17,30 @@ Rectangle {
     anchors.rightMargin: 15
     anchors.topMargin: 5
 
-    Text {
-        text: "Путь:  C: > some > very > long > path > to > data > table.xlsx"
-        font.pointSize: 11
-        color: "#aaaaaa"
+    RowLayout {
+        anchors.fill: parent
+        spacing: 20
 
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
+        Text {
+            id: pathText
+            text: (qmlHelper.currentTablePath !== ""
+                ? "Путь:  " + qmlHelper.currentTablePath.replace(/[\\/]/g, " > ")
+                : "Путь:  файл не выбран")
+            font.pointSize: 11
+            color: "#cccccc"
+            elide: Text.ElideMiddle
+        }
 
-    }
+        Item {
+            Layout.fillWidth: true
+        }
 
-    Text {
-        text: "Версия: 0.8.0"
-        font.pointSize: 11
-        color: "#aaaaaa"
+        Text {
+            text: "Версия: " + qmlHelper.appVersion
+            font.pointSize: 11
+            color: "#cccccc"
 
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-
+        }
     }
 
 }

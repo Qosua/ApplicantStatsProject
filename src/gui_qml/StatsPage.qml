@@ -51,6 +51,7 @@ SplitView {
                 border.width: 1
                 border.color: "#323232"
                 topLeftRadius: 10
+                SplitView.fillHeight: tablesList.collapsed
                 SplitView.preferredHeight: parent.height / 2
                 SplitView.minimumHeight: parent.height / 10
 
@@ -61,13 +62,15 @@ SplitView {
             }
 
             TablesList {
+                id: tablesList
                 color: "#191a1c"
                 border.width: 1
                 border.color: "#323232"
                 bottomLeftRadius: 10
-                SplitView.preferredHeight: parent.height / 2
-                SplitView.minimumHeight: parent.height / 10
 
+                SplitView.preferredHeight: collapsed ? collapsedHeight : parent.height / 2
+                SplitView.minimumHeight: collapsed ? collapsedHeight : parent.height / 10
+                SplitView.maximumHeight: collapsed ? collapsedHeight : Number.POSITIVE_INFINITY
 
             }
         }

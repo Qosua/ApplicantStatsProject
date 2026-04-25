@@ -1,5 +1,6 @@
 #include <Windows.h>
 
+#include <QApplication >
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -16,8 +17,12 @@ void connectSignals(QmlHelper& qmlHelper, CacheManager& cacheManager,
                     TreeViewModel& treeViewModel) {
     QObject::connect(&qmlHelper, &QmlHelper::sendSignalToProceedTable, &cacheManager,
                      &CacheManager::processTable);
+
     QObject::connect(&cacheManager, &CacheManager::sendProceededData, &treeViewModel,
                      &TreeViewModel::setFaculties);
+
+    // QObject::connect(&qmlHelper, &QmlHelper::sendDirectionNameFromTree,
+    //                  );
 }
 
 void moveToThread(QThread& thread, CacheManager& cacheManager) {
@@ -30,7 +35,7 @@ int main(int argc, char* argv[]) {
 
     SetConsoleOutputCP(CP_UTF8);
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     SupportSystem::init();
     QThread cacheThread;
     CacheManager cacheManager;
@@ -39,6 +44,8 @@ int main(int argc, char* argv[]) {
     QSortFilterProxyModel proxyModel;
     QmlHelper qmlHelper;
     TreeViewModel treeViewModel;
+
+    qmlHelper.setAppVersion("0.8.0");
 
     connectSignals(qmlHelper, cacheManager, treeViewModel);
     moveToThread(cacheThread, cacheManager);

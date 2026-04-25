@@ -15,6 +15,8 @@ TreeView {
     delegate: TreeViewDelegate {
         id: treeDelegate
 
+        onClicked: if (!model.isDivision) qmlHelper.directionSelected(model.logicalRow)
+
         implicitWidth: treeView.width
 
         topPadding: 5

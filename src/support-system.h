@@ -49,6 +49,9 @@ public:
     inline const static QString appCachePath
         = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
           + "/Applicants-Stats-Project/cache";
+
+    inline const static QString downloadPath
+        = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
 };
 
 #endif  // SUPPORTSYSTEM_H

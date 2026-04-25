@@ -6,6 +6,10 @@ import ApplicantStatsProjectModule
 
 Rectangle {
 
+    id: tablesList
+    property bool collapsed: false
+    readonly property int collapsedHeight: buttonsBar.height + 1
+
     Rectangle {
         id: buttonsBar
         anchors.top: parent.top
@@ -20,10 +24,47 @@ Rectangle {
         RowLayout {
             anchors.fill: parent
             anchors.margins: 3
-            spacing: 5
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+            spacing: 7
 
+            PageButton {
+                Layout.preferredHeight: parent.height
+                Layout.preferredWidth: parent.height
+
+                btnIconSource: "qrc:/resources/icons/angle-down.png"
+                btnIconColor: "#aeaeae"
+                btnToolTipName: tablesList.collapsed ? " Развернуть " : " Свернуть "
+                btnToolTipDelay: 700
+
+                rotation: tablesList.collapsed ? 180 : 0
+                Behavior on rotation {
+                    NumberAnimation {
+                        duration: 150; easing.type: Easing.OutQuad
+                    }
+                }
+
+                onClicked: {
+                    tablesList.collapsed = !tablesList.collapsed
+                }
+
+            }
             Item {
                 Layout.fillWidth: true
+            }
+            PageButton {
+                Layout.preferredHeight: parent.height
+                Layout.preferredWidth: parent.height
+
+                btnIconSource: "qrc:/resources/icons/plus.png"
+                btnIconColor: "#aeaeae"
+                btnToolTipName: " Добавить таблицу "
+                btnToolTipDelay: 700
+
+                onClicked: {
+                    qmlHelper.openDownloadsFolder();
+                }
+
             }
             PageButton {
                 Layout.preferredHeight: parent.height
@@ -68,6 +109,7 @@ Rectangle {
 
     Rectangle {
         id: someKindOfBorder
+        visible: !tablesList.collapsed
         anchors.top: buttonsBar.bottom
         anchors.right: parent.right
         anchors.left: parent.left
@@ -79,6 +121,7 @@ Rectangle {
 
     Rectangle {
         id: viewRect
+        visible: !tablesList.collapsed
         anchors.top: someKindOfBorder.bottom
         anchors.bottom: parent.bottom
         anchors.right: parent.right
@@ -88,6 +131,7 @@ Rectangle {
 
         ListView {
 
+            id: listView
             model: sortFilterProxyModel
             spacing: 2
             clip: true
@@ -96,15 +140,19 @@ Rectangle {
             anchors.margins: 4
 
             delegate: Rectangle {
+
+                readonly property bool selected: qmlHelper.currentTablePath === tableFullPath
+
                 width: viewRect.width - 10
                 height: 30
                 radius: 8
 
                 color: {
-                    if (!delegatHover.hovered)
-                        return "#2c2e32"
-                    else
+                    if (selected)
+                        return "#3a4660"
+                    if (delegatHover.hovered)
                         return "#3f4247"
+                    return "#2c2e32"
                 }
                 Behavior on color {
                     ColorAnimation {
@@ -115,6 +163,7 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
+                        qmlHelper.currentTablePath = tableFullPath
                         qmlHelper.sendSignalToProceedTable(tableName)
                     }
                 }

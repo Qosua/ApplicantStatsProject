@@ -19,6 +19,7 @@ include(FetchContent)
 find_package(Qt6 COMPONENTS
         Core
         Gui
+        Widgets
         Qml
         Quick
         Graphs
@@ -70,6 +71,7 @@ qt_add_qml_module(ApplicantStatsProject
 target_link_libraries(ApplicantStatsProject PRIVATE
         Qt6::Core
         Qt6::Gui
+        Qt6::Widgets
         Qt6::Qml
         Qt6::Quick
         Qt6::Graphs
