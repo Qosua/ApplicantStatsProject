@@ -1,6 +1,6 @@
 #include <Windows.h>
 
-#include <QApplication >
+#include <QApplication>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
