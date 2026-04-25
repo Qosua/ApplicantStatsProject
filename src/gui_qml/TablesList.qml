@@ -32,17 +32,11 @@ Rectangle {
                 Layout.preferredHeight: parent.height
                 Layout.preferredWidth: parent.height
 
-                btnIconSource: "qrc:/resources/icons/angle-down.png"
+                btnIconSource: !tablesList.collapsed ? "qrc:/resources/icons/angle-down.png" : "qrc:/resources/icons/angle-up.png"
                 btnIconColor: "#aeaeae"
                 btnToolTipName: tablesList.collapsed ? " Развернуть " : " Свернуть "
                 btnToolTipDelay: 700
-
-                rotation: tablesList.collapsed ? 180 : 0
-                Behavior on rotation {
-                    NumberAnimation {
-                        duration: 150; easing.type: Easing.OutQuad
-                    }
-                }
+                iconSize: 20
 
                 onClicked: {
                     tablesList.collapsed = !tablesList.collapsed
@@ -51,6 +45,14 @@ Rectangle {
             }
             Item {
                 Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                MouseArea {
+                    anchors.fill: parent
+                    onDoubleClicked: {
+                        tablesList.collapsed = !tablesList.collapsed
+                    }
+                }
             }
             PageButton {
                 Layout.preferredHeight: parent.height
@@ -60,6 +62,7 @@ Rectangle {
                 btnIconColor: "#aeaeae"
                 btnToolTipName: " Добавить таблицу "
                 btnToolTipDelay: 700
+                iconSize: 20
 
                 onClicked: {
                     qmlHelper.openDownloadsFolder();
@@ -74,6 +77,7 @@ Rectangle {
                 btnIconColor: "#aeaeae"
                 btnToolTipName: " Открыть папку хранения таблиц "
                 btnToolTipDelay: 700
+                iconSize: 20
 
                 onClicked: {
                     qmlHelper.openAppDataFolder();
@@ -91,6 +95,7 @@ Rectangle {
                 btnIconColor: "#aeaeae"
                 btnToolTipName: " Сортировать по имени "
                 btnToolTipDelay: 700
+                iconSize: 20
 
                 onClicked: {
                     if (sortFlag) {

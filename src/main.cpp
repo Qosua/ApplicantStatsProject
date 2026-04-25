@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     engine.rootContext()->setContextProperty("treeViewModel", &treeViewModel);
     engine.loadFromModule("ApplicantStatsProjectModule", "Main");
 
-    int ret = QGuiApplication::exec();
+    int ret = QApplication::exec();
 
     cacheThread.quit();
     cacheThread.wait();
