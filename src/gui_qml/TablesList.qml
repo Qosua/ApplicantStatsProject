@@ -8,7 +8,31 @@ Rectangle {
 
     id: tablesList
     property bool collapsed: false
+    property bool dropped: dropArea.containsDrag
     readonly property int collapsedHeight: buttonsBar.height + 1
+
+    DropArea {
+        id: dropArea
+        anchors.fill: parent
+
+        // Фильтр — принимаем только файлы
+        keys: ["text/uri-list"]
+
+        onEntered: (drag) => {
+            drag.accept(Qt.CopyAction)
+        }
+
+        onDropped: (drop) => {
+            if (drop.hasUrls) {
+                for (let i = 0; i < drop.urls.length; i++) {
+                    let path = drop.urls[i].toString()
+                    path = path.replace(/^file:\/\/\//, "")
+
+                    qmlHelper.sendSignalToProceedTable(path)
+                }
+            }
+        }
+    }
 
     Rectangle {
         id: buttonsBar
@@ -125,6 +149,7 @@ Rectangle {
     }
 
     Rectangle {
+
         id: viewRect
         visible: !tablesList.collapsed
         anchors.top: someKindOfBorder.bottom
