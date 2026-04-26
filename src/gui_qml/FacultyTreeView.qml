@@ -11,6 +11,7 @@ TreeView {
     }
 
     rowSpacing: 3
+    boundsBehavior: Flickable.StopAtBounds
 
     delegate: TreeViewDelegate {
         id: treeDelegate
@@ -72,21 +73,21 @@ TreeView {
                 verticalAlignment: Text.AlignVCenter
                 Layout.fillHeight: true
             }
-            Label {
-                visible: !model.isDivision
-                text: (model.poolSize ?? 0) + " / " + (model.capacity ?? 0)
-                font.pixelSize: 14
-                color: {
-                    if (model.isDivision)
-                        return "#888888"
-                    if (model.capacity === 0)
-                        return "#27ae60"
-                    let ratio = (model.poolSize ?? 0) / Math.max(model.capacity ?? 1, 1)
-                    return ratio >= 1.0 ? "#27ae60" : ratio >= 0.7 ? "#f39c12" : "#e74c3c"
-                }
-                verticalAlignment: Text.AlignVCenter
-                Layout.fillHeight: true
-            }
+            // Label {
+            //     visible: !model.isDivision
+            //     text: (model.poolSize ?? 0) + " / " + (model.capacity ?? 0)
+            //     font.pixelSize: 14
+            //     color: {
+            //         if (model.isDivision)
+            //             return "#888888"
+            //         if (model.capacity === 0)
+            //             return "#27ae60"
+            //         let ratio = (model.poolSize ?? 0) / Math.max(model.capacity ?? 1, 1)
+            //         return ratio >= 1.0 ? "#27ae60" : ratio >= 0.7 ? "#f39c12" : "#e74c3c"
+            //     }
+            //     verticalAlignment: Text.AlignVCenter
+            //     Layout.fillHeight: true
+            // }
             Item {
                 Layout.fillWidth: true
             }

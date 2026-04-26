@@ -28,7 +28,7 @@ Rectangle {
                     let path = drop.urls[i].toString()
                     path = path.replace(/^file:\/\/\//, "")
 
-                    qmlHelper.sendSignalToProceedTable(path)
+                    qmlHelper.copyFileToAppdata(path)
                 }
             }
         }
@@ -89,7 +89,7 @@ Rectangle {
                 iconSize: 20
 
                 onClicked: {
-                    qmlHelper.openDownloadsFolder();
+                    qmlHelper.addTableFromExploler();
                 }
 
             }
@@ -165,6 +165,7 @@ Rectangle {
             model: sortFilterProxyModel
             spacing: 2
             clip: true
+            boundsBehavior: Flickable.StopAtBounds
 
             anchors.fill: parent
             anchors.margins: 4
@@ -183,11 +184,6 @@ Rectangle {
                     if (delegatHover.hovered)
                         return "#3f4247"
                     return "#2c2e32"
-                }
-                Behavior on color {
-                    ColorAnimation {
-                        duration: 100
-                    }
                 }
 
                 MouseArea {

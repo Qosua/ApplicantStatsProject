@@ -22,18 +22,20 @@ public:
     Q_INVOKABLE void openFolder(const QString &path) {
 	QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     }
-
     Q_INVOKABLE void openAppDataFolder() {
 	QDesktopServices::openUrl(QUrl(SupportSystem::appDataPath));
     }
-
-    Q_INVOKABLE void openDownloadsFolder() {
+    Q_INVOKABLE void addTableFromExploler() {
 
 	QFileDialog fileDialog;
 	fileDialog.setDirectory(SupportSystem::downloadPath);
 
 	QString src = fileDialog.getOpenFileName(nullptr, "", SupportSystem::downloadPath,
 	                                         "Выберите таблицу (*.xlsx)");
+	if (!src.isEmpty())
+	    copyFileToAppdata(src);
+    }
+    Q_INVOKABLE void copyFileToAppdata(QString src) {
 	QString dest = SupportSystem::appDataPath + "/" + src.split('/').last();
 
 	if (QFile::exists(dest))

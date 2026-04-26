@@ -66,6 +66,7 @@ qt_add_qml_module(ApplicantStatsProject
         src/gui_qml/PagesMenu.qml
         src/gui_qml/StatusBar.qml
         src/gui_qml/FacultyTreeView.qml
+        src/gui_qml/Stats.qml
 )
 
 target_link_libraries(ApplicantStatsProject PRIVATE

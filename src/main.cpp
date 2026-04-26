@@ -1,7 +1,6 @@
 #include <Windows.h>
 
 #include <QApplication>
-#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QSortFilterProxyModel>

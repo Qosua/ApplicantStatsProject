@@ -86,6 +86,9 @@ SplitView {
         topRightRadius: 10
         bottomRightRadius: 10
 
+        Stats {
+            anchors.fill: parent
+        }
 
     }
 

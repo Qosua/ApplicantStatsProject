@@ -9,8 +9,8 @@ Window {
 
     property int currentPageIndex: 0
 
-    width: 1280; minimumWidth: 320
-    height: 720; minimumHeight: 200
+    width: 1280; minimumWidth: 720
+    height: 720; minimumHeight: 480
 
     visible: true
     color: "#26282b"
