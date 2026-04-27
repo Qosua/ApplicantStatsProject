@@ -229,4 +229,50 @@ Rectangle {
             }
         }
     }
+
+    Item {
+        id: emptyPlaceholder
+        anchors.fill: parent
+        visible: listView.count === 0
+
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 10
+
+            PageButton {
+                id: placeHolderBtn
+                Layout.alignment: Qt.AlignHCenter
+                Layout.preferredHeight: 38
+                Layout.preferredWidth: 38
+
+                btnIconSource: "qrc:/resources/icons/plus.png"
+                btnIconColor: "#aeaeae"
+                btnToolTipDelay: 700
+                iconSize: 38
+
+                onClicked: {
+                    qmlHelper.addTableFromExploler();
+                }
+                opacity: tablesList.dropped ? 1.0 : 0.6
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 120
+                    }
+                }
+            }
+
+            Text {
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+                text: tablesList.dropped
+                    ? "Отпустите, чтобы добавить"
+                    : "Перетащите таблицу сюда\nили нажмите +"
+                color: tablesList.dropped ? "#aeaeae" : "#6c6e72"
+                font.pointSize: 14
+                lineHeight: 1.2
+            }
+        }
+    }
+
 }
