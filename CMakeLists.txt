@@ -29,9 +29,10 @@ add_executable(ApplicantStatsProject
 
         src/xlsx.h
         src/data-processing/cache-manager.h
+        src/data-processing/magic-hat.h
+        src/data-processing/data-to-stats-converter.h
         src/support-system.h
         src/qml-helper.h
-        src/data-processing/magic-hat.h
         src/models/tree-view-model.h
         src/applicants-faculty-data/table-parser-bachelor.h
         src/applicants-faculty-data/namespaces.h
@@ -43,6 +44,7 @@ add_executable(ApplicantStatsProject
         src/main.cpp
         src/data-processing/cache-manager.cpp
         src/data-processing/magic-hat.cpp
+        src/data-processing/data-to-stats-converter.cpp
         src/models/tree-view-model.cpp
         src/applicants-faculty-data/table-parser-bachelor.cpp
         src/applicants-faculty-data/faculty-direction.cpp

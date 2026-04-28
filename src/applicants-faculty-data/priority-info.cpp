@@ -125,6 +125,7 @@ bool PriorityInfo::operator<(const PriorityInfo &copy) const {
 
     if (m_isBVI == false and copy.m_isBVI == true)
 	return true;
+
     else if (m_isBVI == true and copy.m_isBVI == false)
 	return false;
 

@@ -15,7 +15,7 @@ StackLayout {
             width: 340; height: 340
             radius: width / 2
             color: "transparent"
-            border.color: "#556da3"
+            border.color: "#6e8cd1"
             border.width: 1
             opacity: 0.08
 
@@ -37,7 +37,7 @@ StackLayout {
             width: 230; height: 230
             radius: width / 2
             color: "transparent"
-            border.color: "#556da3"
+            border.color: "#6e8cd1"
             border.width: 1
             opacity: 0.16
 

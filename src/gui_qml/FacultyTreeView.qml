@@ -16,7 +16,10 @@ TreeView {
     delegate: TreeViewDelegate {
         id: treeDelegate
 
-        onClicked: if (!model.isDivision) qmlHelper.directionSelected(model.logicalRow)
+        onClicked: {
+            console.log(model.display)
+            qmlHelper.sendTreeElemName(model.display, model.isDivision)
+        }
 
         implicitWidth: treeView.width
 

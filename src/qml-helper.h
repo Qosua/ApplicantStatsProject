@@ -72,7 +72,7 @@ private:
 
 signals:
     void sendSignalToProceedTable(const QString &tableName);
-    void sendDirectionNameFromTree(const QString &dirName);
+    void sendTreeElemName(const QString &elemName, bool isDivision);
     void currentTablePathChanged();
     void fileSizeStringChanged();
 };
