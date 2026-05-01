@@ -17,7 +17,7 @@ StackLayout {
             color: "transparent"
             border.color: "#6e8cd1"
             border.width: 1
-            opacity: 0.08
+            opacity: 0.16
 
             SequentialAnimation on scale {
                 loops: Animation.Infinite
@@ -39,7 +39,7 @@ StackLayout {
             color: "transparent"
             border.color: "#6e8cd1"
             border.width: 1
-            opacity: 0.16
+            opacity: 0.32
 
             SequentialAnimation on scale {
                 loops: Animation.Infinite

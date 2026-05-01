@@ -1,12 +1,13 @@
-#ifndef APPLICANTSTATSPROJECT_DATATOSTATSCONVERTER_H
-#define APPLICANTSTATSPROJECT_DATATOSTATSCONVERTER_H
+#ifndef APPLICANTSTATSPROJECT_STATSPAGEMODEL_H
+#define APPLICANTSTATSPROJECT_STATSPAGEMODEL_H
 
-#include <QHash>
+#include <QAbstractListModel>
 #include <memory>
 
 #include "../applicants-faculty-data/faculty-direction.h"
 
 struct DirectionStats {
+
     QString name;
     QString facultyName;
     StudyForm form;
@@ -38,18 +39,23 @@ struct FacultyStats {
     QList<DirectionInfo> directions;
 };
 
-class DataToStatsConverter : public QObject {
+class StatsPageModel : public QAbstractListModel {
     Q_OBJECT
 public:
-    DataToStatsConverter(QObject* parent = nullptr);
+    StatsPageModel();
 
-    void getData(std::shared_ptr<QList<FacultyDirection>> data);
+    void setFaculties(std::shared_ptr<QList<FacultyDirection>> data);
+    void processDataToDirectionStats(std::shared_ptr<QList<FacultyDirection>> data);
+    FacultyStats getFacultyStats(std::shared_ptr<QList<FacultyDirection>> data);
 
-signals:
-    void sendStats();
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+
+protected:
+    QHash<int, QByteArray> roleNames() const override;
 
 private:
-    FacultyStats facultyStats;
+    QHash<QString, DirectionStats> directionStats;
 };
 
-#endif  // APPLICANTSTATSPROJECT_DATATOSTATSCONVERTER_H
+#endif  // APPLICANTSTATSPROJECT_STATSPAGEMODEL_H

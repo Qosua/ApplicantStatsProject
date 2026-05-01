@@ -37,11 +37,46 @@ void DataToStatsConverter::getData(std::shared_ptr<QList<FacultyDirection>> data
 	    directionStats.scoreDistribution[(elem.first.egeScore() / 10) * 10] += 1;
 	}
 
-	directionStats.meanSumScore = meanSumScore / directionStats.size;
+	if (directionStats.size != 0)
+	    directionStats.meanSumScore = meanSumScore / directionStats.size;
 
 	directions[directionStats.facultyName].append(directionStats);
     }
 
-    for (const auto& faculty : directions.keys()) {
+    for (const auto& facultyName : directions.keys()) {
+
+	FacultyStats facultyStats;
+	facultyStats.facultyName = facultyName;
+
+	int scoreSum = 0;
+	int studentsCount = 0;
+
+	for (const auto& direction : directions[facultyName]) {
+
+	    facultyStats.maxSumScore = std::max(facultyStats.maxSumScore, direction.maxSumScore);
+	    facultyStats.minSumScore = std::min(facultyStats.minSumScore, direction.minSumScore);
+	    facultyStats.directions.push_back({
+	        .directionName = direction.name,
+	        .form = direction.form,
+	        .type = direction.type,
+	        .directionSize = direction.size,
+	        .directionCapacity = direction.capacity,
+	        .score = ((direction.size == direction.capacity and direction.applicants.size())
+	                      ? direction.applicants.first().first.egeScore()
+	                      : -1),
+	    });
+
+	    for (const auto& elem : direction.applicants) {
+		scoreSum += elem.first.egeScore();
+		studentsCount += 1;
+	    }
+	}
+
+	if (studentsCount != 0)
+	    facultyStats.meanSumScore = scoreSum / studentsCount;
+
+	faculties[facultyName] = facultyStats;
     }
+
+    int a = 0;
 }
